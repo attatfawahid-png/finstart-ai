@@ -502,13 +502,13 @@ async function callAI(prompt) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: prompt })
     });
-    if (!response.ok) throw new Error('API Error');
     const data = await response.json();
-    return data.result;
-  } catch (error) {
-    console.error(error);
-    return "عذراً، حدث خطأ في الاتصال بالذكاء الاصطناعي. تأكد من إعداد الخادم الوسيط (Backend).";
-  }
+  if (!response.ok) throw new Error(data.error || 'API Error');
+  return data.result;
+} catch (error) {
+  console.error(error);
+  return "❌ خطأ: " + error.message;
+}
 }
 
 async function askAI() {
