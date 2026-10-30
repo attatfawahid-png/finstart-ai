@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinStart DZ - AI Edition</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--p:#1e3a5f;--p-l:#2b5a8c;--a:#3182ce;--bg:#f0f4f8;--c:#fff;--t:#1a202c;--m:#4a5568;--b:#e2e8f0;--s:#38a169;--d:#c53030;--w:#d69e2e;--pu:#805ad5;}
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial,sans-serif;}
+body{background:var(--bg);margin:0;color:var(--t);}
+header{background:linear-gradient(135deg,var(--p),var(--p-l));color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+header h1{margin:0;font-size:19px;}
+.lang-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;margin:0 3px;}
+.lang-btn.active,.lang-btn:hover{background:#fff;color:var(--p);}
+.tabs{display:flex;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;}
+.tab-btn{background:none;border:none;padding:14px;cursor:pointer;font-size:12px;font-weight:600;color:var(--m);border-bottom:3px solid transparent;white-space:nowrap;}
+.tab-btn.active{color:var(--p);border-bottom-color:var(--a);}
+.container{max-width:1200px;margin:20px auto;padding:0 15px;}
+.tab-content{display:none;}.tab-content.active{display:block;}
+.card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
+.card h2{color:var(--p);border-bottom:2px solid var(--b);padding-bottom:10px;margin-top:0;font-size:17px;}
+.card h3{color:var(--p);font-size:14px;margin-top:18px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:768px){.grid,.grid3{grid-template-columns:1fr;}}
+label{display:block;margin-bottom:5px;font-weight:600;color:var(--m);font-size:12px;}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;font-size:13px;font-family:inherit;transition:0.2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(49,130,206,.15);}
+.btn{border:none;padding:11px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s;}
+.btn-primary{background:var(--a);color:#fff;}.btn-success{background:var(--s);color:#fff;}.btn-danger{background:var(--d);color:#fff;}
+.btn-ai{background:linear-gradient(135deg,#805ad5,#6b46c1);color:#fff;box-shadow:0 4px 12px rgba(128,90,213,.3);}
+.btn-calc{background:linear-gradient(135deg,#d69e2e,#b7791f);color:#fff;font-size:16px;padding:16px;width:100%;box-shadow:0 4px 14px rgba(214,158,46,.4);cursor:pointer;border:none;border-radius:10px;font-weight:700;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;}
+.row-item{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 40px;gap:8px;margin-bottom:8px;align-items:center;}
+.row-item.three{grid-template-columns:2fr 1fr 1fr 40px;}
+.row-item button{background:var(--d);color:#fff;border:none;width:40px;height:38px;border-radius:8px;cursor:pointer;font-size:16px;}
+.add-btn{background:var(--a);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;margin-top:6px;}
+table.data{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;background:#fff;}
+table.data th,table.data td{border:1px solid var(--b);padding:10px;text-align:center;}
+table.data th{background:#edf2f7;color:var(--p);font-weight:700;}
+table.data tr:nth-child(even){background:#f9fbfd;}
+.bmc-container{display:grid;grid-template-columns:repeat(5, 1fr);grid-template-rows:auto auto auto;gap:8px;margin-top:15px;}
+.bmc-box{background:#f7fafc;border:1px solid var(--b);border-radius:10px;padding:12px;display:flex;flex-direction:column;}
+.bmc-box h4{margin:0 0 8px 0;font-size:12px;color:var(--p);text-align:center;border-bottom:1px solid var(--b);padding-bottom:5px;}
+.bmc-box textarea{width:100%;flex-grow:1;height:100px;font-size:11px;resize:none;border:none;background:transparent;}
+.bmc-partners{grid-area:1 / 1 / 3 / 2;}.bmc-activities{grid-area:1 / 2 / 2 / 3;}.bmc-resources{grid-area:2 / 2 / 3 / 3;}
+.bmc-value{grid-area:1 / 3 / 3 / 4;}.bmc-relations{grid-area:1 / 4 / 2 / 5;}.bmc-channels{grid-area:2 / 4 / 3 / 5;}
+.bmc-segments{grid-area:1 / 5 / 3 / 6;}.bmc-costs{grid-area:3 / 1 / 4 / 3;}.bmc-revenues{grid-area:3 / 3 / 4 / 6;}
+@media(max-width:900px){.bmc-container{grid-template-columns:1fr;}.bmc-box{grid-area:auto!important;}}
+.result{background:#ebf8ff;padding:15px;border-radius:10px;margin-top:12px;border-right:4px solid var(--a);}
+.result p{margin:6px 0;font-size:13px;}
+.big-num{color:var(--d);font-size:17px;font-weight:bold;}.ok-num{color:var(--s);font-size:17px;font-weight:bold;}
+.ai-tip{background:#fff;border-radius:8px;padding:12px;margin:8px 0;font-size:13px;border-right:4px solid var(--pu);}
+.pricing-card{border:2px solid var(--b);border-radius:12px;padding:15px;text-align:center;transition:.2s;cursor:pointer;background:#fff;}
+.pricing-card:hover{border-color:var(--a);background:#ebf8ff;transform:translateY(-2px);}
+.pricing-card .price{font-size:22px;font-weight:bold;color:var(--s);margin:8px 0;}
+footer{text-align:center;color:#718096;font-size:12px;padding:20px;}
+.chart-box{position:relative;height:300px;width:100%;margin-top:20px;}
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px;}
+.swot-item{border-radius:8px;padding:12px;font-size:12px;color:#fff;}
+.swot-s{background:#38a169;}.swot-w{background:#c53030;}.swot-o{background:#3182ce;}.swot-t{background:#d69e2e;}
+.print-header{display:none;}.exporting .tabs, .exporting .toolbar, .exporting .add-btn, .exporting .row-item button { display: none !important; }
+.exporting .tab-content { display: block !important; margin-bottom: 20px; }
+.exporting .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
+#aiResponse{background:#faf5ff;border:1px solid #d6bcfa;border-radius:8px;padding:15px;margin-top:15px;white-space:pre-wrap;font-size:13px;display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div><h1>📊 FinStart DZ <span style="font-size:12px;background:#805ad5;padding:2px 8px;border-radius:10px;margin-left:8px;">AI EDITION</span></h1></div>
+  <div>
+    <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">العربية</button>
+    <button class="lang-btn" data-lang="fr" onclick="applyLang('fr')">FR</button>
+    <button class="lang-btn" data-lang="en" onclick="applyLang('en')">EN</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="tab1" data-i18n="t1">1. معلومات المشروع</button>
+  <button class="tab-btn" data-tab="tab2" data-i18n="t2">2. التكاليف والتسعير</button>
+  <button class="tab-btn" data-tab="tab3" data-i18n="t3">3. الدراسة المالية</button>
+  <button class="tab-btn" data-tab="tab8" data-i18n="t8">4. الرواتب والتجهيزات</button>
+  <button class="tab-btn" data-tab="tab4" data-i18n="t4">5. المنافسون</button>
+  <button class="tab-btn" data-tab="tab5" data-i18n="t5">6. BMC</button>
+  <button class="tab-btn" data-tab="tab6" data-i18n="t6">7. المساعد الذكي</button>
+</nav>
+
+<div class="container" id="printContainer">
+  <div class="print-header"><h1>📊 FinStart DZ - AI EDITION</h1></div>
+
+<!-- TAB 1 -->
+<section class="tab-content active" id="tab1">
+  <div class="card">
+    <h2 data-i18n="info_title">📋 معلومات المشروع</h2>
+    <div class="grid">
+      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" value="Smart Uni System"></div>
+      <div><label data-i18n="p_sector">القطاع</label>
+        <select id="projSector" onchange="onSectorChange()">
+          <option value="iot" data-i18n="s_iot">أجهزة وإنترنت الأشياء (IoT)</option>
+          <option value="restaurant" data-i18n="s_rest">مطعم / مقهى</option>
+          <option value="ecommerce" data-i18n="s_ecom">متجر إلكتروني</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="2">نظام حضور ذكي للجامعات يعتمد على RFID و Raspberry Pi لتحسين كفاءة الحضور.</textarea></div>
+    <div class="grid" style="margin-top:12px;">
+      <div><label data-i18n="p_target">الجمهور المستهدف</label><input type="text" id="projTarget" value="الجامعات الجزائرية"></div>
+      <div><label data-i18n="p_city">الولاية</label><input type="text" id="projCity" value="الجزائر"></div>
+    </div>
+    <h3 data-i18n="h_cap">💰 رأس المال والمبيعات</h3>
+    <div class="grid3">
+      <div><label data-i18n="p_capital">رأس المال المطلوب (دج)</label><input type="number" id="projCapital" value="5000000"></div>
+      <div><label data-i18n="p_units">عدد الأجهزة المباعة (وحدة)</label><input type="number" id="projUnits" value="120"></div>
+      <div><label data-i18n="p_market">السوق الكلي (عملاء محتملين)</label><input type="number" id="projMarket" value="100"></div>
+    </div>
+    <div class="grid" style="margin-top:12px;">
+      <div><label data-i18n="p_mkt_budget">ميزانية التسويق (دج)</label><input type="number" id="projMktBudget" value="200000"></div>
+    </div>
+    <div class="toolbar" style="margin-top:20px;"><button class="btn-calc" onclick="goToCosts()" data-i18n="btn_next">➡️ التالي</button></div>
+  </div>
+</section>
+
+<!-- TAB 2 -->
+<section class="tab-content" id="tab2">
+  <div class="card">
+    <h2 data-i18n="h_fixed">💸 التكاليف الثابتة (شهرياً)</h2>
+    <div id="fixedList"></div>
+    <button class="add-btn" onclick="addFixed()" data-i18n="btn_add">+ إضافة</button>
+  </div>
+  <div class="card">
+    <h2 data-i18n="h_bom">🛠️ تكلفة الجهاز الواحد (BOM)</h2>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 40px;gap:8px;font-size:12px;font-weight:bold;margin-bottom:5px;text-align:center;">
+      <span data-i18n="bom_name">المكون</span><span data-i18n="bom_price">السعر</span><span data-i18n="bom_qty">الكمية</span><span data-i18n="bom_total">الإجمالي</span><span></span>
+    </div>
+    <div id="bomList"></div>
+    <button class="add-btn" onclick="addBOM()" data-i18n="btn_add">+ إضافة</button>
+    <div id="bomTotal" class="result"></div>
+  </div>
+  <div class="card"><h2 data-i18n="h_calc">💰 التسعير</h2><button class="btn-calc" onclick="calculateAll()" data-i18n="btn_calc">🧮 احسب السعر المقترح</button><div id="pricingResult" style="margin-top:15px;"></div></div>
+</section>
+
+<!-- TAB 3 -->
+<section class="tab-content" id="tab3">
+  <div class="card"><h2 data-i18n="h_fin_res">📊 قائمة الأرباح والخسائر</h2><div id="financialResult"></div></div>
+  <div class="card">
+    <h2 data-i18n="h_kpi">🎯 مؤشرات الأداء</h2>
+    <div class="grid3">
+      <div class="result"><p><strong data-i18n="lbl_cac">CAC:</strong> <span id="cacVal">0</span> دج</p></div>
+      <div class="result"><p><strong data-i18n="lbl_ltv">LTV:</strong> <span id="ltvVal">0</span> دج</p></div>
+      <div class="result"><p><strong data-i18n="lbl_bep">نقطة التعادل:</strong> <span id="bepVal">0</span> <span data-i18n="lbl_units">جهاز</span></p></div>
+    </div>
+  </div>
+  <div class="card"><h2 data-i18n="h_charts">📈 لوحة التحكم</h2><div class="chart-box"><canvas id="mainChart"></canvas></div></div>
+</section>
+
+<!-- TAB 8: HR & CAPEX -->
+<section class="tab-content" id="tab8">
+  <div class="card">
+    <h2 data-i18n="h_hr">👥 جدول رواتب الموظفين (تفصيلي)</h2>
+    <div style="overflow-x:auto;">
+      <table class="data" id="hrTable">
+        <thead><tr>
+          <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأجر الأساسي</th>
+          <th data-i18n="hr_cnas_emp">حصة العامل (9%)</th><th data-i18n="hr_net">الصافي للعامل</th>
+          <th data-i18n="hr_cnas_er">حصة صاحب العمل (26%)</th><th data-i18n="hr_total">التكلفة الإجمالية</th><th></th>
+        </tr></thead>
+        <tbody id="hrBody"></tbody>
+      </table>
+    </div>
+    <button class="add-btn" onclick="addEmp()" data-i18n="btn_add">+ إضافة موظف</button>
+  </div>
+  <div class="card">
+    <h2 data-i18n="h_capex">💻 تكاليف التجهيزات الرأسمالية (CapEx)</h2>
+    <div id="capexList"></div>
+    <button class="add-btn" onclick="addCapEx()" data-i18n="btn_add">+ إضافة تجهيز</button>
+    <div id="capexTotal" class="result"></div>
+  </div>
+</section>
+
+<!-- TAB 4 -->
+<section class="tab-content" id="tab4">
+  <div class="card"><h2 data-i18n="h_market">📈 تحليل السوق</h2><div id="marketResult"></div></div>
+  <div class="card">
+    <h2 data-i18n="h_comp">⚔️ تحليل المنافسين</h2>
+    <button class="btn btn-ai" onclick="aiAnalyzeCompetitors()" data-i18n="btn_ai_comp">🤖 تحليل المنافسين بالذكاء الاصطناعي</button>
+    <div id="compResult" style="margin-top:15px;"></div>
+  </div>
+</section>
+
+<!-- TAB 5 -->
+<section class="tab-content" id="tab5">
+  <div class="card">
+    <h2 data-i18n="h_bmc">🧩 نموذج BMC</h2>
+    <div style="margin-bottom:15px;">
+      <button class="btn btn-ai" onclick="aiGenerateBMC()" data-i18n="btn_ai_bmc">🤖 توليد BMC بالذكاء الاصطناعي</button>
+    </div>
+    <div class="bmc-container">
+      <div class="bmc-box bmc-partners"><h4 data-i18n="b1">🤝 الشركاء</h4><textarea id="bmc1"></textarea></div>
+      <div class="bmc-box bmc-activities"><h4 data-i18n="b2">⚙️ الأنشطة</h4><textarea id="bmc2"></textarea></div>
+      <div class="bmc-box bmc-value"><h4 data-i18n="b3">💎 القيمة</h4><textarea id="bmc3"></textarea></div>
+      <div class="bmc-box bmc-relations"><h4 data-i18n="b6">❤️ العلاقات</h4><textarea id="bmc6"></textarea></div>
+      <div class="bmc-box bmc-segments"><h4 data-i18n="b4">👥 العملاء</h4><textarea id="bmc4"></textarea></div>
+      <div class="bmc-box bmc-resources"><h4 data-i18n="b7">🔑 الموارد</h4><textarea id="bmc7"></textarea></div>
+      <div class="bmc-box bmc-channels"><h4 data-i18n="b5">📢 القنوات</h4><textarea id="bmc5"></textarea></div>
+      <div class="bmc-box bmc-costs"><h4 data-i18n="b9">💸 التكاليف</h4><textarea id="bmc9"></textarea></div>
+      <div class="bmc-box bmc-revenues"><h4 data-i18n="b8">💰 الإيرادات</h4><textarea id="bmc8"></textarea></div>
+    </div>
+  </div>
+</section>
+
+<!-- TAB 6: AI ASSISTANT -->
+<section class="tab-content" id="tab6">
+  <div class="card">
+    <h2 data-i18n="h_ai_chat">🧠 المساعد المالي الذكي</h2>
+    <p style="font-size:12px;color:var(--m);" data-i18n="ai_chat_desc">اسأل عن أي شيء يخص مشروعك، وسيقوم الذكاء الاصطناعي بالرد بناءً على بياناتك.</p>
+    <div class="grid">
+      <div>
+        <label data-i18n="ai_question">سؤالك</label>
+        <input type="text" id="aiQuestion" placeholder="مثال: كيف يمكنني تقليل تكاليفي؟ أو هل سعري مناسب؟">
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button class="btn btn-ai" onclick="askAI()" style="width:100%;" data-i18n="btn_ask_ai">🚀 اسأل الذكاء الاصطناعي</button>
+      </div>
+    </div>
+    <div id="aiResponse"></div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <button class="btn btn-success" onclick="saveData()" data-i18n="btn_save">💾 حفظ</button>
+  <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 PDF</button>
+  <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
+</div>
+</div>
+<footer>FinStart DZ v13.0 - AI Edition</footer>
+
+<script>
+const T = {
+  ar:{t1:"1. معلومات",t2:"2. التكاليف",t3:"3. المالية",t8:"4. الرواتب والتجهيزات",t4:"5. المنافسون",t5:"6. BMC",t6:"7. المساعد الذكي",
+    info_title:"📋 المعلومات",p_name:"الاسم",p_sector:"القطاع",p_idea:"الفكرة",p_target:"الجمهور",p_city:"الولاية",h_cap:"💰 رأس المال والمبيعات",p_capital:"رأس المال (دج)",p_units:"الأجهزة/وحدات",p_market:"السوق الكلي",p_mkt_budget:"ميزانية التسويق",btn_next:"➡️ التالي",
+    s_iot:"إنترنت الأشياء",s_rest:"مطعم",s_ecom:"متجر",h_fixed:"💸 ثابتة (شهرياً)",btn_add:"+ إضافة",h_bom:"🛠️ تكلفة الجهاز الواحد",bom_name:"المكون",bom_price:"السعر",bom_qty:"الكمية",bom_total:"الإجمالي",
+    h_calc:"💰 التسعير",btn_calc:"🧮 احسب",h_fin_res:"📊 الأرباح والخسائر",h_kpi:"🎯 المؤشرات",h_charts:"📈 لوحة التحكم",h_hr:"👥 الرواتب التفصيلية",hr_role:"المنصب",hr_count:"العدد",hr_basic:"الأساسي",hr_cnas_emp:"حصة العامل 9%",hr_net:"الصافي",hr_cnas_er:"حصة صاحب العمل 26%",hr_total:"التكلفة الإجمالية",h_capex:"💻 التجهيزات (CapEx)",
+    h_market:"📈 السوق",h_comp:"⚔️ المنافسون",btn_ai_comp:"🤖 تحليل المنافسين بالذكاء الاصطناعي",h_bmc:"🧩 BMC",btn_ai_bmc:"🤖 توليد BMC بالذكاء الاصطناعي",b1:"🤝 الشركاء",b2:"⚙️ الأنشطة",b3:"💎 القيمة",b4:"👥 العملاء",b5:"📢 القنوات",b6:"❤️ العلاقات",b7:"🔑 الموارد",b8:"💰 الإيرادات",b9:"💸 التكاليف",h_ai_chat:"🧠 المساعد المالي الذكي",ai_chat_desc:"اسأل عن أي شيء يخص مشروعك.",ai_question:"سؤالك",btn_ask_ai:"🚀 اسأل الذكاء الاصطناعي",
+    btn_save:"💾 حفظ",btn_pdf:"📄 PDF",btn_reset:"🗑️ مسح",msg_saved:"تم الحفظ",msg_err:"احسب أولاً",
+    lbl_rev:"الإيرادات",lbl_cost:"التكاليف",lbl_profit:"الربح",lbl_cac:"CAC:",lbl_ltv:"LTV:",lbl_bep:"نقطة التعادل:",lbl_units:"جهاز",
+    col_item:"البند",col_qty:"الكمية",col_unit:"سعر الوحدة",col_total:"الإجمالي",
+    swot_s:"قوة (S)",swot_w:"ضعف (W)",swot_o:"فرص (O)",swot_t:"تهديد (T)"},
+  fr:{t1:"1. Infos",t2:"2. Coûts",t3:"3. Financier",t8:"4. RH & CapEx",t4:"4. Marché",t5:"5. BMC",t6:"7. Assistant",
+    info_title:"📋 Infos",p_name:"Nom",p_sector:"Secteur",p_idea:"Idée",p_target:"Cible",p_city:"Wilaya",h_cap:"💰 Capital & Ventes",p_capital:"Capital (DA)",p_units:"Unités",p_market:"Marché",p_mkt_budget:"Budget Mkt",btn_next:"➡️ Suivant",
+    s_iot:"IoT",s_rest:"Resto",s_ecom:"E-com",h_fixed:"💸 Fixes (mois)",btn_add:"+ Ajouter",h_bom:"🛠️ Coût Unitaire (BOM)",bom_name:"Composant",bom_price:"Prix",bom_qty:"Qté",bom_total:"Total",
+    h_calc:"💰 Prix",btn_calc:"🧮 Calculer",h_fin_res:"📊 P&L",h_kpi:"🎯 KPI",h_charts:"📈 Dashboard",h_hr:"👥 Salaires Détaillés",hr_role:"Poste",hr_count:"Nb",hr_basic:"Base",hr_cnas_emp:"Part employé 9%",hr_net:"Net",hr_cnas_er:"Part employeur 26%",hr_total:"Coût Total",h_capex:"💻 CapEx",
+    h_market:"📈 Marché",h_comp:"⚔️ Concurrents",btn_ai_comp:"🤖 Analyse IA des concurrents",h_bmc:"🧩 BMC",btn_ai_bmc:"🤖 Générer BMC par IA",b1:"🤝 Partenaires",b2:"⚙️ Activités",b3:"💎 Valeur",b4:"👥 Clients",b5:"📢 Canaux",b6:"❤️ Relations",b7:"🔑 Ressources",b8:"💰 Revenus",b9:"💸 Coûts",h_ai_chat:"🧠 Assistant Financier IA",ai_chat_desc:"Posez une question sur votre projet.",ai_question:"Votre question",btn_ask_ai:"🚀 Demander à l'IA",
+    btn_save:"💾 Sauver",btn_pdf:"📄 PDF",btn_reset:"🗑️ Effacer",msg_saved:"Sauvegardé",msg_err:"Calculez d'abord",
+    lbl_rev:"Revenus",lbl_cost:"Coûts",lbl_profit:"Profit",lbl_cac:"CAC:",lbl_ltv:"LTV:",lbl_bep:"BEP:",lbl_units:"unités",
+    col_item:"Item",col_qty:"Qté",col_unit:"Prix U.",col_total:"Total",
+    swot_s:"Forces (S)",swot_w:"Faiblesses (W)",swot_o:"Opportunités (O)",swot_t:"Menaces (T)"},
+  en:{t1:"1. Info",t2:"2. Costs",t3:"3. Financials",t8:"4. HR & CapEx",t4:"4. Market",t5:"5. BMC",t6:"7. Assistant",
+    info_title:"📋 Info",p_name:"Name",p_sector:"Sector",p_idea:"Idea",p_target:"Target",p_city:"Region",h_cap:"💰 Capital & Sales",p_capital:"Capital (DA)",p_units:"Units",p_market:"Market",p_mkt_budget:"Mkt Budget",btn_next:"➡️ Next",
+    s_iot:"IoT",s_rest:"Resto",s_ecom:"E-com",h_fixed:"💸 Fixed (monthly)",btn_add:"+ Add",h_bom:"🛠️ Unit Cost (BOM)",bom_name:"Component",bom_price:"Price",bom_qty:"Qty",bom_total:"Total",
+    h_calc:"💰 Pricing",btn_calc:"🧮 Calculate",h_fin_res:"📊 P&L",h_kpi:"🎯 KPI",h_charts:"📈 Dashboard",h_hr:"👥 Detailed Salaries",hr_role:"Role",hr_count:"Count",hr_basic:"Basic",hr_cnas_emp:"Employee 9%",hr_net:"Net",hr_cnas_er:"Employer 26%",hr_total:"Total Cost",h_capex:"💻 CapEx",
+    h_market:"📈 Market",h_comp:"⚔️ Competitors",btn_ai_comp:"🤖 AI Competitor Analysis",h_bmc:"🧩 BMC",btn_ai_bmc:"🤖 AI Generate BMC",b1:"🤝 Partners",b2:"⚙️ Activities",b3:"💎 Value",b4:"👥 Clients",b5:"📢 Channels",b6:"❤️ Relations",b7:"🔑 Resources",b8:"💰 Revenues",b9:"💸 Costs",h_ai_chat:"🧠 AI Financial Assistant",ai_chat_desc:"Ask any question about your project.",ai_question:"Your question",btn_ask_ai:"🚀 Ask AI",
+    btn_save:"💾 Save",btn_pdf:"📄 PDF",btn_reset:"🗑️ Clear",msg_saved:"Saved",msg_err:"Calculate first",
+    lbl_rev:"Revenue",lbl_cost:"Costs",lbl_profit:"Profit",lbl_cac:"CAC:",lbl_ltv:"LTV:",lbl_bep:"BEP:",lbl_units:"units",
+    col_item:"Item",col_qty:"Qty",col_unit:"Unit Price",col_total:"Total",
+    swot_s:"Strengths (S)",swot_w:"Weaknesses (W)",swot_o:"Opportunities (O)",swot_t:"Threats (T)"}
+};
+let L = 'ar', R = null, selectedPrice = 0, currentComps = [], emps = [], fixedItems = [], bomItems = [], capexItems = [], myChart = null;
+const t = k => T[L][k] || k, fmt = n => Math.round(n).toLocaleString('fr-FR');
+
+const DB = {
+  iot:{
+    fixed:[{name:{ar:"إيجار",fr:"Loyer",en:"Rent"},amount:12000},{name:{ar:"كهرباء",fr:"Électricité",en:"Elec"},amount:4166},{name:{ar:"إنترنت",fr:"Internet",en:"Internet"},amount:1666},{name:{ar:"نقل",fr:"Transport",en:"Transport"},amount:4166},{name:{ar:"مصاريف إدارية",fr:"Admin",en:"Admin"},amount:416}],
+    bom:[{name:{ar:"Raspberry Pi",fr:"Raspberry Pi",en:"Raspberry Pi"},price:20000,qty:1},{name:{ar:"قارئ RFID",fr:"Lecteur RFID",en:"RFID Reader"},price:1500,qty:1},{name:{ar:"أسلاك",fr:"Fils",en:"Wires"},price:150,qty:1},{name:{ar:"علبة خارجية",fr:"Boîtier",en:"Enclosure"},price:1000,qty:1},{name:{ar:"تجميع وتركيب",fr:"Assemblage",en:"Assembly"},price:700,qty:1},{name:{ar:"احتياطي صيانة",fr:"Réserve",en:"Maintenance"},price:1000,qty:1}],
+    capex:[{name:{ar:"حاسوب",fr:"PC",en:"PC"},price:60000,qty:2},{name:{ar:"مكتب",fr:"Bureau",en:"Desk"},price:15000,qty:3},{name:{ar:"كرسي",fr:"Chaise",en:"Chair"},price:8000,qty:3},{name:{ar:"طابعة",fr:"Imprimante",en:"Printer"},price:25000,qty:1},{name:{ar:"خزانة",fr:"Armoire",en:"Cabinet"},price:20000,qty:1}],
+    emps:[{role:{ar:"مطور برمجيات",fr:"Dév. Logiciel",en:"SW Dev"},count:1,salary:45000},{role:{ar:"مطور أجهزة",fr:"Dév. Hardware",en:"HW Dev"},count:1,salary:45000},{role:{ar:"محاسب",fr:"Comptable",en:"Accountant"},count:1,salary:45000}],
+    comps:[{name:"Système Local",price:"مرتفع",quality:"متوسطة",deliv:"بطيء",digital:"ضعيف"},{name:"Importé",price:"مرتفع جداً",quality:"عالية",deliv:"بطيء",digital:"متوسط"}],
+    bmc:{b1:"موردو Raspberry Pi, شركات الشحن",b2:"تطوير، تصنيع، تركيب، دعم فني",b3:"نظام حضور ذكي يقلل التزوير ويسرع العملية",b4:"الجامعات، المدارس، الشركات",b5:"معارض التكنولوجيا، اتصال مباشر",b6:"دعم فني، تحديثات",b7:"فريق تقني، أجهزة، كود"}
+  },
+  restaurant:{
+    fixed:[{name:{ar:"إيجار",fr:"Loyer",en:"Rent"},amount:25000},{name:{ar:"كهرباء",fr:"Électricité",en:"Elec"},amount:8000}],
+    bom:[{name:{ar:"مواد غذائية",fr:"Ingrédients",en:"Ingredients"},price:120,qty:1},{name:{ar:"تغليف",fr:"Emballage",en:"Packaging"},price:20,qty:1}],
+    capex:[{name:{ar:"معدات مطبخ",fr:"Équipement",en:"Equipment"},price:100000,qty:1}],
+    emps:[{role:{ar:"طاهي",fr:"Cuisinier",en:"Chef"},count:1,salary:30000},{role:{ar:"نادل",fr:"Serveur",en:"Waiter"},count:2,salary:20000}],
+    comps:[{name:"Yassir Food",price:"مرتفع",quality:"جيدة",deliv:"سريع",digital:"قوي"},{name:"Heetch",price:"متوسط",quality:"متوسطة",deliv:"سريع",digital:"متوسط"}],
+    bmc:{b1:"موردون، شركات توصيل",b2:"طهي، توصيل",b3:"طعام طازج سريع",b4:"طلاب، موظفون",b5:"فيسبوك، تطبيقات",b6:"عروض",b7:"مطبخ، طاقم"}
+  },
+  ecommerce:{
+    fixed:[{name:{ar:"استضافة",fr:"Hébergement",en:"Hosting"},amount:5000},{name:{ar:"تسويق",fr:"Marketing",en:"Mkt"},amount:10000}],
+    bom:[{name:{ar:"قميص",fr:"Chemise",en:"Shirt"},price:300,qty:1},{name:{ar:"كيس",fr:"Sac",en:"Bag"},price:20,qty:1}],
+    capex:[{name:{ar:"حاسوب",fr:"PC",en:"PC"},price:60000,qty:1}],
+    emps:[{role:{ar:"مدير متجر",fr:"Gérant",en:"Manager"},count:1,salary:25000}],
+    comps:[{name:"Jumia",price:"تنافسي",quality:"متوسطة",deliv:"بطيء",digital:"قوي"},{name:"Ouedkniss",price:"منخفض",quality:"متفاوتة",deliv:"بطيء",digital:"متوسط"}],
+    bmc:{b1:"موردون، شحن",b2:"بيع، تغليف",b3:"منتجات نادرة",b4:"شباب",b5:"سوشيال ميديا",b6:"دعم",b7:"مخزون"}
+  }
+};
+
+function applyLang(lang) {
+  L = lang; document.documentElement.lang = lang; document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el => { let k = el.getAttribute('data-i18n'); if (T[lang][k]) el.textContent = T[lang][k]; });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  if(R) { renderFinancial(); renderMarket(); fillBMC(); renderCharts(); runAISearch(); renderAI(); }
+}
+
+function onSectorChange() {
+  let s = document.getElementById('projSector').value;
+  fixedItems = DB[s].fixed.map(x => ({name: x.name[L] || x.name.ar, amount: x.amount}));
+  bomItems = DB[s].bom.map(x => ({name: x.name[L] || x.name.ar, price: x.price, qty: x.qty}));
+  capexItems = DB[s].capex.map(x => ({name: x.name[L] || x.name.ar, price: x.price, qty: x.qty}));
+  emps = DB[s].emps.map(x => ({role: x.role[L] || x.role.ar, count: x.count, salary: x.salary}));
+  renderFixed(); renderBOM(); renderCapEx(); renderEmps();
+  currentComps = JSON.parse(JSON.stringify(DB[s].comps)); document.getElementById('compResult').innerHTML = '';
+}
+
+function renderFixed() { let h = ''; fixedItems.forEach((it, i) => { h += `<div class="row-item three"><input type="text" value="${it.name}" onchange="fixedItems[${i}].name=this.value"><input type="number" value="${it.amount}" onchange="fixedItems[${i}].amount=+this.value"><span></span><button onclick="removeFixed(${i})">×</button></div>`; }); document.getElementById('fixedList').innerHTML = h; }
+function renderBOM() { 
+  let h = '', total = 0; 
+  bomItems.forEach((it, i) => { 
+    let t = it.price * it.qty; total += t;
+    h += `<div class="row-item"><input type="text" value="${it.name}" onchange="bomItems[${i}].name=this.value"><input type="number" value="${it.price}" onchange="bomItems[${i}].price=+this.value;renderBOM()"><input type="number" value="${it.qty}" onchange="bomItems[${i}].qty=+this.value;renderBOM()"><input type="text" value="${fmt(t)}" readonly style="background:#e2e8f0;text-align:center;"><button onclick="removeBOM(${i})">×</button></div>`; 
+  }); 
+  document.getElementById('bomList').innerHTML = h; 
+  document.getElementById('bomTotal').innerHTML = `<p><strong>${t('bom_total')}:</strong> <span class="big-num">${fmt(total)} دج</span></p>`; 
+}
+function renderCapEx() { 
+  let h = '', total = 0; 
+  capexItems.forEach((it, i) => { 
+    let t = it.price * it.qty; total += t;
+    h += `<div class="row-item"><input type="text" value="${it.name}" onchange="capexItems[${i}].name=this.value"><input type="number" value="${it.price}" onchange="capexItems[${i}].price=+this.value;renderCapEx()"><input type="number" value="${it.qty}" onchange="capexItems[${i}].qty=+this.value;renderCapEx()"><input type="text" value="${fmt(t)}" readonly style="background:#e2e8f0;text-align:center;"><button onclick="removeCapEx(${i})">×</button></div>`; 
+  }); 
+  document.getElementById('capexList').innerHTML = h; 
+  document.getElementById('capexTotal').innerHTML = `<p><strong>إجمالي التجهيزات:</strong> <span class="big-num">${fmt(total)} دج</span></p>`; 
+}
+function renderEmps() {
+  let h = '';
+  emps.forEach((emp, i) => {
+    let cnase = emp.salary * 0.09, net = emp.salary - cnase, cnase_er = emp.salary * 0.26, total = emp.salary + cnase_er;
+    h += `<tr>
+      <td><input type="text" value="${emp.role}" onchange="emps[${i}].role=this.value" style="border:1px solid #ccc;padding:4px;text-align:center;"></td>
+      <td><input type="number" value="${emp.count}" onchange="emps[${i}].count=+this.value;renderEmps()" style="border:1px solid #ccc;padding:4px;width:60px;text-align:center;"></td>
+      <td><input type="number" value="${emp.salary}" onchange="emps[${i}].salary=+this.value;renderEmps()" style="border:1px solid #ccc;padding:4px;width:90px;text-align:center;"></td>
+      <td>${fmt(cnase)}</td><td>${fmt(net)}</td><td>${fmt(cnase_er)}</td><td><strong>${fmt(total * emp.count)}</strong></td>
+      <td><button onclick="removeEmp(${i})" style="background:#c53030;color:#fff;border:none;border-radius:4px;cursor:pointer;padding:4px 8px;">×</button></td>
+    </tr>`;
+  });
+  document.getElementById('hrBody').innerHTML = h;
+}
+
+function addFixed(){ fixedItems.push({name:"",amount:0}); renderFixed(); }
+function addBOM(){ bomItems.push({name:"",price:0,qty:1}); renderBOM(); }
+function addCapEx(){ capexItems.push({name:"",price:0,qty:1}); renderCapEx(); }
+function addEmp(){ emps.push({role:"",count:1,salary:0}); renderEmps(); }
+function removeFixed(i){ fixedItems.splice(i,1); renderFixed(); }
+function removeBOM(i){ bomItems.splice(i,1); renderBOM(); }
+function removeCapEx(i){ capexItems.splice(i,1); renderCapEx(); }
+function removeEmp(i){ emps.splice(i,1); renderEmps(); }
+
+function calculateAll() {
+  let units = +document.getElementById('projUnits').value||1, cap = +document.getElementById('projCapital').value||0, mkt = +document.getElementById('projMktBudget').value||0;
+  
+  let totalPayroll = 0;
+  emps.forEach(e => { totalPayroll += (e.salary * 1.26) * e.count; });
+  
+  let totalFixed = fixedItems.reduce((sum, f) => sum + f.amount, 0) + totalPayroll;
+  let unitCost = bomItems.reduce((sum, b) => sum + (b.price * b.qty), 0);
+  let totalVariable = unitCost * units;
+  let capexTotal = capexItems.reduce((sum, c) => sum + (c.price * c.qty), 0);
+  
+  let fpu = totalFixed / units;
+  let fullUnitCost = unitCost + fpu;
+  
+  let prices = [{n:"Eco",m:1.2},{n:"Std",m:1.5},{n:"Prem",m:2.0}];
+  let h = `<h3>💡 ${t('bom_total')} (فقط المكونات): <span class="big-num">${fmt(unitCost)} دج</span></h3>`;
+  h += `<h3>💡 التكلفة الإجمالية للوحدة (مع الثابت): <span class="big-num">${fmt(fullUnitCost)} دج</span></h3><div class="grid3">`;
+  prices.forEach(p => { let pr = Math.ceil(fullUnitCost*p.m/10)*10; h += `<div class="pricing-card" onclick="selectedPrice=${pr};calculateAll()"><h4>${p.n}</h4><div class="price">${fmt(pr)} دج</div></div>`; });
+  h += `</div>`;
+  document.getElementById('pricingResult').innerHTML = h;
+
+  if(!selectedPrice) selectedPrice = Math.ceil(fullUnitCost*1.5/10)*10;
+  R = {units, unitCost, totalVariable, totalFixed, fullUnitCost, cap, mkt, sel:selectedPrice, capexTotal};
+  
+  renderFinancial(); renderMarket(); fillBMC(); renderCharts(); runAISearch(); renderAI();
+}
+
+function renderFinancial() {
+  if(!R) return;
+  let p = R.sel, u = R.units, rev = p*u, varC = R.unitCost*u, fixC = R.totalFixed, prof = rev-(varC+fixC);
+  let cac = R.mkt / u, ltv = p * 3, bep = p > R.unitCost ? Math.ceil(fixC / (p - R.unitCost)) : 0;
+
+  document.getElementById('cacVal').innerText = fmt(cac);
+  document.getElementById('ltvVal').innerText = fmt(ltv);
+  document.getElementById('bepVal').innerText = fmt(bep);
+  
+  let h = `<table class="data">
+    <tr><th>${t('col_item')}</th><th>${t('col_total')} (دج)</th></tr>
+    <tr><td>${t('lbl_rev')} (${u} وحدة × ${fmt(p)})</td><td class="ok-num">${fmt(rev)}</td></tr>
+    <tr><td>${t('lbl_cost')} متغيرة (${u} × ${fmt(R.unitCost)})</td><td class="big-num">-${fmt(varC)}</td></tr>
+    <tr><td>${t('lbl_cost')} ثابتة (تشمل الرواتب)</td><td class="big-num">-${fmt(fixC)}</td></tr>
+    <tr style="background:#ebf8ff;font-weight:bold;"><td>${t('lbl_profit')} الإجمالي</td><td class="${prof>=0?'ok-num':'big-num'}">${fmt(prof)}</td></tr>
+    <tr><td>نقطة التعادل (BEP)</td><td>${fmt(bep)} ${t('lbl_units')}</td></tr>
+    </table>`;
+  document.getElementById('financialResult').innerHTML = h;
+}
+
+function renderCharts() {
+  if(!R || !document.getElementById('mainChart')) return;
+  let ctx = document.getElementById('mainChart').getContext('2d');
+  if(myChart) myChart.destroy();
+  let rev = R.sel * R.units, cost = R.totalFixed + (R.unitCost * R.units), prof = rev - cost;
+  myChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: [t('lbl_rev'), t('lbl_cost'), t('lbl_profit')], datasets: [{ label: 'DA', data: [rev, cost, prof], backgroundColor: ['#3182ce', '#c53030', '#38a169'] }] },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
+
+function renderMarket() {
+  if(!R) return;
+  let m = +document.getElementById('projMarket').value||0, tam = m*R.sel;
+  document.getElementById('marketResult').innerHTML = `<table class="data"><tr><th>TAM</th><td>${fmt(tam)} دج</td></tr><tr><th>SAM (30%)</th><td>${fmt(tam*0.3)} دج</td></tr><tr><th>SOM (5%)</th><td>${fmt(tam*0.015)} دج</td></tr></table>`;
+}
+
+function runAISearch() {
+  if(!R) return;
+  let h = `<table class="data"><tr><th>Criteria</th><th style="background:#ebf8ff;">${t('p_name')}</th><th><input type="text" value="${currentComps[0].name}"></th><th><input type="text" value="${currentComps[1].name}"></th></tr>
+  <tr><td>Price</td><td style="background:#ebf8ff;">${fmt(R.sel)}</td><td>${currentComps[0].price}</td><td>${currentComps[1].price}</td></tr>
+  <tr><td>Quality</td><td style="background:#ebf8ff;">Good</td><td>${currentComps[0].quality}</td><td>${currentComps[1].quality}</td></tr>
+  <tr><td>Delivery</td><td style="background:#ebf8ff;">Fast</td><td>${currentComps[0].deliv}</td><td>${currentComps[1].deliv}</td></tr>
+  <tr><td>Digital</td><td style="background:#ebf8ff;">Medium</td><td>${currentComps[0].digital}</td><td>${currentComps[1].digital}</td></tr>
+  </table>`;
+  document.getElementById('compResult').innerHTML = h;
+}
+
+function fillBMC() {
+  if(!R) return;
+  let b = DB[document.getElementById('projSector').value].bmc;
+  let idea = document.getElementById('projIdea').value || 'حل مبتكر';
+  document.getElementById('bmc1').value = b.b1; document.getElementById('bmc2').value = b.b2;
+  document.getElementById('bmc3').value = `${idea} بسعر ${fmt(R.sel)} دج.`;
+  document.getElementById('bmc4').value = document.getElementById('projTarget').value;
+  document.getElementById('bmc5').value = b.b5; document.getElementById('bmc6').value = b.b6; document.getElementById('bmc7').value = b.b7;
+  document.getElementById('bmc8').value = `${fmt(R.sel * R.units)} دج / إجمالي`;
+  document.getElementById('bmc9').value = `${fmt(R.totalFixed + R.unitCost * R.units)} دج / إجمالي`;
+}
+
+function renderAI() {
+  if(!R) return;
+  let p = R.sel, u = R.units, prof = p*u - (R.totalFixed + R.unitCost*u);
+  let tip = prof > 0 ? "🟢 مشروعك مربح، ركز على التوسع." : "🔴 مشروعك خاسر، راجع التكاليف.";
+  document.getElementById('aiBox').innerHTML = `<div class="ai-tip">${tip}</div>`;
+  let swot = `<div class="swot-item swot-s"><strong>${t('swot_s')}</strong><br>تكلفة تصنيع منخفضة مقارنة بالمستورد</div>
+  <div class="swot-item swot-w"><strong>${t('swot_w')}</strong><br>علامة جديدة، حاجة لثقة الجامعات</div>
+  <div class="swot-item swot-o"><strong>${t('swot_o')}</strong><br>رقمنة الجامعات الجزائرية</div>
+  <div class="swot-item swot-t"><strong>${t('swot_t')}</strong><br>منافسة من شركات أجنبية</div>`;
+  document.getElementById('swotBox').innerHTML = swot;
+}
+
+function exportPDF() {
+  if(!R) { alert(t('msg_err')); return; }
+  document.body.classList.add('exporting');
+  setTimeout(() => {
+    html2canvas(document.getElementById('printContainer'), {scale:2}).then(canvas => {
+      let img = canvas.toDataURL('image/jpeg', 1.0), pdf = new jspdf.jsPDF('p','mm','a4'), w = pdf.internal.pageSize.getWidth(), h = canvas.height*w/canvas.width, left = h, pos = 0;
+      pdf.addImage(img,'JPEG',0,pos,w,h); left -= pdf.internal.pageSize.getHeight();
+      while(left >= 0) { pos = left - h; pdf.addPage(); pdf.addImage(img,'JPEG',0,pos,w,h); left -= pdf.internal.pageSize.getHeight(); }
+      pdf.save('FinStart_Report.pdf'); document.body.classList.remove('exporting');
+    });
+  }, 300);
+}
+
+function saveData() {
+  let data = { emps, fixedItems, bomItems, capexItems, p: selectedPrice, l: L,
+    name: document.getElementById('projName').value, idea: document.getElementById('projIdea').value,
+    target: document.getElementById('projTarget').value, capital: document.getElementById('projCapital').value,
+    units: document.getElementById('projUnits').value, market: document.getElementById('projMarket').value,
+    mkt: document.getElementById('projMktBudget').value
+  };
+  localStorage.setItem('finstart_v13', JSON.stringify(data)); alert(t('msg_saved'));
+}
+function loadData() {
+  let d = localStorage.getItem('finstart_v13');
+  if(d) { d = JSON.parse(d); emps = d.emps; fixedItems = d.fixedItems; bomItems = d.bomItems; capexItems = d.capexItems; selectedPrice = d.p;
+    document.getElementById('projName').value = d.name || ''; document.getElementById('projIdea').value = d.idea || '';
+    document.getElementById('projTarget').value = d.target || ''; document.getElementById('projCapital').value = d.capital || '';
+    document.getElementById('projUnits').value = d.units || ''; document.getElementById('projMarket').value = d.market || '';
+    document.getElementById('projMktBudget').value = d.mkt || '';
+    renderEmps(); renderFixed(); renderBOM(); renderCapEx(); applyLang(d.l);
+  }
+}
+function resetData() { if(confirm("Sure?")) { localStorage.removeItem('finstart_v13'); location.reload(); } }
+function showTab(id) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===id)); document.getElementById(id).classList.add('active'); if(id==='tab3') renderCharts(); }
+function goToCosts(){ showTab('tab2'); }
+
+/* ============ AI FUNCTIONS ============ */
+async function callAI(prompt) {
+  try {
+    const response = await fetch('https://finstart-ai.vercel.app/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    });
+    if (!response.ok) throw new Error('API Error');
+    const data = await response.json();
+    return data.result;
+  } catch (error) {
+    console.error(error);
+    return "عذراً، حدث خطأ في الاتصال بالذكاء الاصطناعي. تأكد من إعداد الخادم الوسيط (Backend).";
+  }
+}
+
+async function askAI() {
+  let q = document.getElementById('aiQuestion').value;
+  if(!q) return;
+  let res = document.getElementById('aiResponse');
+  res.style.display = 'block';
+  res.innerText = "⏳ جاري التفكير...";
+  
+  let projectContext = `اسم المشروع: ${document.getElementById('projName').value}. `;
+  if(R) {
+    projectContext += `السعر: ${R.sel} دج. التكلفة: ${R.fullUnitCost} دج. الربح المتوقع: ${R.sel*R.units - (R.totalFixed + R.unitCost*R.units)} دج. عدد الوحدات: ${R.units}.`;
+  }
+  
+  let prompt = `أنت مستشار مالي خبير. بناءً على بيانات المشروع التالية: ${projectContext}. أجب على سؤال الطالب: "${q}". كن مختصراً ومفيداً.`;
+  
+  let answer = await callAI(prompt);
+  res.innerText = answer;
+}
+
+async function aiGenerateBMC() {
+  let idea = document.getElementById('projIdea').value;
+  if(!idea) { alert('يرجى كتابة فكرة المشروع أولاً'); return; }
+  let btn = event.target;
+  btn.innerText = "⏳ جاري التوليد...";
+  
+  let prompt = `أنت خبير في نماذج الأعمال. قم بتوليد Business Model Canvas (BMC) لمشروع فكرته: "${idea}". أرجع النتيجة بصيغة JSON تحتوي على المفاتيح التالية: partners, activities, value, segments, channels, relations, resources, revenues, costs. اكتب القيم باللغة العربية.`;
+  
+  let result = await callAI(prompt);
+  try {
+    let parsed = JSON.parse(result);
+    document.getElementById('bmc1').value = parsed.partners || '';
+    document.getElementById('bmc2').value = parsed.activities || '';
+    document.getElementById('bmc3').value = parsed.value || '';
+    document.getElementById('bmc4').value = parsed.segments || '';
+    document.getElementById('bmc5').value = parsed.channels || '';
+    document.getElementById('bmc6').value = parsed.relations || '';
+    document.getElementById('bmc7').value = parsed.resources || '';
+    document.getElementById('bmc8').value = parsed.revenues || '';
+    document.getElementById('bmc9').value = parsed.costs || '';
+  } catch(e) {
+    alert("حدث خطأ في تحليل النتيجة. قد يكون الرد غير منسق. النتيجة الخام: " + result);
+  }
+  btn.innerText = "🤖 توليد BMC بالذكاء الاصطناعي";
+}
+
+async function aiAnalyzeCompetitors() {
+  let sector = document.getElementById('projSector').value;
+  let btn = event.target;
+  btn.innerText = "⏳ جاري التحليل...";
+  
+  let prompt = `أنت خبير تسويق. قم بتحليل المنافسين لمشروع في قطاع "${sector}" في الجزائر. أرجع النتيجة بصيغة JSON كمصفوفة من كائنين، كل كائن يحتوي على: name, price, quality, deliv, digital. اكتب القيم باللغة العربية.`;
+  
+  let result = await callAI(prompt);
+  try {
+    let parsed = JSON.parse(result);
+    currentComps = parsed;
+    runAISearch();
+  } catch(e) {
+    alert("حدث خطأ في تحليل النتيجة. قد يكون الرد غير منسق. النتيجة الخام: " + result);
+  }
+  btn.innerText = "🤖 تحليل المنافسين بالذكاء الاصطناعي";
+}
+
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+onSectorChange(); applyLang('ar');
+</script>
+</body>
+</html>
