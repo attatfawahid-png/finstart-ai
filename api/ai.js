@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         'X-Title': 'FinStart DZ'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-r1-0528:free',
+       model: 'google/gemini-2.0-flash-exp:free',
         messages: [{ role: 'user', content: prompt }]
       })
     });
