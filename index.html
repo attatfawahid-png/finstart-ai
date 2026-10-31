@@ -69,10 +69,11 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <button class="tab-btn active" data-tab="tab1" data-i18n="t1">1. معلومات</button>
   <button class="tab-btn" data-tab="tab2" data-i18n="t2">2. التكاليف</button>
   <button class="tab-btn" data-tab="tab8" data-i18n="t8">3. الرواتب والتجهيزات</button>
-  <button class="tab-btn" data-tab="tab3" data-i18n="t3">4. الجداول المالية (Excel)</button>
-  <button class="tab-btn" data-tab="tab4" data-i18n="t4">5. المنافسون (بحث حقيقي)</button>
+  <button class="tab-btn" data-tab="tab3" data-i18n="t3">4. الجداول المالية</button>
+  <button class="tab-btn" data-tab="tab4" data-i18n="t4">5. المنافسون</button>
   <button class="tab-btn" data-tab="tab5" data-i18n="t5">6. BMC</button>
-  <button class="tab-btn" data-tab="tab6" data-i18n="t6">7. المساعد</button>
+  <button class="tab-btn" data-tab="tab9" data-i18n="t9">7. تحليل SWOT</button>
+  <button class="tab-btn" data-tab="tab6" data-i18n="t6">8. المساعد</button>
 </nav>
 
 <div class="container" id="printContainer">
@@ -193,6 +194,40 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   </div>
 </section>
 
+<!-- TAB 9: SWOT -->
+<section class="tab-content" id="tab9">
+  <div class="card">
+    <h2 data-i18n="h_swot">🧠 التحليل الاستراتيجي (SWOT)</h2>
+    <p style="font-size:12px; color:#4a5568;" data-i18n="swot_desc">يقوم الذكاء الاصطناعي بتحليل فكرة مشروعك واستخراج نقاط القوة والضعف والفرص والتهديدات مع توصيات.</p>
+    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد تحليل SWOT بالذكاء الاصطناعي</button>
+    
+    <div id="swotResult" style="margin-top:20px; display:none;">
+      <div class="grid" style="gap:15px;">
+        <div class="result" style="background:#f0fff4; border-color:#38a169;">
+          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">نقاط القوة (Strengths)</span></h3>
+          <ul id="swotS" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+        <div class="result" style="background:#fff5f5; border-color:#c53030;">
+          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">نقاط الضعف (Weaknesses)</span></h3>
+          <ul id="swotW" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+        <div class="result" style="background:#ebf8ff; border-color:#3182ce;">
+          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص (Opportunities)</span></h3>
+          <ul id="swotO" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+        <div class="result" style="background:#fffaf0; border-color:#dd6b20;">
+          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات (Threats)</span></h3>
+          <ul id="swotT" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+      </div>
+      <div class="result" style="background:#faf5ff; border-color:#805ad5; margin-top:15px;">
+        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية الاستراتيجية (AI)</span></h3>
+        <p id="swotRec" style="font-size:14px; font-weight:bold;"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- TAB 6: AI -->
 <section class="tab-content" id="tab6">
   <div class="card">
@@ -211,12 +246,12 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer>FinStart DZ v15.0 - Enterprise Edition</footer>
+<footer>FinStart DZ v15.1 - Enterprise Edition</footer>
 
 <script>
 /* ============ TRANSLATIONS ============ */
 const T = {
-  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. الجداول المالية", t4:"5. المنافسون", t5:"6. BMC", t6:"7. المساعد",
+  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. الجداول المالية", t4:"5. المنافسون", t5:"6. BMC", t9:"7. تحليل SWOT", t6:"8. المساعد",
     info_title:"📋 المعلومات", p_name:"الاسم", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
     p_sector:"القطاع", p_target:"الجمهور", p_idea:"الفكرة", h_cap:"💰 رأس المال", p_capital:"رأس المال (دج)", p_units:"مبيعات سنة 1", p_price:"سعر البيع (دج)", btn_next:"➡️ التالي",
     h_invest:"🏗️ التكاليف الاستثمارية", c_item:"البيان", c_cost:"القيمة", c_qty:"الكمية", c_dep:"الاهتلاك", btn_add:"+ إضافة",
@@ -224,9 +259,10 @@ const T = {
     h_hr:"👥 الرواتب", hr_role:"المنصب", hr_count:"العدد", hr_basic:"الأساسي", hr_cnas_emp:"حصة العامل 9%", hr_net:"الصافي", hr_cnas_er:"حصة صاحب العمل 26%", hr_total:"الإجمالي",
     h_amort:"📉 جدول الاهتلاك", h_tcr:"📊 جدول النتائج (TCR)", h_tft:"💸 جدول التدفقات (TFT)", h_charts:"📈 تطور الأرباح",
     h_comp:"⚔️ المنافسون", btn_ai_comp:"🤖 بحث عن المنافسين", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 توليد BMC", b1:"🤝 الشركاء", b2:"⚙️ الأنشطة", b3:"💎 القيمة", b4:"👥 العملاء", b5:"📢 القنوات", b6:"❤️ العلاقات", b7:"🔑 الموارد", b8:"💰 الإيرادات", b9:"💸 التكاليف",
+    h_swot:"🧠 تحليل SWOT", swot_desc:"تحليل ذكي لمشروعك", btn_ai_swot:"🚀 توليد التحليل", swot_s:"نقاط القوة", swot_w:"نقاط الضعف", swot_o:"الفرص", swot_t:"التهديدات", swot_rec:"التوصية الاستراتيجية",
     h_ai:"🧠 المساعد", ai_q:"سؤالك", btn_ask:"🚀 اسأل", btn_save:"💾 حفظ", btn_pdf:"📄 PDF", btn_reset:"🗑️ مسح"
   },
-  fr:{ t1:"1. Infos", t2:"2. Coûts", t8:"3. RH", t3:"4. Financier", t4:"5. Concurrents", t5:"6. BMC", t6:"7. Assistant",
+  fr:{ t1:"1. Infos", t2:"2. Coûts", t8:"3. RH", t3:"4. Financier", t4:"5. Concurrents", t5:"6. BMC", t9:"7. SWOT", t6:"8. Assistant",
     info_title:"📋 Infos", p_name:"Nom", p_type:"Type", type_hybrid:"Matériel + Logiciel", type_hw:"Matériel", type_sw:"Logiciel",
     p_sector:"Secteur", p_target:"Cible", p_idea:"Idée", h_cap:"💰 Capital", p_capital:"Capital", p_units:"Ventes (An 1)", p_price:"Prix", btn_next:"➡️ Suivant",
     h_invest:"🏗️ CapEx", c_item:"Désignation", c_cost:"Coût", c_qty:"Qté", c_dep:"Amort.", btn_add:"+ Ajouter",
@@ -234,9 +270,10 @@ const T = {
     h_hr:"👥 Salaires", hr_role:"Poste", hr_count:"Nb", hr_basic:"Base", hr_cnas_emp:"Part employé 9%", hr_net:"Net", hr_cnas_er:"Part employeur 26%", hr_total:"Total",
     h_amort:"📉 Amortissement", h_tcr:"📊 Résultat (TCR)", h_tft:"💸 Trésorerie (TFT)", h_charts:"📈 Évolution",
     h_comp:"⚔️ Concurrents", btn_ai_comp:"🤖 Rechercher", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Générer BMC", b1:"🤝 Partenaires", b2:"⚙️ Activités", b3:"💎 Valeur", b4:"👥 Clients", b5:"📢 Canaux", b6:"❤️ Relations", b7:"🔑 Ressources", b8:"💰 Revenus", b9:"💸 Coûts",
+    h_swot:"🧠 Analyse SWOT", swot_desc:"Analyse IA de votre projet", btn_ai_swot:"🚀 Générer l'analyse", swot_s:"Forces", swot_w:"Faiblesses", swot_o:"Opportunités", swot_t:"Menaces", swot_rec:"Recommandation Stratégique",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Demander", btn_save:"💾 Sauver", btn_pdf:"📄 PDF", btn_reset:"🗑️ Effacer"
   },
-  en:{ t1:"1. Info", t2:"2. Costs", t8:"3. HR", t3:"4. Financials", t4:"5. Competitors", t5:"6. BMC", t6:"7. Assistant",
+  en:{ t1:"1. Info", t2:"2. Costs", t8:"3. HR", t3:"4. Financials", t4:"5. Competitors", t5:"6. BMC", t9:"7. SWOT", t6:"8. Assistant",
     info_title:"📋 Info", p_name:"Name", p_type:"Type", type_hybrid:"Hardware + Software", type_hw:"Hardware", type_sw:"Software",
     p_sector:"Sector", p_target:"Target", p_idea:"Idea", h_cap:"💰 Capital", p_capital:"Capital", p_units:"Sales (Year 1)", p_price:"Price", btn_next:"➡️ Next",
     h_invest:"🏗️ CapEx", c_item:"Item", c_cost:"Cost", c_qty:"Qty", c_dep:"Depr.", btn_add:"+ Add",
@@ -244,6 +281,7 @@ const T = {
     h_hr:"👥 Salaries", hr_role:"Role", hr_count:"Count", hr_basic:"Base", hr_cnas_emp:"Employee 9%", hr_net:"Net", hr_cnas_er:"Employer 26%", hr_total:"Total",
     h_amort:"📉 Depreciation", h_tcr:"📊 Income Statement", h_tft:"💸 Cash Flow", h_charts:"📈 Evolution",
     h_comp:"⚔️ Competitors", btn_ai_comp:"🤖 Search", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Generate BMC", b1:"🤝 Partners", b2:"⚙️ Activities", b3:"💎 Value", b4:"👥 Clients", b5:"📢 Channels", b6:"❤️ Relations", b7:"🔑 Resources", b8:"💰 Revenues", b9:"💸 Costs",
+    h_swot:"🧠 SWOT Analysis", swot_desc:"AI Analysis of your project", btn_ai_swot:"🚀 Generate Analysis", swot_s:"Strengths", swot_w:"Weaknesses", swot_o:"Opportunities", swot_t:"Threats", swot_rec:"Strategic Recommendation",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Ask", btn_save:"💾 Save", btn_pdf:"📄 PDF", btn_reset:"🗑️ Clear"
   }
 };
@@ -342,7 +380,6 @@ function calculateAll() {
   let baseUnits = +document.getElementById('projUnits').value || 0;
   let price = +document.getElementById('projPrice').value || 0;
   
-  // 1. Calc Amortization (Depreciation)
   let totalCapEx = 0, annualDep = 0, depData = [];
   investItems.forEach(item => {
     let tc = item.cost * item.qty; totalCapEx += tc;
@@ -350,17 +387,14 @@ function calculateAll() {
     depData.push({name: item.name, total: tc, years: item.dep, annual: d});
   });
 
-  // 2. Calc Unit Cost (BOM)
   let unitCost = 0;
   bomItems.forEach(item => { unitCost += (item.cost * item.qty); });
 
-  // 3. Calc Monthly Opex & Salaries
   let monthlyOpex = 0;
   fixedItems.forEach(item => { monthlyOpex += item.cost; });
-  emps.forEach(e => { monthlyOpex += (e.salary * 1.26 * e.count); }); // Salaries with CNAS
+  emps.forEach(e => { monthlyOpex += (e.salary * 1.26 * e.count); });
   let annualOpex = monthlyOpex * 12;
 
-  // Store Data
   window.calcData = { baseUnits, price, totalCapEx, annualDep, depData, unitCost, annualOpex, monthlyOpex };
   
   renderAmort(); renderTCR(); renderTFT(); renderChart();
@@ -380,7 +414,6 @@ function renderTCR() {
   if(!window.calcData) return;
   let d = window.calcData;
   
-  // 5 Year Projections (Growth 20% Rev, 5% Price)
   let html = `<tr><th>Rubrique</th><th>Année 1</th><th>Année 2</th><th>Année 3</th><th>Année 4</th><th>Année 5</th></tr>`;
   let revRow = `<tr><td>Chiffre d'Affaires</td>`;
   let cogsRow = `<tr><td>Coût des Ventes (Matières)</td>`;
@@ -412,7 +445,6 @@ function renderTCR() {
 function renderTFT() {
   if(!window.calcData) return;
   let d = window.calcData;
-  // TFT simplified: Cash flow = Net Profit + Depreciation - Working Capital changes (Simplified)
   let html = `<tr><th>Flux</th><th>Année 1</th><th>Année 2</th><th>Année 3</th><th>Année 4</th><th>Année 5</th></tr>`;
   let opRow = `<tr><td>Flux d'Exploitation (RN + Amort)</td>`;
   let invRow = `<tr><td>Flux d'Investissement (CapEx)</td>`;
@@ -451,12 +483,20 @@ async function callAI(prompt, type='general', sector='') {
   try {
     const response = await fetch('/api/ai', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, type, sector })
+      body: JSON.stringify({ prompt, type, sector, lang: L })
     });
     const data = await response.json();
-    if(!response.ok) throw new Error(data.error || 'API Error');
+    
+    if (!response.ok || data.error) {
+        if(data.error && data.error.includes("Rate limit")) {
+            return "⚠️ عذراً، لقد استنفدنا الحد المجاني للذكاء الاصطناعي لهذا اليوم. يرجى المحاولة غداً.";
+        }
+        throw new Error(data.error || 'API Error');
+    }
     return data.result;
-  } catch(e) { return "❌ خطأ: " + e.message; }
+  } catch(e) { 
+      return "❌ خطأ: " + e.message; 
+  }
 }
 
 async function askAI() {
@@ -470,9 +510,9 @@ async function askAI() {
 async function aiGenerateBMC() {
   let idea = document.getElementById('projIdea').value;
   if(!idea) return alert('اكتب الفكرة أولاً');
-  let btn = event.target; btn.innerText = "⏳ جاري التوليد...";
-  let prompt = `Génère un BMC pour: "${idea}". Renvoie uniquement un JSON pur (sans \`\`\`json) avec: partners, activities, value, segments, channels, relations, resources, revenues, costs. Langue: ${L}.`;
-  let result = await callAI(prompt);
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التوليد...";
+  
+  let result = await callAI(idea, 'bmc');
   try {
     let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
     document.getElementById('bmc1').value = parsed.partners || ''; document.getElementById('bmc2').value = parsed.activities || '';
@@ -481,23 +521,56 @@ async function aiGenerateBMC() {
     document.getElementById('bmc7').value = parsed.resources || ''; document.getElementById('bmc8').value = parsed.revenues || '';
     document.getElementById('bmc9').value = parsed.costs || '';
   } catch(e) { alert("خطأ في التنسيق: " + result); }
-  btn.innerText = t('btn_ai_bmc');
+  btn.innerText = originalText;
 }
 
 async function aiAnalyzeCompetitors() {
   let sector = document.getElementById('projSector').value;
-  let btn = event.target; btn.innerText = "⏳ جاري البحث...";
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري البحث...";
+  
   let result = await callAI("", 'competitors', sector);
   try {
     let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    let html = `<div style="overflow-x:auto;"><table class="data"><tr><th>Name</th><th>Employees</th><th>Funding</th><th>Pricing</th><th>Features</th><th>Source</th></tr>`;
+    let html = `<div style="overflow-x:auto;"><table class="data"><tr><th data-i18n="p_name">الشركة</th><th>الموظفون</th><th>التمويل</th><th>التسعير</th><th>الميزات</th><th>الدليل</th></tr>`;
     parsed.forEach(c => {
-      html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank">Link</a></td></tr>`;
+      html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank" class="btn btn-primary" style="padding:4px 8px; font-size:10px;">Link</a></td></tr>`;
     });
     html += `</table></div>`;
     document.getElementById('compResult').innerHTML = html;
   } catch(e) { document.getElementById('compResult').innerHTML = `<p class="big-num">فشل البحث: ${result}</p>`; }
-  btn.innerText = t('btn_ai_comp');
+  btn.innerText = originalText;
+}
+
+async function aiGenerateSWOT() {
+  let idea = document.getElementById('projIdea').value;
+  if(!idea) return alert('يرجى كتابة فكرة المشروع في الصفحة الأولى أولاً');
+  
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التحليل...";
+  
+  let result = await callAI(idea, 'swot');
+  
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    
+    let fillList = (id, arr) => {
+      let html = '';
+      if(Array.isArray(arr)) { arr.forEach(item => html += `<li>${item}</li>`); } 
+      else { html = `<li>${arr || 'لا يوجد'}</li>`; }
+      document.getElementById(id).innerHTML = html;
+    };
+    
+    fillList('swotS', parsed.strengths);
+    fillList('swotW', parsed.weaknesses);
+    fillList('swotO', parsed.opportunities);
+    fillList('swotT', parsed.threats);
+    document.getElementById('swotRec').innerText = parsed.recommendation || '';
+    
+    document.getElementById('swotResult').style.display = 'block';
+  } catch(e) {
+    alert("حدث خطأ في تحليل JSON. النتيجة الخام: \n" + result);
+  }
+  
+  btn.innerText = originalText;
 }
 
 /* ============ UTILS ============ */
