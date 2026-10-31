@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FinStart DZ - Global Edition</title>
+<title>FinStart DZ - Ultimate Platform</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- مكتبة SheetJS لتصدير الإكسل الاحترافي -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
   --p:#1e3a5f; --a:#3182ce; --bg:#f0f4f8; --c:#fff; --b:#e2e8f0; --s:#38a169; --d:#c53030;
@@ -69,7 +67,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <div id="autosave-badge">💾 تم الحفظ التلقائي</div>
 
 <header>
-  <div><h1>📊 FinStart DZ <span style="font-size:12px;background:#38a169;padding:2px 8px;border-radius:10px;margin-left:8px;">GLOBAL</span></h1></div>
+  <div><h1>📊 FinStart DZ <span style="font-size:12px;background:#38a169;padding:2px 8px;border-radius:10px;margin-left:8px;">PRO</span></h1></div>
   <div>
     <button class="theme-btn" onclick="toggleTheme()">🌙/☀️</button>
     <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">العربية</button>
@@ -306,12 +304,12 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 </section>
 
 <div class="toolbar">
-  <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 تصدير Excel (xlsx)</button>
+  <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 تصدير Excel (xls)</button>
   <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 تصدير تقرير PDF</button>
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v22.0 - Global Edition</footer>
+<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v23.0 - Ultimate Platform</footer>
 
 <script>
 /* ============ TRANSLATIONS ============ */
@@ -740,27 +738,62 @@ function triggerAutoSave() {
   setTimeout(() => { badge.style.opacity = '0'; }, 2000);
 }
 
-/* ============ EXPORT EXCEL (XLSX) ============ */
+/* ============ EXPORT EXCEL (XLS METHOD) ============ */
 function exportExcel() {
-  if (!window.calcData) calculateAll();
-  
-  // إنشاء ملف إكسل جديد
-  var wb = XLSX.utils.book_new();
-  
-  // 1. جدول الاهتلاك
-  var wsAmort = XLSX.utils.table_to_sheet(document.getElementById('amortTable'));
-  XLSX.utils.book_append_sheet(wb, wsAmort, "Amortissement");
-  
-  // 2. جدول النتائج TCR
-  var wsTCR = XLSX.utils.table_to_sheet(document.getElementById('tcrTable'));
-  XLSX.utils.book_append_sheet(wb, wsTCR, "TCR");
-  
-  // 3. جدول التدفقات TFT
-  var wsTFT = XLSX.utils.table_to_sheet(document.getElementById('tftTable'));
-  XLSX.utils.book_append_sheet(wb, wsTFT, "TFT");
-  
-  // حفظ الملف
-  XLSX.writeFile(wb, "FinStart_Financials.xlsx");
+  if (!window.calcData) {
+    alert("يرجى حساب الجداول أولاً لتتمكن من تصديرها.");
+    return;
+  }
+
+  let tableTCR = document.getElementById('tcrTable').outerHTML;
+  let tableTFT = document.getElementById('tftTable').outerHTML;
+  let tableAmort = document.getElementById('amortTable').outerHTML;
+
+  let template = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="UTF-8">
+      <!--[if gte mso 9]>
+      <xml>
+        <x:ExcelWorkbook>
+          <x:ExcelWorksheets>
+            <x:ExcelWorksheet>
+              <x:Name>Financials</x:Name>
+              <x:WorksheetOptions>
+                <x:DisplayRightToLeft/>
+              </x:WorksheetOptions>
+            </x:ExcelWorksheet>
+          </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+      </xml>
+      <![endif]-->
+      <style>
+        table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI', Tahoma, Arial; text-align: center; }
+        th, td { border: 1px solid #000; padding: 5px; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        h2 { font-family: 'Segoe UI', Tahoma, Arial; text-align: right; color: #1e3a5f; }
+      </style>
+    </head>
+    <body>
+      <h2>جدول الاهتلاك</h2>
+      ${tableAmort}
+      <br><br>
+      <h2>جدول حسابات النتائج (TCR)</h2>
+      ${tableTCR}
+      <br><br>
+      <h2>جدول تدفقات الخزينة (TFT)</h2>
+      ${tableTFT}
+    </body>
+    </html>
+  `;
+
+  let blob = new Blob([template], { type: 'application/vnd.ms-excel' });
+  let link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "FinStart_Financials.xls";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 /* ============ AI ============ */
