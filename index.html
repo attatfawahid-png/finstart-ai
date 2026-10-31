@@ -240,10 +240,10 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer style="text-align:center; padding:20px; color:#718096; font-size:12px;">FinStart DZ v17.0 - Ultimate Report</footer>
+<footer style="text-align:center; padding:20px; color:#718096; font-size:12px;">FinStart DZ v17.1 - Ultimate Report</footer>
 
 <!-- قالب التقرير المخفي للـ PDF -->
-<div id="pdfReport" style="position: absolute; left: -9999px; top: 0; width: 900px; background: #fff; padding: 40px; font-family: 'Segoe UI', Tahoma, Arial; color: #000;"></div>
+<div id="pdfReport" style="position: absolute; left: -9999px; top: 0; width: 1000px; background: #fff; padding: 40px; font-family: 'Segoe UI', Tahoma, Arial; color: #000;"></div>
 
 <script>
 /* ============ TRANSLATIONS ============ */
@@ -573,6 +573,11 @@ async function aiGenerateSWOT() {
 
 /* ============ EXPORT PDF (FULL REPORT) ============ */
 function exportPDF() {
+  // إجبار المنصة على حساب الجداول إذا لم تكن قد حسبتها مسبقاً
+  if (!window.calcData) {
+      calculateAll();
+  }
+
   let reportDiv = document.getElementById('pdfReport');
   let projName = document.getElementById('projName').value || "مشروعي";
   let projIdea = document.getElementById('projIdea').value || "";
@@ -593,13 +598,13 @@ function exportPDF() {
       <tr><td style="padding: 8px; font-weight: bold;">${t('p_capital')}:</td><td style="padding: 8px;">${fmt(document.getElementById('projCapital').value)}</td></tr>
     </table>
 
-    <h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; page-break-before: always;">2. ${t('h_invest')}</h3>
+    <h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px;">2. ${t('h_invest')}</h3>
     <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
       <tr style="background: #edf2f7; font-weight: bold;"><th>${t('c_item')}</th><th>${t('c_cost')}</th><th>${t('c_qty')}</th><th>${t('col_total')}</th></tr>
       ${investItems.map(i => `<tr><td>${i.name}</td><td>${fmt(i.cost)}</td><td>${i.qty}</td><td>${fmt(i.cost*i.qty)}</td></tr>`).join('')}
     </table>
 
-    <h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px;">3. ${t('h_hr')}</h3>
+    <h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px;">3. ${t('h_hr')}</h3>
     <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
       <tr style="background: #edf2f7; font-weight: bold;"><th>${t('hr_role')}</th><th>${t('hr_count')}</th><th>${t('hr_basic')}</th><th>${t('hr_total')}</th></tr>
       ${emps.map(e => `<tr><td>${e.role}</td><td>${e.count}</td><td>${fmt(e.salary)}</td><td>${fmt(e.salary*1.26*e.count)}</td></tr>`).join('')}
@@ -607,31 +612,31 @@ function exportPDF() {
   `;
 
   if (window.calcData) {
-    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px; page-break-before: always;">4. ${t('amort_title')}</h3>`;
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">4. ${t('amort_title')}</h3>`;
     html += `<table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
       ${document.getElementById('amortTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '')}
     </table>`;
 
-    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px;">5. ${t('tcr_title')}</h3>`;
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px;">5. ${t('tcr_title')}</h3>`;
     html += `<table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
       ${document.getElementById('tcrTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '')}
     </table>`;
 
-    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px;">6. ${t('tft_title')}</h3>`;
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px;">6. ${t('tft_title')}</h3>`;
     html += `<table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
       ${document.getElementById('tftTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '')}
     </table>`;
     
     if(myChart) {
         let chartImage = myChart.toBase64Image();
-        html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px;">7. ${t('h_charts')}</h3>`;
+        html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">7. ${t('h_charts')}</h3>`;
         html += `<div style="text-align:center;"><img src="${chartImage}" style="max-width: 80%; height: auto; border: 1px solid #ccc; padding: 10px;"></div>`;
     }
   }
 
   let bmc3 = document.getElementById('bmc3').value;
   if (bmc3) {
-    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px; page-break-before: always;">8. ${t('bmc_title')}</h3>`;
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">8. ${t('bmc_title')}</h3>`;
     html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px;">`;
     const bmcFields = [
       { title: t('b1'), id: "bmc1" }, { title: t('b2'), id: "bmc2" },
@@ -653,7 +658,7 @@ function exportPDF() {
   }
 
   if (document.getElementById('swotResult').style.display !== 'none') {
-    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 20px; page-break-before: always;">9. ${t('swot_title')}</h3>`;
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">9. ${t('swot_title')}</h3>`;
     html += `<div style="font-size: 12px; text-align: ${L==='ar'?'right':'left'};">`;
     html += `<div style="background: #f0fff4; padding: 10px; margin-bottom: 10px; border-right: 4px solid #38a169;"><strong>${t('swot_s')}:</strong> ${document.getElementById('swotS').innerText}</div>`;
     html += `<div style="background: #fff5f5; padding: 10px; margin-bottom: 10px; border-right: 4px solid #c53030;"><strong>${t('swot_w')}:</strong> ${document.getElementById('swotW').innerText}</div>`;
@@ -666,7 +671,7 @@ function exportPDF() {
   reportDiv.innerHTML = html;
 
   setTimeout(() => {
-    html2canvas(reportDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }).then(canvas => {
+    html2canvas(reportDiv, { scale: 1.5, useCORS: true, backgroundColor: "#ffffff" }).then(canvas => {
       let imgData = canvas.toDataURL('image/jpeg', 1.0);
       let pdf = new jspdf.jsPDF('p', 'mm', 'a4');
       let pageWidth = pdf.internal.pageSize.getWidth();
