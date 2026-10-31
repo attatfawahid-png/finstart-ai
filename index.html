@@ -7,6 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- مكتبة SheetJS لتصدير الإكسل الاحترافي -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
   --p:#1e3a5f; --a:#3182ce; --bg:#f0f4f8; --c:#fff; --b:#e2e8f0; --s:#38a169; --d:#c53030;
@@ -146,7 +148,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <div class="card">
     <h2 data-i18n="h_hr">👥 جدول الرواتب (CNAS 26%)</h2>
     <div style="overflow-x:auto;">
-      <table class="data">
+      <table class="data" id="hrTable">
         <thead><tr>
           <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأجر الأساسي</th>
           <th data-i18n="hr_cnas_emp">حصة العامل 9%</th><th data-i18n="hr_net">الصافي</th>
@@ -304,12 +306,12 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 </section>
 
 <div class="toolbar">
-  <button class="btn btn-success" onclick="exportCSV()" data-i18n="btn_excel">📊 تصدير Excel</button>
+  <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 تصدير Excel (xlsx)</button>
   <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 تصدير تقرير PDF</button>
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v21.0 - Global Edition</footer>
+<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v22.0 - Global Edition</footer>
 
 <script>
 /* ============ TRANSLATIONS ============ */
@@ -604,7 +606,7 @@ function renderBreakEvenChart() {
   let varCostPerUnit = d.unitCost;
   let price = d.price;
   
-  if (price <= varCostPerUnit) return; // لا يمكن حساب نقطة التعادل
+  if (price <= varCostPerUnit) return;
   
   let bepUnits = fixedCost / (price - varCostPerUnit);
   let maxUnits = Math.max(bepUnits * 2, d.baseUnits);
@@ -651,13 +653,11 @@ function calculateSensitivity() {
   
   let d = window.calcData;
   
-  // البيانات الأصلية (السنة الأولى)
   let origRev = d.baseUnits * d.price;
   let origVar = d.baseUnits * d.unitCost;
   let origFix = d.annualOpex;
   let origProfit = origRev - origVar - origFix;
   
-  // البيانات الجديدة
   let newRev = origRev * (1 + salesChange);
   let newVar = origVar * (1 + varChange);
   let newFix = origFix * (1 + fixChange);
@@ -738,51 +738,29 @@ function triggerAutoSave() {
   let badge = document.getElementById('autosave-badge');
   badge.style.opacity = '1';
   setTimeout(() => { badge.style.opacity = '0'; }, 2000);
-  // في النسخة الكاملة، يمكن إضافة كود حفظ البيانات في localStorage هنا
 }
 
-/* ============ EXPORT CSV ============ */
-function exportCSV() {
-  if (!window.calcData) return alert("يرجى حساب الجداول أولاً");
+/* ============ EXPORT EXCEL (XLSX) ============ */
+function exportExcel() {
+  if (!window.calcData) calculateAll();
   
-  let csvContent = "\uFEFF"; // BOM لدعم اللغة العربية في Excel
+  // إنشاء ملف إكسل جديد
+  var wb = XLSX.utils.book_new();
   
-  // عنوان الملف
-  csvContent += "تقرير الجداول المالية - FinStart DZ\n\n";
+  // 1. جدول الاهتلاك
+  var wsAmort = XLSX.utils.table_to_sheet(document.getElementById('amortTable'));
+  XLSX.utils.book_append_sheet(wb, wsAmort, "Amortissement");
   
-  // جدول TCR
-  csvContent += "جدول حسابات النتائج (TCR)\n";
-  let tcrTable = document.getElementById('tcrTable');
-  let rows = tcrTable.querySelectorAll('tr');
-  rows.forEach(row => {
-      let cols = row.querySelectorAll('th, td');
-      let rowData = [];
-      cols.forEach(col => rowData.push(`"${col.innerText}"`));
-      csvContent += rowData.join(",") + "\n";
-  });
+  // 2. جدول النتائج TCR
+  var wsTCR = XLSX.utils.table_to_sheet(document.getElementById('tcrTable'));
+  XLSX.utils.book_append_sheet(wb, wsTCR, "TCR");
   
-  csvContent += "\n\n";
+  // 3. جدول التدفقات TFT
+  var wsTFT = XLSX.utils.table_to_sheet(document.getElementById('tftTable'));
+  XLSX.utils.book_append_sheet(wb, wsTFT, "TFT");
   
-  // جدول TFT
-  csvContent += "جدول تدفقات الخزينة (TFT)\n";
-  let tftTable = document.getElementById('tftTable');
-  let rows2 = tftTable.querySelectorAll('tr');
-  rows2.forEach(row => {
-      let cols = row.querySelectorAll('th, td');
-      let rowData = [];
-      cols.forEach(col => rowData.push(`"${col.innerText}"`));
-      csvContent += rowData.join(",") + "\n";
-  });
-
-  // تحميل الملف
-  let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  let link = document.createElement("a");
-  let url = URL.createObjectURL(blob);
-  link.setAttribute("href", url);
-  link.setAttribute("download", "FinStart_Financials.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // حفظ الملف
+  XLSX.writeFile(wb, "FinStart_Financials.xlsx");
 }
 
 /* ============ AI ============ */
