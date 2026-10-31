@@ -19,14 +19,14 @@ export default async function handler(req, res) {
         'X-Title': 'FinStart DZ'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat-v3-0324:free', 
+        // النموذج المجاني الجديد
+        model: 'meta-llama/llama-3-8b-instruct:free', 
         messages: [{ role: 'user', content: prompt }]
       })
     });
 
     const data = await response.json();
 
-    // إرجاع الخطأ الحقيقي من OpenRouter
     if (!response.ok) {
         return res.status(response.status).json({ error: data.error?.message || 'OpenRouter Error' });
     }
