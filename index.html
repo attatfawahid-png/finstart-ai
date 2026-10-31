@@ -48,10 +48,6 @@ table.data tr:nth-child(even){background:#f9fbfd;}
 .bmc-segments{grid-area:1 / 5 / 3 / 6;}.bmc-costs{grid-area:3 / 1 / 4 / 3;}.bmc-revenues{grid-area:3 / 3 / 4 / 6;}
 @media(max-width:900px){.bmc-container{grid-template-columns:1fr;}.bmc-box{grid-area:auto!important;}}
 .chart-box{position:relative;height:300px;width:100%;margin-top:20px;}
-.exporting .tabs, .exporting .toolbar, .exporting .add-btn, .exporting .row-item button { display: none !important; }
-.exporting .tab-content { display: block !important; margin-bottom: 20px; }
-.exporting .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
-.print-header{display:none;}
 </style>
 </head>
 <body>
@@ -68,7 +64,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
 <nav class="tabs">
   <button class="tab-btn active" data-tab="tab1" data-i18n="t1">1. معلومات</button>
   <button class="tab-btn" data-tab="tab2" data-i18n="t2">2. التكاليف</button>
-  <button class="tab-btn" data-tab="tab8" data-i18n="t8">3. الرواتب والتجهيزات</button>
+  <button class="tab-btn" data-tab="tab8" data-i18n="t8">3. الرواتب</button>
   <button class="tab-btn" data-tab="tab3" data-i18n="t3">4. الجداول المالية</button>
   <button class="tab-btn" data-tab="tab4" data-i18n="t4">5. المنافسون</button>
   <button class="tab-btn" data-tab="tab5" data-i18n="t5">6. BMC</button>
@@ -76,9 +72,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <button class="tab-btn" data-tab="tab6" data-i18n="t6">8. المساعد</button>
 </nav>
 
-<div class="container" id="printContainer">
-  <div class="print-header"><h1>📊 FinStart DZ - ENTERPRISE</h1></div>
-
+<div class="container">
 <!-- TAB 1: INFO -->
 <section class="tab-content active" id="tab1">
   <div class="card">
@@ -113,7 +107,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <div class="card">
     <h2 data-i18n="h_invest">🏗️ التكاليف الاستثمارية (CapEx)</h2>
     <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 40px; gap:8px; font-weight:bold; margin-bottom:5px;">
-      <span data-i18n="c_item">البيان</span><span data-i18n="c_cost">القيمة</span><span data-i18n="c_qty">الكمية</span><span data-i18n="c_dep">الاهتلاك (سنوات)</span><span></span>
+      <span data-i18n="c_item">البيان</span><span data-i18n="c_cost">القيمة</span><span data-i18n="c_qty">الكمية</span><span data-i18n="c_dep">الاهتلاك</span><span></span>
     </div>
     <div id="investList"></div>
     <button class="add-btn" onclick="addInvest()" data-i18n="btn_add">+ إضافة</button>
@@ -131,7 +125,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <button class="btn-calc" onclick="calculateAll()" data-i18n="btn_calc">🧮 احسب جميع الجداول المالية</button>
 </section>
 
-<!-- TAB 8: HR & CAPEX -->
+<!-- TAB 3: HR -->
 <section class="tab-content" id="tab8">
   <div class="card">
     <h2 data-i18n="h_hr">👥 جدول الرواتب (CNAS 26%)</h2>
@@ -139,8 +133,8 @@ table.data tr:nth-child(even){background:#f9fbfd;}
       <table class="data">
         <thead><tr>
           <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأجر الأساسي</th>
-          <th data-i18n="hr_cnas_emp">حصة العامل (9%)</th><th data-i18n="hr_net">الصافي</th>
-          <th data-i18n="hr_cnas_er">حصة صاحب العمل (26%)</th><th data-i18n="hr_total">التكلفة الإجمالية</th><th></th>
+          <th data-i18n="hr_cnas_emp">حصة العامل 9%</th><th data-i18n="hr_net">الصافي</th>
+          <th data-i18n="hr_cnas_er">حصة صاحب العمل 26%</th><th data-i18n="hr_total">التكلفة الإجمالية</th><th></th>
         </tr></thead>
         <tbody id="hrBody"></tbody>
       </table>
@@ -149,7 +143,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   </div>
 </section>
 
-<!-- TAB 3: EXCEL TABLES -->
+<!-- TAB 4: EXCEL TABLES -->
 <section class="tab-content" id="tab3">
   <div class="card">
     <h2 data-i18n="h_amort">📉 جدول الاهتلاك (5 سنوات)</h2>
@@ -166,7 +160,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   <div class="card"><h2 data-i18n="h_charts">📈 تطور الأرباح</h2><div class="chart-box"><canvas id="mainChart"></canvas></div></div>
 </section>
 
-<!-- TAB 4: COMPETITORS -->
+<!-- TAB 5: COMPETITORS -->
 <section class="tab-content" id="tab4">
   <div class="card">
     <h2 data-i18n="h_comp">⚔️ تحليل المنافسين (بحث حقيقي)</h2>
@@ -175,7 +169,7 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   </div>
 </section>
 
-<!-- TAB 5: BMC -->
+<!-- TAB 6: BMC -->
 <section class="tab-content" id="tab5">
   <div class="card">
     <h2 data-i18n="h_bmc">🧩 BMC</h2>
@@ -194,41 +188,41 @@ table.data tr:nth-child(even){background:#f9fbfd;}
   </div>
 </section>
 
-<!-- TAB 9: SWOT -->
+<!-- TAB 7: SWOT -->
 <section class="tab-content" id="tab9">
   <div class="card">
     <h2 data-i18n="h_swot">🧠 التحليل الاستراتيجي (SWOT)</h2>
-    <p style="font-size:12px; color:#4a5568;" data-i18n="swot_desc">يقوم الذكاء الاصطناعي بتحليل فكرة مشروعك واستخراج نقاط القوة والضعف والفرص والتهديدات مع توصيات.</p>
-    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد تحليل SWOT بالذكاء الاصطناعي</button>
+    <p style="font-size:12px; color:#4a5568;" data-i18n="swot_desc">يقوم الذكاء الاصطناعي بتحليل فكرة مشروعك واستخراج نقاط القوة والضعف والفرص والتهديدات.</p>
+    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد تحليل SWOT</button>
     
     <div id="swotResult" style="margin-top:20px; display:none;">
       <div class="grid" style="gap:15px;">
         <div class="result" style="background:#f0fff4; border-color:#38a169;">
-          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">نقاط القوة (Strengths)</span></h3>
+          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">نقاط القوة</span></h3>
           <ul id="swotS" style="padding-right:20px; font-size:13px;"></ul>
         </div>
         <div class="result" style="background:#fff5f5; border-color:#c53030;">
-          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">نقاط الضعف (Weaknesses)</span></h3>
+          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">نقاط الضعف</span></h3>
           <ul id="swotW" style="padding-right:20px; font-size:13px;"></ul>
         </div>
         <div class="result" style="background:#ebf8ff; border-color:#3182ce;">
-          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص (Opportunities)</span></h3>
+          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص</span></h3>
           <ul id="swotO" style="padding-right:20px; font-size:13px;"></ul>
         </div>
         <div class="result" style="background:#fffaf0; border-color:#dd6b20;">
-          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات (Threats)</span></h3>
+          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات</span></h3>
           <ul id="swotT" style="padding-right:20px; font-size:13px;"></ul>
         </div>
       </div>
       <div class="result" style="background:#faf5ff; border-color:#805ad5; margin-top:15px;">
-        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية الاستراتيجية (AI)</span></h3>
+        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية الاستراتيجية</span></h3>
         <p id="swotRec" style="font-size:14px; font-weight:bold;"></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TAB 6: AI -->
+<!-- TAB 8: AI -->
 <section class="tab-content" id="tab6">
   <div class="card">
     <h2 data-i18n="h_ai">🧠 المساعد المالي</h2>
@@ -242,16 +236,19 @@ table.data tr:nth-child(even){background:#f9fbfd;}
 
 <div class="toolbar">
   <button class="btn btn-success" onclick="saveData()" data-i18n="btn_save">💾 حفظ</button>
-  <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 PDF</button>
+  <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 تصدير تقرير PDF</button>
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer>FinStart DZ v15.1 - Enterprise Edition</footer>
+<footer style="text-align:center; padding:20px; color:#718096; font-size:12px;">FinStart DZ v16.0 - Enterprise Edition</footer>
+
+<!-- قالب التقرير المخفي للـ PDF -->
+<div id="pdfReport" style="position: absolute; left: -9999px; top: 0; width: 900px; background: #fff; padding: 40px; font-family: 'Segoe UI', Tahoma, Arial; color: #000;"></div>
 
 <script>
 /* ============ TRANSLATIONS ============ */
 const T = {
-  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. الجداول المالية", t4:"5. المنافسون", t5:"6. BMC", t9:"7. تحليل SWOT", t6:"8. المساعد",
+  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. الجداول المالية", t4:"5. المنافسون", t5:"6. BMC", t9:"7. SWOT", t6:"8. المساعد",
     info_title:"📋 المعلومات", p_name:"الاسم", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
     p_sector:"القطاع", p_target:"الجمهور", p_idea:"الفكرة", h_cap:"💰 رأس المال", p_capital:"رأس المال (دج)", p_units:"مبيعات سنة 1", p_price:"سعر البيع (دج)", btn_next:"➡️ التالي",
     h_invest:"🏗️ التكاليف الاستثمارية", c_item:"البيان", c_cost:"القيمة", c_qty:"الكمية", c_dep:"الاهتلاك", btn_add:"+ إضافة",
@@ -375,7 +372,7 @@ function removeEmp(i) { emps.splice(i,1); renderEmps(); }
 
 function fmt(n) { return Math.round(n).toLocaleString('fr-FR'); }
 
-/* ============ FINANCIAL ENGINE (The Core) ============ */
+/* ============ FINANCIAL ENGINE ============ */
 function calculateAll() {
   let baseUnits = +document.getElementById('projUnits').value || 0;
   let price = +document.getElementById('projPrice').value || 0;
@@ -573,18 +570,106 @@ async function aiGenerateSWOT() {
   btn.innerText = originalText;
 }
 
-/* ============ UTILS ============ */
+/* ============ EXPORT PDF (REPORT TEMPLATE) ============ */
 function exportPDF() {
-  document.body.classList.add('exporting');
-  setTimeout(() => {
-    html2canvas(document.getElementById('printContainer'), {scale:2}).then(canvas => {
-      let img = canvas.toDataURL('image/jpeg', 1.0), pdf = new jspdf.jsPDF('p','mm','a4'), w = pdf.internal.pageSize.getWidth(), h = canvas.height*w/canvas.width, left = h, pos = 0;
-      pdf.addImage(img,'JPEG',0,pos,w,h); left -= pdf.internal.pageSize.getHeight();
-      while(left >= 0) { pos = left - h; pdf.addPage(); pdf.addImage(img,'JPEG',0,pos,w,h); left -= pdf.internal.pageSize.getHeight(); }
-      pdf.save('FinStart_Enterprise.pdf'); document.body.classList.remove('exporting');
+  let reportDiv = document.getElementById('pdfReport');
+  let projName = document.getElementById('projName').value || "مشروعي";
+  let projIdea = document.getElementById('projIdea').value || "";
+  let dateStr = new Date().toLocaleDateString('fr-FR');
+
+  // 1. الغلاف والمعلومات
+  let html = `
+    <div style="text-align: center; border-bottom: 3px solid #1e3a5f; padding-bottom: 20px; margin-bottom: 30px;">
+      <h1 style="color: #1e3a5f; font-size: 32px; margin: 0;">📊 FinStart DZ</h1>
+      <h2 style="color: #4a5568; font-size: 20px; margin-top: 10px;">تقرير الدراسة المالية والاستراتيجية</h2>
+      <p style="color: #718096; font-size: 14px;">تاريخ الإصدار: ${dateStr}</p>
+    </div>
+    <h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">1. معلومات المشروع</h3>
+    <table style="width: 100%; margin-bottom: 20px; font-size: 14px; text-align: right;">
+      <tr><td style="padding: 8px; font-weight: bold; width: 150px;">اسم المشروع:</td><td style="padding: 8px;">${projName}</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">فكرة المشروع:</td><td style="padding: 8px;">${projIdea}</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">القطاع:</td><td style="padding: 8px;">${document.getElementById('projSector').value}</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">رأس المال:</td><td style="padding: 8px;">${fmt(document.getElementById('projCapital').value)} دج</td></tr>
+    </table>
+  `;
+
+  // 2. الجداول المالية
+  if (window.calcData) {
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">2. الجداول المالية (TCR & TFT)</h3>`;
+    html += `<div style="margin-bottom: 20px; text-align: center;"><strong>جدول حسابات النتائج (TCR)</strong><br><br><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
+      ${document.getElementById('tcrTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '')}
+    </table></div>`;
+    html += `<div style="text-align: center;"><strong>جدول تدفقات الخزينة (TFT)</strong><br><br><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; border: 1px solid #ccc;">
+      ${document.getElementById('tftTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '')}
+    </table></div>`;
+  }
+
+  // 3. BMC
+  let bmc3 = document.getElementById('bmc3').value;
+  if (bmc3) {
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">3. نموذج العمل (BMC)</h3>`;
+    html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px;">`;
+    const bmcFields = [
+      { title: "🤝 الشركاء", id: "bmc1" }, { title: "⚙️ الأنشطة", id: "bmc2" },
+      { title: "💎 القيمة المقترحة", id: "bmc3" }, { title: "👥 العملاء", id: "bmc4" },
+      { title: "📢 القنوات", id: "bmc5" }, { title: "❤️ العلاقات", id: "bmc6" },
+      { title: "🔑 الموارد", id: "bmc7" }, { title: "💰 الإيرادات", id: "bmc8" },
+      { title: "💸 التكاليف", id: "bmc9" }
+    ];
+    bmcFields.forEach(f => {
+      let val = document.getElementById(f.id).value;
+      if (val) {
+        html += `<div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background: #f9f9f9;">
+          <strong style="display: block; margin-bottom: 5px; color: #1e3a5f;">${f.title}</strong>
+          <p style="margin: 0; white-space: pre-wrap;">${val}</p>
+        </div>`;
+      }
     });
-  }, 300);
+    html += `</div>`;
+  }
+
+  // 4. SWOT
+  if (document.getElementById('swotResult').style.display !== 'none') {
+    html += `<h3 style="color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; page-break-before: always;">4. التحليل الاستراتيجي (SWOT)</h3>`;
+    html += `<div style="font-size: 12px;">`;
+    html += `<div style="background: #f0fff4; padding: 10px; margin-bottom: 10px; border-right: 4px solid #38a169;"><strong>نقاط القوة:</strong> ${document.getElementById('swotS').innerText}</div>`;
+    html += `<div style="background: #fff5f5; padding: 10px; margin-bottom: 10px; border-right: 4px solid #c53030;"><strong>نقاط الضعف:</strong> ${document.getElementById('swotW').innerText}</div>`;
+    html += `<div style="background: #ebf8ff; padding: 10px; margin-bottom: 10px; border-right: 4px solid #3182ce;"><strong>الفرص:</strong> ${document.getElementById('swotO').innerText}</div>`;
+    html += `<div style="background: #fffaf0; padding: 10px; margin-bottom: 10px; border-right: 4px solid #dd6b20;"><strong>التهديدات:</strong> ${document.getElementById('swotT').innerText}</div>`;
+    html += `<div style="background: #faf5ff; padding: 15px; font-weight: bold; border-radius: 5px;"><strong>التوصية الاستراتيجية:</strong> ${document.getElementById('swotRec').innerText}</div>`;
+    html += `</div>`;
+  }
+
+  reportDiv.innerHTML = html;
+
+  setTimeout(() => {
+    html2canvas(reportDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }).then(canvas => {
+      let imgData = canvas.toDataURL('image/jpeg', 1.0);
+      let pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+      let pageWidth = pdf.internal.pageSize.getWidth();
+      let pageHeight = pdf.internal.pageSize.getHeight();
+      
+      let imgWidth = pageWidth;
+      let imgHeight = canvas.height * imgWidth / canvas.width;
+      
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`Rapport_${projName.replace(/\s+/g, '_')}.pdf`);
+    });
+  }, 500);
 }
+
 function saveData() { alert('✅ تم الحفظ (يمكنك إضافة localStorage لاحقاً)'); }
 function resetData() { if(confirm("مسح الكل؟")) location.reload(); }
 
