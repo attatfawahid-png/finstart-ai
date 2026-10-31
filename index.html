@@ -309,7 +309,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v23.0 - Ultimate Platform</footer>
+<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v24.0 - Ultimate Platform</footer>
 
 <script>
 /* ============ TRANSLATIONS ============ */
@@ -738,17 +738,35 @@ function triggerAutoSave() {
   setTimeout(() => { badge.style.opacity = '0'; }, 2000);
 }
 
-/* ============ EXPORT EXCEL (XLS METHOD) ============ */
+/* ============ EXPORT EXCEL (ALL TABLES) ============ */
 function exportExcel() {
   if (!window.calcData) {
     alert("يرجى حساب الجداول أولاً لتتمكن من تصديرها.");
     return;
   }
 
+  // 1. بناء جدول التكاليف الاستثمارية
+  let tableCapEx = `<table><tr><th>البيان</th><th>القيمة (دج)</th><th>الكمية</th><th>الاهتلاك (سنوات)</th><th>المجموع (دج)</th></tr>`;
+  investItems.forEach(i => { tableCapEx += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.dep}</td><td>${i.cost*i.qty}</td></tr>`; });
+  tableCapEx += `</table>`;
+
+  // 2. بناء جدول تكلفة المنتج (BOM)
+  let tableBOM = `<table><tr><th>المكون</th><th>السعر (دج)</th><th>الكمية</th><th>المجموع (دج)</th></tr>`;
+  bomItems.forEach(i => { tableBOM += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.cost*i.qty}</td></tr>`; });
+  tableBOM += `</table>`;
+
+  // 3. بناء جدول المصاريف الشهرية
+  let tableFixed = `<table><tr><th>المصروف</th><th>القيمة (دج)</th></tr>`;
+  fixedItems.forEach(i => { tableFixed += `<tr><td>${i.name}</td><td>${i.cost}</td></tr>`; });
+  tableFixed += `</table>`;
+
+  // 4. سحب الجداول الجاهزة
+  let tableHR = document.getElementById('hrTable').outerHTML;
+  let tableAmort = document.getElementById('amortTable').outerHTML;
   let tableTCR = document.getElementById('tcrTable').outerHTML;
   let tableTFT = document.getElementById('tftTable').outerHTML;
-  let tableAmort = document.getElementById('amortTable').outerHTML;
 
+  // 5. دمج كل شيء في قالب الإكسل
   let template = `
     <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
     <head>
@@ -768,29 +786,42 @@ function exportExcel() {
       </xml>
       <![endif]-->
       <style>
-        table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI', Tahoma, Arial; text-align: center; }
+        table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI', Tahoma, Arial; text-align: center; margin-bottom: 20px; }
         th, td { border: 1px solid #000; padding: 5px; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        h2 { font-family: 'Segoe UI', Tahoma, Arial; text-align: right; color: #1e3a5f; }
+        th { background-color: #f2f2f2; font-weight: bold; color: #1e3a5f; }
+        h2 { font-family: 'Segoe UI', Tahoma, Arial; text-align: right; color: #1e3a5f; margin-top: 30px; margin-bottom: 10px;}
       </style>
     </head>
     <body>
-      <h2>جدول الاهتلاك</h2>
+      <h2>1. التكاليف الاستثمارية (CapEx)</h2>
+      ${tableCapEx}
+      
+      <h2>2. تكلفة المنتج الواحد (BOM)</h2>
+      ${tableBOM}
+
+      <h2>3. المصاريف التشغيلية الشهرية</h2>
+      ${tableFixed}
+
+      <h2>4. جدول الرواتب والأجور</h2>
+      ${tableHR}
+
+      <h2>5. جدول الاهتلاك</h2>
       ${tableAmort}
-      <br><br>
-      <h2>جدول حسابات النتائج (TCR)</h2>
+
+      <h2>6. جدول حسابات النتائج (TCR)</h2>
       ${tableTCR}
-      <br><br>
-      <h2>جدول تدفقات الخزينة (TFT)</h2>
+
+      <h2>7. جدول تدفقات الخزينة (TFT)</h2>
       ${tableTFT}
     </body>
     </html>
   `;
 
+  // تحميل الملف
   let blob = new Blob([template], { type: 'application/vnd.ms-excel' });
   let link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "FinStart_Financials.xls";
+  link.download = "FinStart_Complete_Financials.xls";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
