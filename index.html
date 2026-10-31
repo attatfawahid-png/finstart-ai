@@ -536,10 +536,13 @@ async function aiGenerateBMC() {
   btn.innerText = "⏳ جاري التوليد...";
   
   let prompt = `أنت خبير في نماذج الأعمال. قم بتوليد Business Model Canvas (BMC) لمشروع فكرته: "${idea}". أرجع النتيجة بصيغة JSON تحتوي على المفاتيح التالية: partners, activities, value, segments, channels, relations, resources, revenues, costs. اكتب القيم باللغة العربية.`;
-  
-  let result = await callAI(prompt);
+let result = await callAI(prompt);
   try {
-    let parsed = JSON.parse(result);
+  
+  // تنظيف النتيجة من أي علامات زائدة
+let cleanResult = result.replace(/```json/gi, '').replace(/```/gi, '').trim();
+let parsed = JSON.parse(cleanResult);
+    
     document.getElementById('bmc1').value = parsed.partners || '';
     document.getElementById('bmc2').value = parsed.activities || '';
     document.getElementById('bmc3').value = parsed.value || '';
@@ -564,7 +567,8 @@ async function aiAnalyzeCompetitors() {
   
   let result = await callAI(prompt);
   try {
-    let parsed = JSON.parse(result);
+   let cleanResult = result.replace(/```json/gi, '').replace(/```/gi, '').trim();
+let parsed = JSON.parse(cleanResult);
     currentComps = parsed;
     runAISearch();
   } catch(e) {
