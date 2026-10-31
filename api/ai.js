@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         // النموذج المجاني الجديد
-        model: 'meta-llama/llama-3-8b-instruct:free', 
+        model: 'openrouter/free',
         messages: [{ role: 'user', content: prompt }]
       })
     });
