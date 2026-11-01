@@ -1,469 +1,203 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FinStart DZ - App Edition</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
-
-<style>
-:root {
-  --p:#1e3a5f; --a:#3182ce; --bg:#f0f4f8; --c:#fff; --b:#e2e8f0; --s:#38a169; --d:#c53030;
-  --text:#1a202c; --muted:#4a5568; --table-hover:#f9fbfd; --input-bg:#fff;
+/* ============ MARKETPLACE ============ */
+const demoProjects = [{ name: "EcoDeliver", sector: "لوجستيك", idea: "توصيل بالدراجات.", capital: 2000000, margin: "25%" }];
+function renderMarket() {
+    let grid = document.getElementById('marketGrid'); if(!grid) return;
+    let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
+    let html = '';
+    [...userProjects, ...demoProjects].forEach(p => { html += `<div class="market-card"><div><h3>${p.name}</h3><p><strong>القطاع:</strong> ${p.sector} | <strong>رأس المال:</strong> ${fmt(p.capital)} دج</p><p>${p.idea}</p></div><div><span style="background:var(--s); color:white; padding:5px 10px; border-radius:10px; font-size:12px;">${t('profit_margin')}: ${p.margin}</span></div></div>`; });
+    grid.innerHTML = html;
 }
-body.dark-mode {
-  --p:#63b3ed; --a:#4299e1; --bg:#1a202c; --c:#2d3748; --b:#4a5568; --s:#48bb78; --d:#f56565;
-  --text:#f7fafc; --muted:#a0aec0; --table-hover:#4a5568; --input-bg:#1a202c;
+function publishToMarket() {
+    if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
+    let name = document.getElementById('projName').value || "مشروعي", sector = document.getElementById('projSector').value, idea = document.getElementById('projIdea').value, capital = window.calcData.totalCapEx;
+    let rev = window.calcData.baseUnits * window.calcData.price, profit = rev - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
+    let margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) + "%" : "0%";
+
+    let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
+    userProjects = userProjects.filter(up => up.name !== name); userProjects.push({ name, sector, idea, capital, margin });
+    localStorage.setItem('finstart_market', JSON.stringify(userProjects)); localStorage.setItem('finstart_published_' + name, 'true');
+    alert(t('pub_success')); renderMarket(); updateChecklist();
 }
-*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial,sans-serif;}
-body{background:var(--bg);margin:0;color:var(--text);transition:background 0.3s, color 0.3s;}
 
-/* ============ DESKTOP LAYOUT ============ */
-header{background:linear-gradient(135deg,#1e3a5f,#2b5a8c);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.lang-btn, .theme-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;margin:0 3px;transition:0.2s;}
-.lang-btn.active, .theme-btn:hover{background:#fff;color:#1e3a5f;}
+/* ============ AI ============ */
+async function callAI(prompt, type='general', sector='') {
+  try {
+    const response = await fetch('/api/ai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, type, sector, lang: L }) });
+    const data = await response.json();
+    if (!response.ok || data.error) throw new Error(data.error || 'API Error');
+    return data.result;
+  } catch(e) { return "❌ خطأ: " + e.message; }
+}
 
-.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;}
-.tab-btn{background:none;border:none;padding:14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:0.2s;}
-.tab-btn.active{color:var(--a);border-bottom-color:var(--a);}
+async function askAI() { let q = document.getElementById('aiQuestion').value; if(!q) return; let res = document.getElementById('aiResponse'); res.style.display = 'block'; res.innerText = "⏳ جاري التفكير..."; res.innerText = await callAI(q); }
 
-.container{max-width:1250px;margin:20px auto;padding:0 15px;}
-.tab-content{display:none;}.tab-content.active{display:block;}
-.card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
-.card h2{color:var(--p);border-bottom:2px solid var(--b);padding-bottom:10px;margin-top:0;font-size:18px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-label{display:block;margin-bottom:5px;font-weight:600;color:var(--muted);font-size:12px;}
-input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;font-size:14px;font-family:inherit;background:var(--input-bg);color:var(--text);}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(49,130,206,.15);}
-.btn{border:none;padding:11px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s;}
-.btn-primary{background:var(--a);color:#fff;}.btn-success{background:var(--s);color:#fff;}.btn-danger{background:var(--d);color:#fff;}.btn-ai{background:linear-gradient(135deg,#805ad5,#6b46c1);color:#fff;}
-.btn-calc{background:linear-gradient(135deg,#d69e2e,#b7791f);color:#fff;font-size:16px;padding:16px;width:100%;cursor:pointer;border:none;border-radius:10px;font-weight:700;}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;}
-.row-item{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 40px;gap:8px;margin-bottom:8px;align-items:center;}
-.row-item button{background:var(--d);color:#fff;border:none;height:38px;border-radius:8px;cursor:pointer;}
-.add-btn{background:var(--a);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:6px;}
+async function aiGenerateBMC() {
+  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التوليد...";
+  let result = await callAI(idea, 'bmc');
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    document.getElementById('bmc1').value = parsed.partners || ''; document.getElementById('bmc2').value = parsed.activities || ''; document.getElementById('bmc3').value = parsed.value || ''; document.getElementById('bmc4').value = parsed.segments || ''; document.getElementById('bmc5').value = parsed.channels || ''; document.getElementById('bmc6').value = parsed.relations || ''; document.getElementById('bmc7').value = parsed.resources || ''; document.getElementById('bmc8').value = parsed.revenues || ''; document.getElementById('bmc9').value = parsed.costs || ''; updateReadiness();
+  } catch(e) { alert("خطأ في التنسيق"); }
+  btn.innerText = originalText;
+}
 
-.table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
-table.data{width:100%;border-collapse:collapse;font-size:12px;background:var(--c);color:var(--text);min-width:600px;}
-table.data th,table.data td{border:1px solid var(--b);padding:8px;text-align:center;}
-table.data th{background:var(--b);color:var(--p);font-weight:700;}
-table.data tr:nth-child(even){background:var(--table-hover);}
+async function aiAnalyzeCompetitors() {
+  let sector = document.getElementById('projSector').value; let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري البحث...";
+  let result = await callAI("", 'competitors', sector);
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    let html = `<table class="data"><tr><th>${t('p_name')}</th><th>الموظفون</th><th>التمويل</th><th>السعر</th><th>الميزات</th><th>المصدر</th></tr>`;
+    parsed.forEach(c => { html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank">رابط</a></td></tr>`; });
+    document.getElementById('compResult').innerHTML = html + `</table>`;
+  } catch(e) { document.getElementById('compResult').innerHTML = `<p class="big-num">فشل البحث</p>`; }
+  btn.innerText = originalText;
+}
 
-.result{background:var(--table-hover);padding:15px;border-radius:10px;margin-top:12px;border-right:4px solid var(--a);}
-.big-num{color:var(--d);font-weight:bold;}.ok-num{color:var(--s);font-weight:bold;}
-.bmc-container{display:grid;grid-template-columns:repeat(5, 1fr);gap:8px;margin-top:15px;}
-.bmc-box{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:12px;}
-.bmc-box textarea{width:100%;height:90px;font-size:12px;resize:none;border:none;background:transparent;color:var(--text);}
-.bmc-partners{grid-area:1 / 1 / 3 / 2;}.bmc-activities{grid-area:1 / 2 / 2 / 3;}.bmc-resources{grid-area:2 / 2 / 3 / 3;}
-.bmc-value{grid-area:1 / 3 / 3 / 4;}.bmc-relations{grid-area:1 / 4 / 2 / 5;}.bmc-channels{grid-area:2 / 4 / 3 / 5;}
-.bmc-segments{grid-area:1 / 5 / 3 / 6;}.bmc-costs{grid-area:3 / 1 / 4 / 3;}.bmc-revenues{grid-area:3 / 3 / 4 / 6;}
-.chart-box{position:relative;height:300px;width:100%;margin-top:20px;}
-.score-container { background: var(--bg); border-radius: 10px; padding: 15px; margin-top: 15px; border: 1px solid var(--b); }
-.progress-bar { width: 100%; background: var(--b); border-radius: 10px; height: 20px; overflow: hidden; margin-top: 10px; }
-.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #d69e2e, #38a169); transition: width 1s ease-in-out; }
-.score-text { font-weight: bold; font-size: 24px; color: var(--p); }
-.pitch-slide-preview { background: #fff; color: #000; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 15px; min-height: 200px; }
-.pitch-slide-preview h3 { margin-top: 0; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-.pitch-slide-preview ul { padding-right: 20px; }
-.pitch-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-#autosave-badge { position: fixed; bottom: 80px; right: 20px; background: var(--s); color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.5s; z-index: 1000; }
-#validation-banner { display: none; background-color: var(--d); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 999; }
+async function aiGenerateSWOT() {
+  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التحليل...";
+  let result = await callAI(idea, 'swot');
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    let fillList = (id, arr) => { let html = ''; if(Array.isArray(arr)) { arr.forEach(item => html += `<li>${item}</li>`); } else { html = `<li>${arr || 'لا يوجد'}</li>`; } document.getElementById(id).innerHTML = html; };
+    fillList('swotS', parsed.strengths); fillList('swotW', parsed.weaknesses); fillList('swotO', parsed.opportunities); fillList('swotT', parsed.threats);
+    document.getElementById('swotRec').innerText = parsed.recommendation || ''; document.getElementById('swotResult').style.display = 'block'; updateReadiness();
+  } catch(e) { alert("حدث خطأ، حاول مجدداً."); }
+  btn.innerText = originalText;
+}
 
-/* ============ FLOATING CHAT ============ */
-#chat-toggle { position: fixed; bottom: 80px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #805ad5, #6b46c1); color: white; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(128,90,213,0.4); z-index: 1002; display: flex; justify-content: center; align-items: center; transition: transform 0.2s; }
-#chat-toggle:hover { transform: scale(1.1); }
-#chat-window { position: fixed; bottom: 150px; right: 20px; width: 350px; height: 450px; background: var(--c); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1003; display: none; flex-direction: column; overflow: hidden; border: 1px solid var(--b); }
-.chat-header { background: linear-gradient(135deg, #805ad5, #6b46c1); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-.chat-header span { cursor: pointer; }
-.chat-messages { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.chat-msg { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 14px; line-height: 1.4; }
-.chat-msg.user { background: var(--a); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-.chat-msg.ai { background: var(--bg); color: var(--text); align-self: flex-start; border-bottom-left-radius: 2px; }
-.chat-input-area { display: flex; padding: 10px; border-top: 1px solid var(--b); background: var(--c); }
-.chat-input-area input { flex-grow: 1; margin-left: 10px; border-radius: 20px; padding: 10px 15px; }
-.chat-input-area button { background: var(--a); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; }
+/* ============ PITCH DECK ============ */
+const defaultPitchDeck = [
+  { title: "1. General Presentation", content: ["Project Title: Smart Attendance System", "Tagline: Trust the process, track the progress", "Presented by: Attatfa Halima, Ait Ziane Fatmazohra", "Supervised by: Dr. Bouchouareb Rachida, Dr. Mellal Nassima"] },
+  { title: "2. Project Summary", content: ["Raspberry Pi + Facial Recognition + RFID Card.", "Database: Comparing facial features and UID with stored data.", "Real-Time Update: Attendance is automatically recorded once a match is confirmed.", "Accuracy and Efficiency: Precise tracking and protection against tampering."] },
+  { title: "3. The Team", content: ["AIT ZIANE FATMAZOHRA - Hardware Developer", "ATTATFA HALIMA - Software Developer", "Location: Larbi Ben M'hidi University, Oum El Bouaghi", "Department: Networks and Telecommunications"] },
+  { title: "4. Targeted Problem", content: ["Manual attendance recording in a paper register.", "Roll call in the classroom wastes time.", "Signing an attendance sheet upon entry is slow.", "Time-wasting attendance (15 min of a 90-min timeline)."] },
+  { title: "5. Proposed Solution", content: ["Dual Recognition System Using Raspberry Pi and RFID.", "Teacher Attendance Dashboard.", "Smart Management Platform for Administrators.", "Automated and secure attendance tracking."] },
+  { title: "6. Prototype Presentation", content: ["Live interface and platform dashboard.", "Full hardware prototype with Raspberry Pi and RFID.", "Prototype video demonstrating real-time tracking."] },
+  { title: "7. Added Value", content: ["Cost reduction: Lower administrative costs.", "Time efficiency: Save attendance time.", "Sustainability: Reduced paper usage.", "Innovation: Smart AI-based system."] },
+  { title: "8. Competitive Analysis", content: ["Strengths: Accurate real-time tracking, local competitive price.", "Weaknesses: Depends on continuous power, needs updated database.", "Opportunities: Digital transformation growing, expand to access control.", "Threats: Competition from imported systems (Hikvision, ZKTeco)."] },
+  { title: "9. Business Model", content: ["Key Partners: Hardware suppliers, educational institutions.", "Value Proposition: Facilitating attendance, reducing fraud, saving time.", "Customer Segments: B2B (Private schools/universities), B2G (Public universities).", "Revenue Stream: System sales, annual maintenance subscription."] },
+  { title: "10. Target Market Analysis", content: ["Education Sector (Current Phase): Universities, Technical Institutes, Schools.", "Corporate Sector: Companies needing reliable employee attendance.", "Ministry of Education: Building accurate digital databases."] },
+  { title: "11. Project Roadmap", content: ["1-6 Months: Prototype building and testing.", "6-12 Months: Field testing in a real environment.", "1-3 Years: Expansion, improving user experience, sustainability."] }
+];
 
-/* ============ MOBILE APP LAYOUT ============ */
-@media (max-width: 768px) {
-  body { padding-bottom: 80px; }
-  header { position: sticky; top: 0; z-index: 1000; padding: 12px; flex-direction: column; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-  header h1 { font-size: 18px; margin-bottom: 8px; }
-  
-  .tabs { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; flex-wrap: nowrap; overflow-x: auto; background: var(--c); border-bottom: none; border-top: 1px solid var(--b); box-shadow: 0 -4px 12px rgba(0,0,0,0.1); padding: 0; z-index: 1001; gap: 0; }
-  .tab-btn { flex: 0 0 auto; padding: 12px 15px; font-size: 12px; border-bottom: none; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; }
-  .tab-btn.active { border-bottom: none; border-top-color: var(--a); background: var(--table-hover); }
-
-  .grid, .grid3 { grid-template-columns: 1fr; gap: 10px; }
-  .card { padding: 15px; margin-bottom: 12px; border-radius: 10px; }
-  input, select, textarea { font-size: 16px; padding: 12px; }
-  .row-item { display: flex; flex-direction: column; gap: 8px; background: var(--bg); padding: 12px; border-radius: 8px; border: 1px solid var(--b); margin-bottom: 12px; }
-  .row-item input { width: 100%; }
-  .row-item button { width: 100%; height: 35px; margin-top: 5px; }
-  .bmc-container { grid-template-columns: 1fr; }
-  .bmc-box { grid-area: auto !important; }
-  table.data { min-width: 700px; }
-  
-  /* ⚠️ التعديل الوحيد هنا: جعل الأزرار في صفين لتوفير مساحة الشاشة */
-  .toolbar { 
-    display: grid !important; 
-    grid-template-columns: 1fr 1fr !important; 
-    gap: 10px !important; 
-    padding: 10px !important;
-    margin: 10px 0 !important;
+async function aiGeneratePitchDeck() {
+  let idea = document.getElementById('projIdea').value;
+  if(!idea) return alert('اكتب فكرة المشروع أولاً في الصفحة الأولى');
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري بناء العرض...";
+  let bmc = { partners: document.getElementById('bmc1').value, activities: document.getElementById('bmc2').value, value: document.getElementById('bmc3').value, segments: document.getElementById('bmc4').value, channels: document.getElementById('bmc5').value, relations: document.getElementById('bmc6').value, resources: document.getElementById('bmc7').value, revenues: document.getElementById('bmc8').value, costs: document.getElementById('bmc9').value };
+  let swot = { s: document.getElementById('swotS').innerText, w: document.getElementById('swotW').innerText, o: document.getElementById('swotO').innerText, t: document.getElementById('swotT').innerText };
+  let prompt = `أنت خبير في عرض المشاريع. قم بإنشاء Pitch Deck لمشروع فكرته: "${idea}". BMC: ${JSON.stringify(bmc)}. SWOT: ${JSON.stringify(swot)}. أرجع النتيجة بصيغة JSON نقية فقط (مصفوفة من 11 كائناً). كل كائن يحتوي على: "title" (عنوان الشريحة) و "content" (مصفوفة نقاط). العناوين بالضبط: 1. General Presentation, 2. Project Summary, 3. The Team, 4. Targeted Problem, 5. Proposed Solution, 6. Prototype Presentation, 7. Added Value, 8. Competitive Analysis, 9. Business Model, 10. Target Market Analysis, 11. Project Roadmap. اكتب باللغة: ${L}.`;
+  let result = await callAI(prompt);
+  if (result.startsWith("❌") || result.startsWith("⚠️")) {
+      alert(result); pitchDeckData = defaultPitchDeck; renderPitchPreview(); document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; btn.innerText = originalText; return;
   }
-  .toolbar button {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 12px 5px !important;
-    font-size: 13px !important;
-  }
-  
-  .pitch-controls { flex-direction: column; }
-  .pitch-controls button { width: 100%; }
-  
-  #chat-toggle { bottom: 90px; right: 15px; width: 50px; height: 50px; font-size: 20px; }
-  #chat-window { bottom: 150px; right: 15px; width: calc(100% - 30px); height: 400px; }
-  #autosave-badge { bottom: 90px; right: 75px; }
+  try {
+    let cleanResult = result; let startIdx = cleanResult.indexOf('['); let endIdx = cleanResult.lastIndexOf(']');
+    if(startIdx !== -1 && endIdx !== -1) cleanResult = cleanResult.substring(startIdx, endIdx + 1);
+    let parsed = JSON.parse(cleanResult);
+    if(Array.isArray(parsed) && parsed.length >= 10) { pitchDeckData = parsed; } else { throw new Error("Not enough slides"); }
+  } catch(e) { pitchDeckData = defaultPitchDeck; }
+  renderPitchPreview(); document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; btn.innerText = originalText;
 }
-</style>
-</head>
-<body>
 
-<div id="autosave-badge">💾 تم الحفظ</div>
-<div id="validation-banner">⚠️ تنبيه!</div>
+function renderPitchPreview() {
+  let container = document.getElementById('pitchDeckPreview');
+  if(!container) return;
+  if(!pitchDeckData) { pitchDeckData = defaultPitchDeck; document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; }
+  let html = '';
+  pitchDeckData.forEach((slide, index) => { html += `<div class="pitch-slide-preview"><h3>Slide ${index + 1}: ${slide.title}</h3><ul>${slide.content.map(c => `<li>${c}</li>`).join('')}</ul></div>`; });
+  container.innerHTML = html; container.style.display = 'block';
+}
 
-<!-- Floating Chat -->
-<button id="chat-toggle" onclick="toggleChat()">💬</button>
-<div id="chat-window">
-    <div class="chat-header">
-        <span>🤖 المساعد الذكي (AI)</span>
-        <span onclick="toggleChat()">✖</span>
-    </div>
-    <div class="chat-messages" id="chat-messages">
-        <div class="chat-msg ai">مرحباً! أنا مساعدك المالي. كيف يمكنني مساعدتك في مشروعك اليوم؟</div>
-    </div>
-    <div class="chat-input-area">
-        <input type="text" id="chat-input" placeholder="اكتب رسالتك..." onkeypress="handleChatEnter(event)">
-        <button onclick="sendChatMessage()">➤</button>
-    </div>
-</div>
+function exportPitchToPPTX() {
+  if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
+  let pptx = new PptxGenJS(); pptx.layout = 'LAYOUT_16x9';
+  let slide1 = pptx.addSlide(); slide1.background = { color: "1e3a5f" };
+  slide1.addText(pitchDeckData[0].title, { x: 1, y: 2, w: '80%', h: 1, fontSize: 36, color: "FFFFFF", bold: true, align: 'center' });
+  slide1.addText(pitchDeckData[0].content.join('\n'), { x: 1, y: 3.5, w: '80%', h: 2, fontSize: 18, color: "E2E8F0", align: 'center' });
+  for(let i = 1; i < pitchDeckData.length; i++) {
+    let slide = pptx.addSlide(); slide.background = { color: "FFFFFF" };
+    slide.addText(pitchDeckData[i].title, { x: 0.5, y: 0.5, w: '90%', h: 1, fontSize: 28, color: "1e3a5f", bold: true, border: { pt: 2, color: "3182ce" }, fill: "f0f4f8" });
+    let textRows = pitchDeckData[i].content.map(text => ({ text: text, options: { bullet: true, fontSize: 20, color: "1a202c", breakLine: true } }));
+    slide.addText(textRows, { x: 0.5, y: 1.8, w: '90%', h: 4, valign: 'top' });
+  }
+  pptx.writeFile({ fileName: `${document.getElementById('projName').value || 'Project'}_PitchDeck.pptx` });
+}
 
-<header>
-  <div><h1>📊 FinStart DZ <span style="font-size:10px;background:#38a169;padding:2px 6px;border-radius:10px;">APP</span></h1></div>
-  <div>
-    <button class="theme-btn" onclick="togglePresentation()">📺 عرض</button>
-    <button class="theme-btn" onclick="toggleTheme()">🌙/☀️</button>
-    <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">AR</button>
-    <button class="lang-btn" data-lang="fr" onclick="applyLang('fr')">FR</button>
-    <button class="lang-btn" data-lang="en" onclick="applyLang('en')">EN</button>
-  </div>
-</header>
+function openInCanva() {
+  if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
+  let textToCopy = "";
+  pitchDeckData.forEach((slide, index) => { textToCopy += `[Slide ${index + 1}: ${slide.title}]\n`; slide.content.forEach(c => { textToCopy += `- ${c}\n`; }); textToCopy += "\n"; });
+  navigator.clipboard.writeText(textToCopy).then(() => { alert("✅ تم نسخ محتوى العرض!\n\nاذهبي إلى Canva، وافتحي قالب Pitch Deck، ثم الصقي النص."); window.open('https://www.canva.com/create/pitch-decks/', '_blank'); }).catch(err => alert("حدث خطأ أثناء النسخ: " + err));
+}
 
-<nav class="tabs">
-  <button class="tab-btn active" data-tab="tab1" data-i18n="t1">1. معلومات</button>
-  <button class="tab-btn" data-tab="tab2" data-i18n="t2">2. التكاليف</button>
-  <button class="tab-btn" data-tab="tab8" data-i18n="t8">3. الرواتب</button>
-  <button class="tab-btn" data-tab="tab3" data-i18n="t3">4. التحليل المالي</button>
-  <button class="tab-btn" data-tab="tab10" data-i18n="t10">5. القروض</button>
-  <button class="tab-btn" data-tab="tab4" data-i18n="t4">6. المنافسون</button>
-  <button class="tab-btn" data-tab="tab5" data-i18n="t5">7. BMC</button>
-  <button class="tab-btn" data-tab="tab9" data-i18n="t9">8. SWOT</button>
-  <button class="tab-btn" data-tab="tab6" data-i18n="t6">9. المساعد</button>
-  <button class="tab-btn" data-tab="tab11" data-i18n="t11">10. المحاسب</button>
-  <button class="tab-btn" data-tab="tab12" data-i18n="t12">11. الاستثمار</button>
-  <button class="tab-btn" data-tab="tab13" data-i18n="t13">12. المسار</button>
-  <button class="tab-btn" data-tab="tab14" data-i18n="t14">13. السوق</button>
-  <button class="tab-btn" data-tab="tab15" data-i18n="t15">14. العرض</button>
-</nav>
+/* ============ EXPORT EXCEL & PDF ============ */
+function exportExcel() {
+  if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
+  let tCapEx = `<table><tr><th>البيان</th><th>القيمة</th><th>الكمية</th><th>الاهتلاك</th><th>المجموع</th></tr>`; investItems.forEach(i => { tCapEx += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.dep}</td><td>${i.cost*i.qty}</td></tr>`; }); tCapEx += `</table>`;
+  let tBOM = `<table><tr><th>المكون</th><th>السعر</th><th>الكمية</th><th>المجموع</th></tr>`; bomItems.forEach(i => { tBOM += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.cost*i.qty}</td></tr>`; }); tBOM += `</table>`;
+  let tFixed = `<table><tr><th>المصروف</th><th>القيمة</th></tr>`; fixedItems.forEach(i => { tFixed += `<tr><td>${i.name}</td><td>${i.cost}</td></tr>`; }); tFixed += `</table>`;
+  let tHR = document.getElementById('hrTable').outerHTML, tAmort = document.getElementById('amortTable').outerHTML, tTCR = document.getElementById('tcrTable').outerHTML, tTFT = document.getElementById('tftTable').outerHTML;
+  let template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI'; text-align: center; margin-bottom: 20px; } th, td { border: 1px solid #000; padding: 5px; } th { background-color: #f2f2f2; font-weight: bold; color: #1e3a5f; } h2 { text-align: right; color: #1e3a5f; margin-top: 30px; margin-bottom: 10px;}</style></head><body><h2>1. CapEx</h2>${tCapEx}<h2>2. BOM</h2>${tBOM}<h2>3. Charges</h2>${tFixed}<h2>4. Salaires</h2>${tHR}<h2>5. Amortissement</h2>${tAmort}<h2>6. TCR</h2>${tTCR}<h2>7. TFT</h2>${tTFT}</body></html>`;
+  let blob = new Blob([template], { type: 'application/vnd.ms-excel' }); let link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "FinStart_Financials.xls"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+}
 
-<div class="container">
-<!-- TAB 1: INFO -->
-<section class="tab-content active" id="tab1">
-  <div class="card">
-    <h2 data-i18n="info_title">📋 معلومات المشروع</h2>
-    <div class="grid">
-      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" placeholder="أدخل اسم مشروعك..." oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_type">نوع المشروع</label>
-        <select id="projType" onchange="onTypeChange()">
-          <option value="hybrid" data-i18n="type_hybrid">جهاز + منصة/تطبيق</option>
-          <option value="hardware" data-i18n="type_hw">جهاز فقط</option>
-          <option value="software" data-i18n="type_sw">منصة/تطبيق فقط</option>
-        </select>
-      </div>
-    </div>
-    <div class="grid" style="margin-top:12px;">
-      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" placeholder="مثال: التعليم، الصحة..." oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_target">الجمهور</label><input type="text" id="projTarget" placeholder="مثال: الطلاب..."></div>
-    </div>
-    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="3" placeholder="اشرح فكرتك..." oninput="updateReadiness()"></textarea></div>
-    
-    <div style="margin-top:12px;">
-      <label data-i18n="p_logo">شعار المشروع (للـ PDF)</label>
-      <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)" style="padding:5px;">
-      <div id="logoPreview" style="margin-top:10px; display:none;">
-        <img id="logoImg" src="" style="max-height: 60px; border:1px solid var(--b); padding:5px;">
-      </div>
-    </div>
+async function exportPDF() {
+  if (!window.calcData) calculateAll();
+  let projName = document.getElementById('projName').value || "مشروعي", dateStr = new Date().toLocaleDateString('fr-FR');
+  let pdf = new jspdf.jsPDF('p', 'mm', 'a4'), pageWidth = pdf.internal.pageSize.getWidth(), pageHeight = pdf.internal.pageSize.getHeight(), margin = 15, currentY = margin;
 
-    <h3 data-i18n="h_cap">💰 رأس المال والمبيعات</h3>
-    <div class="grid3">
-      <div><label data-i18n="p_capital">رأس المال (دج)</label><input type="number" id="projCapital" placeholder="0" oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_units">الوحدات/مبيعات (سنة 1)</label><input type="number" id="projUnits" placeholder="0" oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_price">سعر البيع (دج)</label><input type="number" id="projPrice" placeholder="0" oninput="updateReadiness()"></div>
-    </div>
-    <div class="toolbar" style="margin-top:20px;"><button class="btn-calc" onclick="goToTab('tab2')" data-i18n="btn_next">➡️ التالي</button></div>
-  </div>
-</section>
+  async function addSection(htmlContent) {
+    let tempDiv = document.createElement('div'); tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.style.top = '0'; tempDiv.style.width = '800px'; tempDiv.style.backgroundColor = '#ffffff'; tempDiv.style.padding = '10px'; tempDiv.style.fontFamily = 'Segoe UI'; tempDiv.style.color = '#000000'; tempDiv.style.direction = L === 'ar' ? 'rtl' : 'ltr'; tempDiv.innerHTML = htmlContent; document.body.appendChild(tempDiv);
+    let canvas = await html2canvas(tempDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }); let imgData = canvas.toDataURL('image/jpeg', 1.0); let imgWidth = pageWidth - (margin * 2); let imgHeight = (canvas.height * imgWidth) / canvas.width;
+    if (currentY + imgHeight > pageHeight - margin) { pdf.addPage(); currentY = margin; }
+    pdf.addImage(imgData, 'JPEG', margin, currentY, imgWidth, imgHeight); currentY += imgHeight + 10; document.body.removeChild(tempDiv);
+  }
 
-<!-- TAB 2: COSTS -->
-<section class="tab-content" id="tab2">
-  <div class="card">
-    <h2 data-i18n="h_invest">🏗️ التكاليف الاستثمارية (CapEx)</h2>
-    <div id="investList"></div>
-    <button class="add-btn" onclick="addInvest()" data-i18n="btn_add">+ إضافة</button>
-  </div>
-  <div class="card">
-    <h2 data-i18n="h_bom">🛠️ تكلفة المنتج (BOM)</h2>
-    <div id="bomList"></div>
-    <button class="add-btn" onclick="addBOM()" data-i18n="btn_add">+ إضافة</button>
-  </div>
-  <div class="card">
-    <h2 data-i18n="h_fixed">💸 المصاريف الشهرية</h2>
-    <div id="fixedList"></div>
-    <button class="add-btn" onclick="addFixed()" data-i18n="btn_add">+ إضافة</button>
-  </div>
-  
-  <div class="card" style="background:#fffaf0; border:1px solid #dd6b20;">
-    <h2 data-i18n="h_inflation" style="color:#dd6b20; border-bottom-color:#fbd38d;">📈 معدل التضخم</h2>
-    <div class="grid">
-      <div>
-        <label data-i18n="lbl_inflation">نسبة التضخم (%)</label>
-        <input type="number" id="inflationRate" value="5" step="0.1" onchange="calculateAll()">
-      </div>
-      <div style="display:flex; align-items:flex-end;">
-        <p style="font-size:12px; color:var(--muted); margin:0;">لحساب الجداول لـ 5 سنوات قادمة.</p>
-      </div>
-    </div>
-  </div>
+  let logoHtml = logoBase64 ? `<img src="${logoBase64}" style="max-height: 80px; margin-bottom: 20px;">` : '';
+  await addSection(`<div style="text-align: center; padding: 30px 0;">${logoHtml}<h1 style="color: #1e3a5f; font-size: 40px; margin: 0;">📊 FinStart DZ</h1><h2 style="color: #4a5568; font-size: 24px; margin-top: 20px;">${t('report_title')}</h2><p style="color: #718096; font-size: 16px; margin-top: 40px;">${projName}</p><p style="color: #718096; font-size: 14px;">${dateStr}</p></div>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">1. ${t('info_title')}</h3><table style="width: 100%; font-size: 14px; margin-top: 15px;"><tr><td style="padding: 8px; font-weight: bold; width: 150px;">${t('p_name')}:</td><td style="padding: 8px;">${projName}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_idea')}:</td><td style="padding: 8px;">${document.getElementById('projIdea').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_sector')}:</td><td style="padding: 8px;">${document.getElementById('projSector').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_capital')}:</td><td style="padding: 8px;">${fmt(document.getElementById('projCapital').value)}</td></tr></table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">2. ${t('h_readiness')}</h3><div style="font-size: 16px; margin-top: 15px;"><strong>${t('lbl_readiness')} <span style="color: #38a169; font-size: 24px;">${document.getElementById('readinessScoreText').innerText}</span></strong></div>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">3. ${t('h_invest')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('c_item')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_cost')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_qty')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('col_total')}</th></tr>${investItems.map(i => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${i.name}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost)}</td><td style="border: 1px solid #ccc; padding: 8px;">${i.qty}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost*i.qty)}</td></tr>`).join('')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">4. ${t('h_hr')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_role')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_count')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_basic')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_total')}</th></tr>${emps.map(e => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${e.role}</td><td style="border: 1px solid #ccc; padding: 8px;">${e.count}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary)}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary*1.26*e.count)}</td></tr>`).join('')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">5. ${t('amort_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;">${document.getElementById('amortTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 8px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 8px;"')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">6. ${t('tcr_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center; margin-top: 15px;">${document.getElementById('tcrTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 6px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 6px;"')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">7. ${t('tft_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center; margin-top: 15px;">${document.getElementById('tftTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 6px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 6px;"')}</table>`);
+  if(document.getElementById('loanResult').style.display !== 'none') { await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">8. ${t('loan_title')}</h3><div style="font-size: 14px; margin-top: 15px;">${document.getElementById('loanResult').innerHTML}</div>`); }
+  if (myChart) { let chartImage = myChart.toBase64Image(); await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">9. ${t('h_charts')}</h3><div style="text-align:center; margin-top: 15px;"><img src="${chartImage}" style="width: 100%; max-width: 600px; border: 1px solid #ccc; padding: 10px;"></div>`); }
+  if (beChart) { let beImage = beChart.toBase64Image(); await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">10. ${t('h_breakeven')}</h3><div style="text-align:center; margin-top: 15px;"><img src="${beImage}" style="width: 100%; max-width: 600px; border: 1px solid #ccc; padding: 10px;"></div>`); }
+  let bmc3 = document.getElementById('bmc3').value; if (bmc3) { let bmcHTML = `<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">11. ${t('bmc_title')}</h3><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-top: 15px;">`; const bmcFields = [{ title: t('b1'), id: "bmc1" }, { title: t('b2'), id: "bmc2" }, { title: t('b3'), id: "bmc3" }, { title: t('b4'), id: "bmc4" }, { title: t('b5'), id: "bmc5" }, { title: t('b6'), id: "bmc6" }, { title: t('b7'), id: "bmc7" }, { title: t('b8'), id: "bmc8" }, { title: t('b9'), id: "bmc9" }]; bmcFields.forEach(f => { let val = document.getElementById(f.id).value; if (val) bmcHTML += `<div style="border: 1px solid #ccc; padding: 10px; background: #f9f9f9;"><strong style="display: block; margin-bottom: 5px; color: #1e3a5f;">${f.title}</strong><p style="margin: 0; white-space: pre-wrap;">${val}</p></div>`; }); bmcHTML += `</div>`; await addSection(bmcHTML); }
+  if (document.getElementById('swotResult').style.display !== 'none') { let swotHTML = `<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">12. ${t('swot_title')}</h3><div style="font-size: 12px; margin-top: 15px;">`; swotHTML += `<div style="background: #f0fff4; padding: 10px; margin-bottom: 10px; border-right: 4px solid #38a169;"><strong>${t('swot_s')}:</strong> ${document.getElementById('swotS').innerText}</div><div style="background: #fff5f5; padding: 10px; margin-bottom: 10px; border-right: 4px solid #c53030;"><strong>${t('swot_w')}:</strong> ${document.getElementById('swotW').innerText}</div><div style="background: #ebf8ff; padding: 10px; margin-bottom: 10px; border-right: 4px solid #3182ce;"><strong>${t('swot_o')}:</strong> ${document.getElementById('swotO').innerText}</div><div style="background: #fffaf0; padding: 10px; margin-bottom: 10px; border-right: 4px solid #dd6b20;"><strong>${t('swot_t')}:</strong> ${document.getElementById('swotT').innerText}</div><div style="background: #faf5ff; padding: 15px; font-weight: bold; border-radius: 5px;"><strong>${t('swot_rec')}:</strong> ${document.getElementById('swotRec').innerText}</div></div>`; await addSection(swotHTML); }
+  pdf.save(`Rapport_${projName.replace(/\s+/g, '_')}.pdf`);
+}
 
-  <button class="btn-calc" onclick="calculateAll()" data-i18n="btn_calc">🧮 احسب الجداول</button>
-</section>
+/* ============ CHAT & AUTO SAVE ============ */
+function toggleChat() {
+  let chatWin = document.getElementById('chat-window');
+  if (chatWin.style.display === 'flex' || chatWin.style.display === 'block') { chatWin.style.display = 'none'; } else { chatWin.style.display = 'flex'; }
+}
+function handleChatEnter(event) { if (event.key === 'Enter') sendChatMessage(); }
+async function sendChatMessage() {
+  let input = document.getElementById('chat-input'); let msg = input.value.trim(); if (!msg) return;
+  let chatMessages = document.getElementById('chat-messages'); chatMessages.innerHTML += `<div class="chat-msg user">${msg}</div>`; input.value = ''; chatMessages.scrollTop = chatMessages.scrollHeight;
+  let loadingDiv = document.createElement('div'); loadingDiv.className = 'chat-msg ai'; loadingDiv.innerText = "⏳ جاري التفكير..."; chatMessages.appendChild(loadingDiv); chatMessages.scrollTop = chatMessages.scrollHeight;
+  let result = await callAI(msg); loadingDiv.innerText = result; chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function startNewChat() { document.getElementById('chat-messages').innerHTML = `<div class="chat-msg ai">مرحباً! أنا مساعدك المالي. كيف يمكنني مساعدتك في مشروعك اليوم؟</div>`; }
 
-<!-- TAB 3: HR -->
-<section class="tab-content" id="tab8">
-  <div class="card">
-    <h2 data-i18n="h_hr">👥 جدول الرواتب</h2>
-    <div class="table-responsive">
-      <table class="data" id="hrTable">
-        <thead><tr>
-          <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأساسي</th>
-          <th data-i18n="hr_cnas_emp">9%</th><th data-i18n="hr_net">الصافي</th>
-          <th data-i18n="hr_cnas_er">26%</th><th data-i18n="hr_total">الإجمالي</th><th></th>
-        </tr></thead>
-        <tbody id="hrBody"></tbody>
-      </table>
-    </div>
-    <button class="add-btn" onclick="addEmp()" data-i18n="btn_add">+ إضافة موظف</button>
-  </div>
-</section>
+function triggerAutoSave() { let badge = document.getElementById('autosave-badge'); badge.style.opacity = '1'; setTimeout(() => { badge.style.opacity = '0'; }, 2000); }
+function resetData() { if(confirm("مسح الكل؟")) location.reload(); }
 
-<!-- TAB 4: FINANCIALS -->
-<section class="tab-content" id="tab3">
-  <div class="card" id="readinessCard">
-    <h2 data-i18n="h_readiness">🎯 مؤشر الجاهزية</h2>
-    <div class="score-container">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span data-i18n="lbl_readiness">الجاهزية:</span>
-        <span class="score-text" id="readinessScoreText">0%</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="readinessBar"></div></div>
-      <p style="font-size:12px; color:var(--muted); margin-top:10px;" id="readinessMsg"></p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2 data-i18n="h_amort">📉 جدول الاهتلاك</h2>
-    <div class="table-responsive"><table class="data" id="amortTable"></table></div>
-  </div>
-  <div class="card">
-    <h2 data-i18n="h_tcr">📊 جدول النتائج (TCR)</h2>
-    <div class="table-responsive"><table class="data" id="tcrTable"></table></div>
-  </div>
-  <div class="card">
-    <h2 data-i18n="h_tft">💸 جدول التدفقات (TFT)</h2>
-    <div class="table-responsive"><table class="data" id="tftTable"></table></div>
-  </div>
-  
-  <div class="grid">
-    <div class="card">
-      <h2 data-i18n="h_breakeven">📈 نقطة التعادل</h2>
-      <div class="chart-box" style="height:250px;"><canvas id="beChart"></canvas></div>
-    </div>
-    <div class="card">
-      <h2 data-i18n="h_sensitivity">⚖️ الحساسية</h2>
-      <div class="grid3" style="margin-bottom:10px;">
-        <div><label data-i18n="sens_sales">المبيعات (%)</label><input type="number" id="sensSales" value="0"></div>
-        <div><label data-i18n="sens_var">المتغيرة (%)</label><input type="number" id="sensVar" value="0"></div>
-        <div><label data-i18n="sens_fix">الثابتة (%)</label><input type="number" id="sensFix" value="0"></div>
-      </div>
-      <button class="btn btn-primary" onclick="calculateSensitivity()" style="width:100%;" data-i18n="btn_sens">احسب</button>
-      <div id="sensResult" class="result" style="display:none; margin-top:15px; font-size:13px;"></div>
-    </div>
-  </div>
-  
-  <div class="card"><h2 data-i18n="h_charts">📊 تطور الأرباح</h2><div class="chart-box"><canvas id="mainChart"></canvas></div></div>
-</section>
-
-<!-- TAB 5: LOAN -->
-<section class="tab-content" id="tab10">
-  <div class="card">
-    <h2 data-i18n="h_loan">🏦 محاكي القروض</h2>
-    <div class="grid">
-      <div><label data-i18n="loan_amount">مبلغ القرض (دج)</label><input type="number" id="loanAmount" value="3000000"></div>
-      <div><label data-i18n="loan_rate">الفائدة (%)</label><input type="number" id="loanRate" value="5" step="0.1"></div>
-      <div><label data-i18n="loan_years">المدة (سنوات)</label><input type="number" id="loanYears" value="5"></div>
-    </div>
-    <button class="btn-calc" onclick="calculateLoan()" data-i18n="btn_calc_loan" style="margin-top:20px;">🧮 احسب DSCR</button>
-    <div id="loanResult" class="result" style="display:none; margin-top:20px; font-size:15px;"></div>
-  </div>
-</section>
-
-<!-- TAB 6: COMPETITORS -->
-<section class="tab-content" id="tab4">
-  <div class="card">
-    <h2 data-i18n="h_comp">⚔️ المنافسون</h2>
-    <button class="btn btn-ai" onclick="aiAnalyzeCompetitors()" data-i18n="btn_ai_comp">🤖 بحث</button>
-    <div id="compResult" class="table-responsive" style="margin-top:15px;"></div>
-  </div>
-</section>
-
-<!-- TAB 7: BMC -->
-<section class="tab-content" id="tab5">
-  <div class="card">
-    <h2 data-i18n="h_bmc">🧩 BMC</h2>
-    <button class="btn btn-ai" onclick="aiGenerateBMC()" data-i18n="btn_ai_bmc">🤖 توليد</button>
-    <div class="bmc-container">
-      <div class="bmc-box bmc-partners"><h4 data-i18n="b1">🤝 الشركاء</h4><textarea id="bmc1"></textarea></div>
-      <div class="bmc-box bmc-activities"><h4 data-i18n="b2">⚙️ الأنشطة</h4><textarea id="bmc2"></textarea></div>
-      <div class="bmc-box bmc-value"><h4 data-i18n="b3">💎 القيمة</h4><textarea id="bmc3"></textarea></div>
-      <div class="bmc-box bmc-relations"><h4 data-i18n="b6">❤️ العلاقات</h4><textarea id="bmc6"></textarea></div>
-      <div class="bmc-box bmc-segments"><h4 data-i18n="b4">👥 العملاء</h4><textarea id="bmc4"></textarea></div>
-      <div class="bmc-box bmc-resources"><h4 data-i18n="b7">🔑 الموارد</h4><textarea id="bmc7"></textarea></div>
-      <div class="bmc-box bmc-channels"><h4 data-i18n="b5">📢 القنوات</h4><textarea id="bmc5"></textarea></div>
-      <div class="bmc-box bmc-costs"><h4 data-i18n="b9">💸 التكاليف</h4><textarea id="bmc9"></textarea></div>
-      <div class="bmc-box bmc-revenues"><h4 data-i18n="b8">💰 الإيرادات</h4><textarea id="bmc8"></textarea></div>
-    </div>
-  </div>
-</section>
-
-<!-- TAB 8: SWOT -->
-<section class="tab-content" id="tab9">
-  <div class="card">
-    <h2 data-i18n="h_swot">🧠 SWOT</h2>
-    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد</button>
-    <div id="swotResult" style="margin-top:20px; display:none;">
-      <div class="grid" style="gap:15px;">
-        <div class="result" style="background:#f0fff4; border-color:#38a169; color:#1a202c;">
-          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">القوة</span></h3><ul id="swotS" style="padding-right:20px; font-size:13px;"></ul>
-        </div>
-        <div class="result" style="background:#fff5f5; border-color:#c53030; color:#1a202c;">
-          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">الضعف</span></h3><ul id="swotW" style="padding-right:20px; font-size:13px;"></ul>
-        </div>
-        <div class="result" style="background:#ebf8ff; border-color:#3182ce; color:#1a202c;">
-          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص</span></h3><ul id="swotO" style="padding-right:20px; font-size:13px;"></ul>
-        </div>
-        <div class="result" style="background:#fffaf0; border-color:#dd6b20; color:#1a202c;">
-          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات</span></h3><ul id="swotT" style="padding-right:20px; font-size:13px;"></ul>
-        </div>
-      </div>
-      <div class="result" style="background:#faf5ff; border-color:#805ad5; margin-top:15px; color:#1a202c;">
-        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية</span></h3><p id="swotRec" style="font-size:14px; font-weight:bold;"></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TAB 9: AI -->
-<section class="tab-content" id="tab6">
-  <div class="card">
-    <h2 data-i18n="h_ai">🧠 المساعد المالي</h2>
-    <div class="grid">
-      <div><label data-i18n="ai_q">سؤالك</label><input type="text" id="aiQuestion" placeholder="..."></div>
-      <div style="display:flex; align-items:flex-end;"><button class="btn btn-primary" onclick="askAI()" style="width:100%;" data-i18n="btn_ask">🚀 اسأل</button></div>
-    </div>
-    <div id="aiResponse" style="background:var(--table-hover); padding:15px; border-radius:8px; margin-top:15px; display:none; white-space:pre-wrap;"></div>
-  </div>
-</section>
-
-<!-- TAB 11: SMART ACCOUNTANT -->
-<section class="tab-content" id="tab11">
-  <div class="card">
-    <h2 data-i18n="h_acc">🧾 المحاسب الذكي</h2>
-    <button class="btn btn-ai" onclick="aiSmartAccountant()" data-i18n="btn_ai_acc" style="width:100%;">🔍 مراجعة</button>
-    <div id="accResult" style="background:var(--table-hover); padding:20px; border-radius:8px; margin-top:15px; display:none; font-size:14px;"></div>
-  </div>
-</section>
-
-<!-- TAB 12: NPV / IRR -->
-<section class="tab-content" id="tab12">
-  <div class="card">
-    <h2 data-i18n="h_npv">📈 مؤشرات الاستثمار</h2>
-    <div class="grid" style="margin-bottom: 15px;">
-      <div><label data-i18n="lbl_discount">الخصم (%)</label><input type="number" id="discountRate" value="10" onchange="calculateNPV_IRR()"></div>
-      <div style="display:flex; align-items:flex-end;"><button class="btn btn-primary" onclick="calculateNPV_IRR()" style="width:100%;" data-i18n="btn_calc_npv">احسب</button></div>
-    </div>
-    <div id="npvResult" class="grid3" style="display:none;"></div>
-  </div>
-</section>
-
-<!-- TAB 13: PATH PARTNER -->
-<section class="tab-content" id="tab13">
-  <div class="card">
-    <h2 data-i18n="h_path">🛣️ شريك المسار</h2>
-    <div id="checklistContainer" style="margin-top: 15px;"></div>
-  </div>
-</section>
-
-<!-- TAB 14: MARKET -->
-<section class="tab-content" id="tab14">
-  <div class="card">
-    <h2 data-i18n="h_market">🏪 سوق المشاريع</h2>
-    <div style="text-align: center; margin-bottom: 20px;">
-      <button class="btn btn-success" onclick="publishToMarket()" data-i18n="btn_publish">🚀 نشر</button>
-    </div>
-    <div id="marketGrid"></div>
-  </div>
-</section>
-
-<!-- TAB 15: PITCH DECK GENERATOR -->
-<section class="tab-content" id="tab15">
-  <div class="card">
-    <h2 data-i18n="h_pitch_deck">🎤 مولّد العرض التقديمي</h2>
-    <div class="pitch-controls">
-      <button class="btn btn-ai" onclick="aiGeneratePitchDeck()" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض</button>
-      <button class="btn btn-success" id="btn_pptx" onclick="exportPitchToPPTX()" style="display:none;" data-i18n="btn_download_pptx">📥 تحميل PPTX</button>
-      <button class="btn btn-primary" id="btn_canva" onclick="openInCanva()" style="display:none;" data-i18n="btn_open_canva">🎨 Canva</button>
-    </div>
-    <div id="pitchDeckPreview" style="margin-top:20px; display:none;"></div>
-  </div>
-</section>
-
-<div class="toolbar">
-  <button class="btn btn-success" onclick="saveCurrentProject()">💾 حفظ</button>
-  <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 Excel</button>
-  <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 PDF</button>
-  <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
-</div>
-</div>
-<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v30.0 - App Edition</footer>
-
-<script>
-/* JS_PART_2_HERE */
-  /* ============ TRANSLATIONS ============ */
+/* ============ INITIALIZATION ============ */
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+applyLang('ar'); updateReadiness(); calculateLoan(); renderPitchPreview();
+</script>
+</body>
+</html>
+ /* ============ TRANSLATIONS ============ */
 const T = {
   ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب", t12:"11. الاستثمار", t13:"12. المسار", t14:"13. السوق", t15:"14. العرض",
     info_title:"📋 معلومات المشروع", p_name:"اسم المشروع", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
@@ -852,265 +586,392 @@ function calculateLoan() {
     document.getElementById('loanResult').style.display = 'block';
     document.getElementById('loanResult').innerHTML = `<p><strong>${t('res_monthly')}</strong> <span class="big-num">${fmt(monthlyPayment)} دج</span></p><p><strong>${t('res_total_interest')}</strong> ${fmt(totalInterest)} دج</p><p><strong>${t('res_total_payment')}</strong> ${fmt(totalPayment)} دج</p>${dscrHtml}`;
 }
+   /* ============ TRANSLATIONS ============ */
+const T = {
+  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب", t12:"11. الاستثمار", t13:"12. المسار", t14:"13. السوق", t15:"14. العرض",
+    info_title:"📋 معلومات المشروع", p_name:"اسم المشروع", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
+    p_sector:"القطاع", p_target:"الجمهور", p_idea:"فكرة المشروع", p_logo:"شعار المشروع (اختياري)",
+    h_cap:"💰 رأس المال والمبيعات", p_capital:"رأس المال (دج)", p_units:"مبيعات سنة 1", p_price:"سعر البيع (دج)", btn_next:"➡️ التالي",
+    h_invest:"🏗️ التكاليف الاستثمارية (CapEx)", c_item:"البيان", c_cost:"القيمة", c_qty:"الكمية", c_dep:"الاهتلاك", btn_add:"+ إضافة",
+    h_bom:"🛠️ تكلفة المنتج الواحد (BOM)", h_fixed:"💸 المصاريف التشغيلية الشهرية", h_inflation:"📈 معدل التضخم", lbl_inflation:"نسبة التضخم (%)", btn_calc:"🧮 احسب الجداول",
+    h_hr:"👥 جدول الرواتب", hr_role:"المنصب", hr_count:"العدد", hr_basic:"الأساسي", hr_cnas_emp:"حصة العامل 9%", hr_net:"الصافي", hr_cnas_er:"حصة صاحب العمل 26%", hr_total:"الإجمالي",
+    h_readiness:"🎯 مؤشر الجاهزية", lbl_readiness:"الجاهزية:", msg_r0:"أدخل البيانات الأساسية.", msg_r50:"دراسة جيدة، ينقصك BMC أو SWOT.", msg_r80:"دراسة قوية جداً!", msg_r100:"مكتمل 100% جاهز للتمويل!",
+    h_amort:"📉 جدول الاهتلاك", h_tcr:"📊 جدول النتائج (TCR)", h_tft:"💸 جدول التدفقات (TFT)", h_charts:"📊 تطور الأرباح",
+    h_breakeven:"📈 نقطة التعادل", h_sensitivity:"⚖️ تحليل الحساسية", sens_desc:"تأثير التغيرات على الربح:", sens_sales:"تغير المبيعات (%)", sens_var:"تغير التكلفة المتغيرة (%)", sens_fix:"تغير التكاليف الثابتة (%)", btn_sens:"احسب",
+    h_loan:"🏦 محاكي القروض", loan_desc:"احسب القسط الشهري.", loan_amount:"مبلغ القرض (دج)", loan_rate:"الفائدة (%)", loan_years:"المدة (سنوات)", btn_calc_loan:"🧮 احسب القسط و DSCR",
+    res_monthly:"القسط الشهري:", res_total_interest:"إجمالي الفوائد:", res_total_payment:"الإجمالي:", res_dscr:"نسبة DSCR:", dscr_good:"آمن", dscr_risky:"مخاطرة",
+    h_comp:"⚔️ تحليل المنافسين", btn_ai_comp:"🤖 بحث", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 توليد BMC", b1:"🤝 الشركاء", b2:"⚙️ الأنشطة", b3:"💎 القيمة", b4:"👥 العملاء", b5:"📢 القنوات", b6:"❤️ العلاقات", b7:"🔑 الموارد", b8:"💰 الإيرادات", b9:"💸 التكاليف",
+    h_swot:"🧠 تحليل SWOT", swot_desc:"تحليل ذكي للمشروع", btn_ai_swot:"🚀 توليد", swot_s:"القوة", swot_w:"الضعف", swot_o:"الفرص", swot_t:"التهديدات", swot_rec:"التوصية",
+    h_ai:"🧠 المساعد المالي", ai_q:"سؤالك", btn_ask:"🚀 اسأل", btn_save:"💾 حفظ", btn_pdf:"📄 PDF", btn_reset:"🗑️ مسح", btn_excel:"📊 Excel",
+    h_acc:"🧾 المحاسب الذكي", acc_desc:"مراجعة الأرقام بالذكاء الاصطناعي", btn_ai_acc:"🔍 مراجعة",
+    h_npv:"📈 مؤشرات الاستثمار", npv_desc:"بناءً على التدفقات النقدية.", lbl_discount:"الخصم (%)", btn_calc_npv:"احسب", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"الاسترداد", npv_good:"مجدي", npv_bad:"غير مجدي",
+    h_path:"🛣️ شريك المسار", path_desc:"تتبع إنجاز المشروع", step1:"البيانات الأساسية", step2:"الجداول المالية", step3:"BMC", step4:"SWOT", step5:"النشر في السوق",
+    h_market:"🏪 سوق المشاريع", market_desc:"تصفح أو انشر مشروعك", btn_publish:"🚀 نشر المشروع", pub_success:"✅ تم النشر!", btn_view:"عرض", profit_margin:"الهامش",
+    h_pitch_deck:"🎤 مولّد العرض التقديمي", pitch_deck_desc:"توليد عرض تقديمي احترافي من 11 قسماً.", btn_ai_pitch_deck:"🤖 توليد العرض", btn_download_pptx:"📥 تحميل PowerPoint", btn_open_canva:"🎨 نسخ لـ Canva",
+    row_rev:"الإيرادات", row_cogs:"تكلفة المبيعات", row_va:"القيمة المضافة", row_opex:"المصاريف التشغيلية", row_ebe:"EBE", row_dep:"الاهتلاك", row_net:"الربح الصافي",
+    row_opflow:"تدفق التشغيل", row_invflow:"تدفق الاستثمار", row_cash:"تغير الخزينة",
+    col_year:"السنة", col_total:"المجموع", tcr_title:"جدول النتائج", tft_title:"جدول التدفقات", amort_title:"الاهتلاك", loan_title:"القروض",
+    report_title:"تقرير الدراسة المالية", bmc_title:"نموذج BMC", swot_title:"تحليل SWOT",
+    val_err_price:"⚠️ سعر البيع أقل من التكلفة!", val_err_opex:"⚠️ التكاليف التشغيلية صفر!", val_ok:""
+  },
+  fr:{ t1:"1. Infos", t2:"2. Coûts", t8:"3. RH", t3:"4. Financier", t10:"5. Prêts", t4:"6. Concurrents", t5:"7. BMC", t9:"8. SWOT", t6:"9. Assistant", t11:"10. Comptable", t12:"11. Investissement", t13:"12. Parcours", t14:"13. Marché", t15:"14. Pitch Deck",
+    info_title:"📋 Infos", p_name:"Nom", p_type:"Type", type_hybrid:"Matériel + Logiciel", type_hw:"Matériel", type_sw:"Logiciel",
+    p_sector:"Secteur", p_target:"Cible", p_idea:"Idée", p_logo:"Logo (PDF)",
+    h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Ventes (An 1)", p_price:"Prix (DA)", btn_next:"➡️ Suivant",
+    h_invest:"🏗️ CapEx", c_item:"Désignation", c_cost:"Coût", c_qty:"Qté", c_dep:"Amort.", btn_add:"+ Ajouter",
+    h_bom:"🛠️ Coût Unitaire", h_fixed:"💸 Charges Mensuelles", h_inflation:"📈 Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculer",
+    h_hr:"👥 Salaires", hr_role:"Poste", hr_count:"Nb", hr_basic:"Base", hr_cnas_emp:"Employé 9%", hr_net:"Net", hr_cnas_er:"Employeur 26%", hr_total:"Total",
+    h_readiness:"🎯 Préparation", lbl_readiness:"Prêt:", msg_r0:"Complétez les infos.", msg_r50:"Manque BMC/SWOT.", msg_r80:"Très solide!", msg_r100:"100% Prêt!",
+    h_amort:"📉 Amortissement", h_tcr:"📊 Résultat (TCR)", h_tft:"💸 Trésorerie (TFT)", h_charts:"📊 Évolution",
+    h_breakeven:"📈 Seuil", h_sensitivity:"⚖️ Sensibilité", sens_desc:"Impact:", sens_sales:"Ventes (%)", sens_var:"Coût Var (%)", sens_fix:"Coûts Fixes (%)", btn_sens:"Calculer",
+    h_loan:"🏦 Prêt", loan_desc:"Calculez la mensualité.", loan_amount:"Montant (DA)", loan_rate:"Taux (%)", loan_years:"Durée (Ans)", btn_calc_loan:"🧮 Calculer DSCR",
+    res_monthly:"Mensualité:", res_total_interest:"Intérêts:", res_total_payment:"Total:", res_dscr:"DSCR:", dscr_good:"Sûr", dscr_risky:"Risqué",
+    h_comp:"⚔️ Concurrents", btn_ai_comp:"🤖 Chercher", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Générer", b1:"🤝 Partenaires", b2:"⚙️ Activités", b3:"💎 Valeur", b4:"👥 Clients", b5:"📢 Canaux", b6:"❤️ Relations", b7:"🔑 Ressources", b8:"💰 Revenus", b9:"💸 Coûts",
+    h_swot:"🧠 SWOT", swot_desc:"Analyse IA", btn_ai_swot:"🚀 Générer", swot_s:"Forces", swot_w:"Faiblesses", swot_o:"Opportunités", swot_t:"Menaces", swot_rec:"Recommandation",
+    h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Demander", btn_save:"💾 Sauver", btn_pdf:"📄 PDF", btn_reset:"🗑️ Effacer", btn_excel:"📊 Excel",
+    h_acc:"🧾 Comptable IA", acc_desc:"Analysez vos chiffres", btn_ai_acc:"🔍 Analyser",
+    h_npv:"📈 Investissement", npv_desc:"Basé sur les flux.", lbl_discount:"Taux (%)", btn_calc_npv:"Calculer", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"Récupération", npv_good:"Rentable", npv_bad:"Non rentable",
+    h_path:"🛣️ Parcours", path_desc:"Suivi", step1:"Infos", step2:"Finances", step3:"BMC", step4:"SWOT", step5:"Publication",
+    h_market:"🏪 Marché", market_desc:"Projets étudiants", btn_publish:"🚀 Publier", pub_success:"✅ Publié!", btn_view:"Voir", profit_margin:"Marge",
+    h_pitch_deck:"🎤 Pitch Deck", pitch_deck_desc:"Générer 11 slides pro.", btn_ai_pitch_deck:"🤖 Générer", btn_download_pptx:"📥 Télécharger PPTX", btn_open_canva:"🎨 Copier Canva",
+    row_rev:"Revenus", row_cogs:"Coût Ventes", row_va:"Valeur Ajoutée", row_opex:"Charges", row_ebe:"EBE", row_dep:"Amort.", row_net:"Résultat Net",
+    row_opflow:"Flux Op.", row_invflow:"Flux Inv.", row_cash:"Trésorerie",
+    col_year:"Année", col_total:"Total", tcr_title:"Résultat", tft_title:"Trésorerie", amort_title:"Amortissement", loan_title:"Prêt",
+    report_title:"Rapport Financier", bmc_title:"BMC", swot_title:"SWOT",
+    val_err_price:"⚠️ Prix < Coût!", val_err_opex:"⚠️ Charges = 0!", val_ok:""
+  },
+  en:{ t1:"1. Info", t2:"2. Costs", t8:"3. HR", t3:"4. Financials", t10:"5. Loan", t4:"6. Competitors", t5:"7. BMC", t9:"8. SWOT", t6:"9. Assistant", t11:"10. Accountant", t12:"11. Investment", t13:"12. Journey", t14:"13. Market", t15:"14. Pitch Deck",
+    info_title:"📋 Info", p_name:"Name", p_type:"Type", type_hybrid:"Hardware + Software", type_hw:"Hardware", type_sw:"Software",
+    p_sector:"Sector", p_target:"Target", p_idea:"Idea", p_logo:"Logo (PDF)",
+    h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Sales (Y1)", p_price:"Price (DA)", btn_next:"➡️ Next",
+    h_invest:"🏗️ CapEx", c_item:"Item", c_cost:"Cost", c_qty:"Qty", c_dep:"Depr.", btn_add:"+ Add",
+    h_bom:"🛠️ Unit Cost", h_fixed:"💸 Monthly Expenses", h_inflation:"📈 Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculate",
+    h_hr:"👥 Salaries", hr_role:"Role", hr_count:"Count", hr_basic:"Base", hr_cnas_emp:"Employee 9%", hr_net:"Net", hr_cnas_er:"Employer 26%", hr_total:"Total",
+    h_readiness:"🎯 Readiness", lbl_readiness:"Ready:", msg_r0:"Enter basic info.", msg_r50:"Missing BMC/SWOT.", msg_r80:"Very strong!", msg_r100:"100% Ready!",
+    h_amort:"📉 Depreciation", h_tcr:"📊 Income (TCR)", h_tft:"💸 Cash Flow (TFT)", h_charts:"📊 Evolution",
+    h_breakeven:"📈 Break-Even", h_sensitivity:"⚖️ Sensitivity", sens_desc:"Impact:", sens_sales:"Sales (%)", sens_var:"Var Cost (%)", sens_fix:"Fixed Costs (%)", btn_sens:"Calculate",
+    h_loan:"🏦 Loan", loan_desc:"Calculate monthly payment.", loan_amount:"Amount (DA)", loan_rate:"Rate (%)", loan_years:"Years", btn_calc_loan:"🧮 Calculate DSCR",
+    res_monthly:"Monthly:", res_total_interest:"Interest:", res_total_payment:"Total:", res_dscr:"DSCR:", dscr_good:"Safe", dscr_risky:"Risky",
+    h_comp:"⚔️ Competitors", btn_ai_comp:"🤖 Search", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Generate", b1:"🤝 Partners", b2:"⚙️ Activities", b3:"💎 Value", b4:"👥 Clients", b5:"📢 Channels", b6:"❤️ Relations", b7:"🔑 Resources", b8:"💰 Revenues", b9:"💸 Costs",
+    h_swot:"🧠 SWOT", swot_desc:"AI Analysis", btn_ai_swot:"🚀 Generate", swot_s:"Strengths", swot_w:"Weaknesses", swot_o:"Opportunities", swot_t:"Threats", swot_rec:"Recommendation",
+    h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Ask", btn_save:"💾 Save", btn_pdf:"📄 PDF", btn_reset:"🗑️ Clear", btn_excel:"📊 Excel",
+    h_acc:"🧾 Smart Accountant", acc_desc:"AI review", btn_ai_acc:"🔍 Review",
+    h_npv:"📈 Investment", npv_desc:"Based on cash flows.", lbl_discount:"Rate (%)", btn_calc_npv:"Calculate", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"Payback", npv_good:"Profitable", npv_bad:"Not profitable",
+    h_path:"🛣️ Journey", path_desc:"Track progress", step1:"Basic Info", step2:"Financials", step3:"BMC", step4:"SWOT", step5:"Published",
+    h_market:"🏪 Market", market_desc:"Student projects", btn_publish:"🚀 Publish", pub_success:"✅ Published!", btn_view:"View", profit_margin:"Margin",
+    h_pitch_deck:"🎤 Pitch Deck", pitch_deck_desc:"Generate 11 pro slides.", btn_ai_pitch_deck:"🤖 Generate", btn_download_pptx:"📥 Download PPTX", btn_open_canva:"🎨 Copy Canva",
+    row_rev:"Revenue", row_cogs:"COGS", row_va:"Value Added", row_opex:"OpEx", row_ebe:"EBITDA", row_dep:"Depreciation", row_net:"Net Profit",
+    row_opflow:"Op. Cash Flow", row_invflow:"Inv. Cash Flow", row_cash:"Cash Flow",
+    col_year:"Year", col_total:"Total", tcr_title:"Income", tft_title:"Cash Flow", amort_title:"Depreciation", loan_title:"Loan",
+    report_title:"Financial Report", bmc_title:"BMC", swot_title:"SWOT",
+    val_err_price:"⚠️ Price < Cost!", val_err_opex:"⚠️ OpEx = 0!", val_ok:""
+  }
+};
+let L = 'ar'; const t = k => T[L][k] || k;
 
-/* ============ NPV & IRR ============ */
-function calculateIRR(cashFlows) {
-    let guess = 0.1;
-    for(let i=0; i<100; i++) {
-        let npv = 0;
-        for(let j=0; j<cashFlows.length; j++) npv += cashFlows[j] / Math.pow(1 + guess, j);
-        if(Math.abs(npv) < 0.01) return guess * 100;
-        let d_npv = 0;
-        for(let j=1; j<cashFlows.length; j++) d_npv -= j * cashFlows[j] / Math.pow(1 + guess, j + 1);
-        let newGuess = guess - npv / d_npv;
-        if(Math.abs(newGuess - guess) < 0.0001) return newGuess * 100;
-        guess = newGuess;
-    }
-    return null;
+/* ============ STATE ============ */
+let logoBase64 = null;
+let investItems = [];
+let bomItems = [];
+let fixedItems = [];
+let emps = [];
+let myChart = null;
+let beChart = null;
+let tftCashFlows = [];
+let pitchDeckData = null;
+
+/* ============ INIT & UI ============ */
+if(localStorage.getItem('finstart_theme') === 'dark') document.body.classList.add('dark-mode');
+
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('finstart_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  if(window.calcData) { renderChart(); renderBreakEvenChart(); }
 }
-function calculateNPV_IRR() {
-    if (!window.calcData || tftCashFlows.length === 0) { alert("يرجى حساب الجداول المالية أولاً."); return; }
-    let rate = parseFloat(document.getElementById('discountRate').value) / 100 || 0;
-    let npv = 0;
-    for(let i=0; i<tftCashFlows.length; i++) npv += tftCashFlows[i] / Math.pow(1 + rate, i);
-    let irr = calculateIRR(tftCashFlows), payback = 0, cumulative = tftCashFlows[0];
-    for(let i=1; i<tftCashFlows.length; i++) { cumulative += tftCashFlows[i]; if(cumulative >= 0) { payback = i; break; } }
 
-    let resDiv = document.getElementById('npvResult'); resDiv.style.display = 'grid';
-    let npvColor = npv > 0 ? 'ok-num' : 'big-num';
-    resDiv.innerHTML = `<div class="result"><p><strong>${t('res_npv')}</strong></p><p class="${npvColor}" style="font-size:20px;">${fmt(npv)} دج</p></div><div class="result"><p><strong>${t('res_irr')}</strong></p><p class="${irr && irr > rate*100 ? 'ok-num' : 'big-num'}" style="font-size:20px;">${irr ? irr.toFixed(1) + '%' : 'N/A'}</p></div><div class="result"><p><strong>${t('res_payback')}</strong></p><p style="font-size:20px;">${payback > 0 ? payback : '> 5'} ${L==='ar'?'سنوات':'ans'}</p></div>`;
+function togglePresentation() {
+  document.body.classList.toggle('presentation-mode');
+  if(document.body.classList.contains('presentation-mode')) alert("تم تفعيل وضع العرض التقديمي. اضغط على الزر مرة أخرى للعودة.");
 }
 
-/* ============ SMART ACCOUNTANT ============ */
-async function aiSmartAccountant() {
-    if(!window.calcData) return alert('يرجى حساب الجداول أولاً');
-    let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري المراجعة...";
-    let d = window.calcData;
-    let prompt = `أنت محاسب خبير. راجع هذه البيانات المالية لمشروع: رأس المال: ${d.totalCapEx} دج. تكلفة الوحدة: ${d.unitCost} دج. سعر البيع: ${d.price} دج. المصاريف الشهرية: ${d.monthlyOpex} دج. المبيعات: ${d.baseUnits} وحدة/سنة. قم بإعطاء 3 نصائح مالية دقيقة جداً لتحسين الأرباح، وحذرني من الأخطاء. اكتب باللغة: ${L}.`;
-    let result = await callAI(prompt);
-    document.getElementById('accResult').style.display = 'block';
-    document.getElementById('accResult').innerText = result;
-    btn.innerText = originalText; updateChecklist();
+function handleLogoUpload(event) {
+  let file = event.target.files[0]; if(!file) return;
+  let reader = new FileReader();
+  reader.onload = function(e) {
+    logoBase64 = e.target.result;
+    document.getElementById('logoPreview').style.display = 'block';
+    document.getElementById('logoImg').src = logoBase64;
+    localStorage.setItem('finstart_logo', logoBase64);
+  };
+  reader.readAsDataURL(file);
+}
+if(localStorage.getItem('finstart_logo')) {
+  logoBase64 = localStorage.getItem('finstart_logo');
+  setTimeout(() => { if(document.getElementById('logoPreview')) { document.getElementById('logoPreview').style.display = 'block'; document.getElementById('logoImg').src = logoBase64; } }, 200);
 }
 
-/* ============ READINESS & PATH ============ */
-function updateReadiness() {
-    let score = 0;
-    let name = document.getElementById('projName').value, idea = document.getElementById('projIdea').value, sector = document.getElementById('projSector').value;
-    if(name.length > 2 && idea.length > 5 && sector.length > 2) score += 20;
-    if(window.calcData && window.calcData.baseUnits > 0 && window.calcData.price > 0) score += 20;
-    if(window.calcData && (window.calcData.baseUnits * window.calcData.price) - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex > 0) score += 20;
-    if(document.getElementById('bmc3').value.length > 5) score += 20;
-    if(document.getElementById('swotResult').style.display !== 'none') score += 20;
+function applyLang(lang) {
+  L = lang; document.documentElement.lang = lang; document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el => { let k = el.getAttribute('data-i18n'); if (T[lang][k]) el.textContent = T[lang][k]; });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  if(window.calcData) { renderAmort(); renderTCR(); renderTFT(); renderChart(); renderBreakEvenChart(); updateReadiness(); checkValidation(); updateChecklist(); renderMarket(); renderPitchPreview(); }
+}
+
+function showTab(id) { 
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===id)); 
+  document.getElementById(id).classList.add('active'); 
+  if(id==='tab3') { renderChart(); renderBreakEvenChart(); }
+  if(id==='tab13') updateChecklist();
+  if(id==='tab14') renderMarket();
+  if(id==='tab15') renderPitchPreview();
+}
+
+function onTypeChange() { /* Kept for compatibility, logic moved to dynamic entry */ }
+
+function fmt(n) { return Math.round(n || 0).toLocaleString('fr-FR'); }
+
+/* ============ RENDER DYNAMIC LISTS ============ */
+function renderInvest() {
+  let h = '';
+  investItems.forEach((item, i) => {
+    h += `<div class="row-item">
+      <input type="text" value="${item.name}" placeholder="البيان" onchange="investItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="القيمة" onchange="investItems[${i}].cost=+this.value">
+      <input type="number" value="${item.qty}" placeholder="الكمية" onchange="investItems[${i}].qty=+this.value">
+      <input type="number" value="${item.dep}" placeholder="سنوات الاهتلاك" onchange="investItems[${i}].dep=+this.value">
+      <button onclick="removeInvest(${i})">×</button>
+    </div>`;
+  });
+  document.getElementById('investList').innerHTML = h;
+}
+function renderBOM() {
+  let h = '';
+  bomItems.forEach((item, i) => {
+    h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 1fr 40px;">
+      <input type="text" value="${item.name}" placeholder="المكون" onchange="bomItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="السعر" onchange="bomItems[${i}].cost=+this.value">
+      <input type="number" value="${item.qty}" placeholder="الكمية" onchange="bomItems[${i}].qty=+this.value">
+      <button onclick="removeBOM(${i})">×</button>
+    </div>`;
+  });
+  document.getElementById('bomList').innerHTML = h;
+}
+function renderFixed() {
+  let h = '';
+  fixedItems.forEach((item, i) => {
+    h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 40px;">
+      <input type="text" value="${item.name}" placeholder="المصروف" onchange="fixedItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="القيمة الشهرية" onchange="fixedItems[${i}].cost=+this.value">
+      <button onclick="removeFixed(${i})">×</button>
+    </div>`;
+  });
+  document.getElementById('fixedList').innerHTML = h;
+}
+function renderEmps() {
+  let h = '';
+  emps.forEach((emp, i) => {
+    let cnase = emp.salary * 0.09, net = emp.salary - cnase, cnase_er = emp.salary * 0.26, total = emp.salary + cnase_er;
+    h += `<tr>
+      <td><input type="text" value="${emp.role}" placeholder="المنصب" onchange="emps[${i}].role=this.value" style="border:1px solid var(--b);padding:4px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="number" value="${emp.count}" placeholder="العدد" onchange="emps[${i}].count=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:60px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="number" value="${emp.salary}" placeholder="الراتب" onchange="emps[${i}].salary=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:90px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td>${fmt(cnase)}</td><td>${fmt(net)}</td><td>${fmt(cnase_er)}</td><td><strong>${fmt(total * emp.count)}</strong></td>
+      <td><button onclick="removeEmp(${i})" style="background:var(--d);color:#fff;border:none;border-radius:4px;cursor:pointer;padding:4px 8px;">×</button></td>
+    </tr>`;
+  });
+  document.getElementById('hrBody').innerHTML = h;
+}
+function addInvest() { investItems.push({name:"", cost:0, qty:1, dep:5}); renderInvest(); }
+function addBOM() { bomItems.push({name:"", cost:0, qty:1}); renderBOM(); }
+function addFixed() { fixedItems.push({name:"", cost:0}); renderFixed(); }
+function addEmp() { emps.push({role:"", count:1, salary:0}); renderEmps(); }
+function removeInvest(i) { investItems.splice(i,1); renderInvest(); }
+function removeBOM(i) { bomItems.splice(i,1); renderBOM(); }
+function removeFixed(i) { fixedItems.splice(i,1); renderFixed(); }
+function removeEmp(i) { emps.splice(i,1); renderEmps(); }
+
+/* ============ FINANCIAL ENGINE ============ */
+function calculateAll() {
+  let baseUnits = +document.getElementById('projUnits').value || 0;
+  let price = +document.getElementById('projPrice').value || 0;
+  
+  let totalCapEx = 0, annualDep = 0, depData = [];
+  investItems.forEach(item => {
+    let tc = (item.cost || 0) * (item.qty || 0); totalCapEx += tc;
+    let d = item.dep > 0 ? tc / item.dep : 0; annualDep += d;
+    depData.push({name: item.name, total: tc, years: item.dep, annual: d});
+  });
+
+  let unitCost = 0;
+  bomItems.forEach(item => { unitCost += ((item.cost || 0) * (item.qty || 0)); });
+
+  let monthlyOpex = 0;
+  fixedItems.forEach(item => { monthlyOpex += (item.cost || 0); });
+  emps.forEach(e => { monthlyOpex += ((e.salary || 0) * 1.26 * (e.count || 0)); });
+  let annualOpex = monthlyOpex * 12;
+
+  window.calcData = { baseUnits, price, totalCapEx, annualDep, depData, unitCost, annualOpex, monthlyOpex };
+  
+  renderAmort(); renderTCR(); renderTFT(); renderChart(); renderBreakEvenChart();
+  updateReadiness();
+  checkValidation();
+  showTab('tab3');
+  triggerAutoSave();
+}
+
+function renderAmort() {
+  if(!window.calcData) return;
+  let d = window.calcData;
+  let html = `<tr><th>${t('c_item')}</th><th>${t('c_cost')}</th><th>${t('c_dep')}</th><th>${t('col_year')}</th></tr>`;
+  d.depData.forEach(item => { html += `<tr><td>${item.name}</td><td>${fmt(item.total)}</td><td>${item.years}</td><td>${fmt(item.annual)}</td></tr>`; });
+  html += `<tr style="font-weight:bold;"><td>${t('col_total')}</td><td>${fmt(d.totalCapEx)}</td><td>-</td><td>${fmt(d.annualDep)}</td></tr>`;
+  document.getElementById('amortTable').innerHTML = html;
+}
+
+function renderTCR() {
+  if(!window.calcData) return;
+  let d = window.calcData;
+  let infRate = (parseFloat(document.getElementById('inflationRate').value) || 0) / 100;
+  
+  let html = `<tr><th>${t('c_item')}</th>`;
+  for(let i=1; i<=5; i++) html += `<th>${t('col_year')} ${i}</th>`;
+  html += `</tr>`;
+  
+  let revRow = `<tr><td>${t('row_rev')}</td>`, cogsRow = `<tr><td>${t('row_cogs')}</td>`, vaRow = `<tr><td>${t('row_va')}</td>`;
+  let opexRow = `<tr><td>${t('row_opex')}</td>`, ebeRow = `<tr><td>${t('row_ebe')}</td>`, depRow = `<tr><td>${t('row_dep')}</td>`;
+  let netRow = `<tr style="font-weight:bold;"><td>${t('row_net')}</td>`;
+  
+  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
+  
+  for(let i=1; i<=5; i++) {
+    if(i>1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
+    let rev = u * p, cogs = u * cogsUnit, va = rev - cogs, ebe = va - opex, dep = i <= 5 ? d.annualDep : 0, net = ebe - dep;
+
+    revRow += `<td>${fmt(rev)}</td>`; cogsRow += `<td>${fmt(cogs)}</td>`; vaRow += `<td>${fmt(va)}</td>`;
+    opexRow += `<td>${fmt(opex)}</td>`; ebeRow += `<td>${fmt(ebe)}</td>`; depRow += `<td>${fmt(dep)}</td>`;
+    netRow += `<td class="${net>=0?'ok-num':'big-num'}">${fmt(net)}</td>`;
+  }
+  html += revRow+`</tr>`+cogsRow+`</tr>`+vaRow+`</tr>`+opexRow+`</tr>`+ebeRow+`</tr>`+depRow+`</tr>`+netRow+`</tr>`;
+  document.getElementById('tcrTable').innerHTML = html;
+}
+
+function renderTFT() {
+  if(!window.calcData) return;
+  let d = window.calcData;
+  let infRate = (parseFloat(document.getElementById('inflationRate').value) || 0) / 100;
+  
+  let html = `<tr><th>${t('c_item')}</th>`;
+  for(let i=1; i<=5; i++) html += `<th>${t('col_year')} ${i}</th>`;
+  html += `</tr>`;
+  
+  let opRow = `<tr><td>${t('row_opflow')}</td>`, invRow = `<tr><td>${t('row_invflow')}</td>`, cashRow = `<tr style="font-weight:bold;"><td>${t('row_cash')}</td>`;
+  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
+  tftCashFlows = [-d.totalCapEx]; 
+  
+  for(let i=1; i<=5; i++) {
+    if(i>1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
+    let rev = u * p, cogs = u * cogsUnit, ebe = rev - cogs - opex, net = ebe - (i<=5?d.annualDep:0);
+    let opFlow = net + (i<=5?d.annualDep:0), invFlow = i === 1 ? -d.totalCapEx : 0, cashFlow = opFlow + invFlow;
     
-    document.getElementById('readinessScoreText').innerText = score + '%';
-    document.getElementById('readinessBar').style.width = score + '%';
-    document.getElementById('readinessMsg').innerText = score <= 20 ? t('msg_r0') : score <= 60 ? t('msg_r50') : score <= 80 ? t('msg_r80') : t('msg_r100');
-}
-
-function updateChecklist() {
-    if(!document.getElementById('checklistContainer')) return;
-    let items = [{ text: t('step1'), checked: document.getElementById('projName').value.length > 2 },{ text: t('step2'), checked: window.calcData != null },{ text: t('step3'), checked: document.getElementById('bmc3').value.length > 5 },{ text: t('step4'), checked: document.getElementById('swotResult').style.display !== 'none' },{ text: t('step5'), checked: localStorage.getItem('finstart_published_' + document.getElementById('projName').value) === 'true' }];
-    let html = '';
-    items.forEach(item => { html += `<div class="checklist-item"><input type="checkbox" ${item.checked ? 'checked' : ''} disabled><span style="${item.checked ? 'color:var(--s); font-weight:bold;' : ''}">${item.text}</span></div>`; });
-    document.getElementById('checklistContainer').innerHTML = html;
-}
-/* ============ MARKETPLACE ============ */
-const demoProjects = [{ name: "EcoDeliver", sector: "لوجستيك", idea: "توصيل بالدراجات.", capital: 2000000, margin: "25%" }];
-function renderMarket() {
-    let grid = document.getElementById('marketGrid'); if(!grid) return;
-    let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
-    let html = '';
-    [...userProjects, ...demoProjects].forEach(p => { html += `<div class="market-card"><div><h3>${p.name}</h3><p><strong>القطاع:</strong> ${p.sector} | <strong>رأس المال:</strong> ${fmt(p.capital)} دج</p><p>${p.idea}</p></div><div><span style="background:var(--s); color:white; padding:5px 10px; border-radius:10px; font-size:12px;">${t('profit_margin')}: ${p.margin}</span></div></div>`; });
-    grid.innerHTML = html;
-}
-function publishToMarket() {
-    if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
-    let name = document.getElementById('projName').value || "مشروعي", sector = document.getElementById('projSector').value, idea = document.getElementById('projIdea').value, capital = window.calcData.totalCapEx;
-    let rev = window.calcData.baseUnits * window.calcData.price, profit = rev - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
-    let margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) + "%" : "0%";
-
-    let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
-    userProjects = userProjects.filter(up => up.name !== name); userProjects.push({ name, sector, idea, capital, margin });
-    localStorage.setItem('finstart_market', JSON.stringify(userProjects)); localStorage.setItem('finstart_published_' + name, 'true');
-    alert(t('pub_success')); renderMarket(); updateChecklist();
-}
-
-/* ============ AI ============ */
-async function callAI(prompt, type='general', sector='') {
-  try {
-    const response = await fetch('/api/ai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, type, sector, lang: L }) });
-    const data = await response.json();
-    if (!response.ok || data.error) throw new Error(data.error || 'API Error');
-    return data.result;
-  } catch(e) { return "❌ خطأ: " + e.message; }
-}
-
-async function askAI() { let q = document.getElementById('aiQuestion').value; if(!q) return; let res = document.getElementById('aiResponse'); res.style.display = 'block'; res.innerText = "⏳ جاري التفكير..."; res.innerText = await callAI(q); }
-
-async function aiGenerateBMC() {
-  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
-  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التوليد...";
-  let result = await callAI(idea, 'bmc');
-  try {
-    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    document.getElementById('bmc1').value = parsed.partners || ''; document.getElementById('bmc2').value = parsed.activities || ''; document.getElementById('bmc3').value = parsed.value || ''; document.getElementById('bmc4').value = parsed.segments || ''; document.getElementById('bmc5').value = parsed.channels || ''; document.getElementById('bmc6').value = parsed.relations || ''; document.getElementById('bmc7').value = parsed.resources || ''; document.getElementById('bmc8').value = parsed.revenues || ''; document.getElementById('bmc9').value = parsed.costs || ''; updateReadiness();
-  } catch(e) { alert("خطأ في التنسيق"); }
-  btn.innerText = originalText;
-}
-
-async function aiAnalyzeCompetitors() {
-  let sector = document.getElementById('projSector').value; let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري البحث...";
-  let result = await callAI("", 'competitors', sector);
-  try {
-    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    let html = `<table class="data"><tr><th>${t('p_name')}</th><th>الموظفون</th><th>التمويل</th><th>السعر</th><th>الميزات</th><th>المصدر</th></tr>`;
-    parsed.forEach(c => { html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank">رابط</a></td></tr>`; });
-    document.getElementById('compResult').innerHTML = html + `</table>`;
-  } catch(e) { document.getElementById('compResult').innerHTML = `<p class="big-num">فشل البحث</p>`; }
-  btn.innerText = originalText;
-}
-
-async function aiGenerateSWOT() {
-  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
-  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التحليل...";
-  let result = await callAI(idea, 'swot');
-  try {
-    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    let fillList = (id, arr) => { let html = ''; if(Array.isArray(arr)) { arr.forEach(item => html += `<li>${item}</li>`); } else { html = `<li>${arr || 'لا يوجد'}</li>`; } document.getElementById(id).innerHTML = html; };
-    fillList('swotS', parsed.strengths); fillList('swotW', parsed.weaknesses); fillList('swotO', parsed.opportunities); fillList('swotT', parsed.threats);
-    document.getElementById('swotRec').innerText = parsed.recommendation || ''; document.getElementById('swotResult').style.display = 'block'; updateReadiness();
-  } catch(e) { alert("حدث خطأ، حاول مجدداً."); }
-  btn.innerText = originalText;
-}
-
-/* ============ PITCH DECK ============ */
-const defaultPitchDeck = [
-  { title: "1. General Presentation", content: ["Project Title: Smart Attendance System", "Tagline: Trust the process, track the progress", "Presented by: Attatfa Halima, Ait Ziane Fatmazohra", "Supervised by: Dr. Bouchouareb Rachida, Dr. Mellal Nassima"] },
-  { title: "2. Project Summary", content: ["Raspberry Pi + Facial Recognition + RFID Card.", "Database: Comparing facial features and UID with stored data.", "Real-Time Update: Attendance is automatically recorded once a match is confirmed.", "Accuracy and Efficiency: Precise tracking and protection against tampering."] },
-  { title: "3. The Team", content: ["AIT ZIANE FATMAZOHRA - Hardware Developer", "ATTATFA HALIMA - Software Developer", "Location: Larbi Ben M'hidi University, Oum El Bouaghi", "Department: Networks and Telecommunications"] },
-  { title: "4. Targeted Problem", content: ["Manual attendance recording in a paper register.", "Roll call in the classroom wastes time.", "Signing an attendance sheet upon entry is slow.", "Time-wasting attendance (15 min of a 90-min timeline)."] },
-  { title: "5. Proposed Solution", content: ["Dual Recognition System Using Raspberry Pi and RFID.", "Teacher Attendance Dashboard.", "Smart Management Platform for Administrators.", "Automated and secure attendance tracking."] },
-  { title: "6. Prototype Presentation", content: ["Live interface and platform dashboard.", "Full hardware prototype with Raspberry Pi and RFID.", "Prototype video demonstrating real-time tracking."] },
-  { title: "7. Added Value", content: ["Cost reduction: Lower administrative costs.", "Time efficiency: Save attendance time.", "Sustainability: Reduced paper usage.", "Innovation: Smart AI-based system."] },
-  { title: "8. Competitive Analysis", content: ["Strengths: Accurate real-time tracking, local competitive price.", "Weaknesses: Depends on continuous power, needs updated database.", "Opportunities: Digital transformation growing, expand to access control.", "Threats: Competition from imported systems (Hikvision, ZKTeco)."] },
-  { title: "9. Business Model", content: ["Key Partners: Hardware suppliers, educational institutions.", "Value Proposition: Facilitating attendance, reducing fraud, saving time.", "Customer Segments: B2B (Private schools/universities), B2G (Public universities).", "Revenue Stream: System sales, annual maintenance subscription."] },
-  { title: "10. Target Market Analysis", content: ["Education Sector (Current Phase): Universities, Technical Institutes, Schools.", "Corporate Sector: Companies needing reliable employee attendance.", "Ministry of Education: Building accurate digital databases."] },
-  { title: "11. Project Roadmap", content: ["1-6 Months: Prototype building and testing.", "6-12 Months: Field testing in a real environment.", "1-3 Years: Expansion, improving user experience, sustainability."] }
-];
-
-async function aiGeneratePitchDeck() {
-  let idea = document.getElementById('projIdea').value;
-  if(!idea) return alert('اكتب فكرة المشروع أولاً في الصفحة الأولى');
-  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري بناء العرض...";
-  let bmc = { partners: document.getElementById('bmc1').value, activities: document.getElementById('bmc2').value, value: document.getElementById('bmc3').value, segments: document.getElementById('bmc4').value, channels: document.getElementById('bmc5').value, relations: document.getElementById('bmc6').value, resources: document.getElementById('bmc7').value, revenues: document.getElementById('bmc8').value, costs: document.getElementById('bmc9').value };
-  let swot = { s: document.getElementById('swotS').innerText, w: document.getElementById('swotW').innerText, o: document.getElementById('swotO').innerText, t: document.getElementById('swotT').innerText };
-  let prompt = `أنت خبير في عرض المشاريع. قم بإنشاء Pitch Deck لمشروع فكرته: "${idea}". BMC: ${JSON.stringify(bmc)}. SWOT: ${JSON.stringify(swot)}. أرجع النتيجة بصيغة JSON نقية فقط (مصفوفة من 11 كائناً). كل كائن يحتوي على: "title" (عنوان الشريحة) و "content" (مصفوفة نقاط). العناوين بالضبط: 1. General Presentation, 2. Project Summary, 3. The Team, 4. Targeted Problem, 5. Proposed Solution, 6. Prototype Presentation, 7. Added Value, 8. Competitive Analysis, 9. Business Model, 10. Target Market Analysis, 11. Project Roadmap. اكتب باللغة: ${L}.`;
-  let result = await callAI(prompt);
-  if (result.startsWith("❌") || result.startsWith("⚠️")) {
-      alert(result); pitchDeckData = defaultPitchDeck; renderPitchPreview(); document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; btn.innerText = originalText; return;
+    tftCashFlows.push(cashFlow);
+    opRow += `<td>${fmt(opFlow)}</td>`; invRow += `<td>${fmt(invFlow)}</td>`; cashRow += `<td class="${cashFlow>=0?'ok-num':'big-num'}">${fmt(cashFlow)}</td>`;
   }
-  try {
-    let cleanResult = result; let startIdx = cleanResult.indexOf('['); let endIdx = cleanResult.lastIndexOf(']');
-    if(startIdx !== -1 && endIdx !== -1) cleanResult = cleanResult.substring(startIdx, endIdx + 1);
-    let parsed = JSON.parse(cleanResult);
-    if(Array.isArray(parsed) && parsed.length >= 10) { pitchDeckData = parsed; } else { throw new Error("Not enough slides"); }
-  } catch(e) { pitchDeckData = defaultPitchDeck; }
-  renderPitchPreview(); document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; btn.innerText = originalText;
+  html += opRow+`</tr>`+invRow+`</tr>`+cashRow+`</tr>`;
+  document.getElementById('tftTable').innerHTML = html;
 }
 
-function renderPitchPreview() {
-  let container = document.getElementById('pitchDeckPreview');
-  if(!container) return;
-  if(!pitchDeckData) { pitchDeckData = defaultPitchDeck; document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; }
-  let html = '';
-  pitchDeckData.forEach((slide, index) => { html += `<div class="pitch-slide-preview"><h3>Slide ${index + 1}: ${slide.title}</h3><ul>${slide.content.map(c => `<li>${c}</li>`).join('')}</ul></div>`; });
-  container.innerHTML = html; container.style.display = 'block';
-}
-
-function exportPitchToPPTX() {
-  if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
-  let pptx = new PptxGenJS(); pptx.layout = 'LAYOUT_16x9';
-  let slide1 = pptx.addSlide(); slide1.background = { color: "1e3a5f" };
-  slide1.addText(pitchDeckData[0].title, { x: 1, y: 2, w: '80%', h: 1, fontSize: 36, color: "FFFFFF", bold: true, align: 'center' });
-  slide1.addText(pitchDeckData[0].content.join('\n'), { x: 1, y: 3.5, w: '80%', h: 2, fontSize: 18, color: "E2E8F0", align: 'center' });
-  for(let i = 1; i < pitchDeckData.length; i++) {
-    let slide = pptx.addSlide(); slide.background = { color: "FFFFFF" };
-    slide.addText(pitchDeckData[i].title, { x: 0.5, y: 0.5, w: '90%', h: 1, fontSize: 28, color: "1e3a5f", bold: true, border: { pt: 2, color: "3182ce" }, fill: "f0f4f8" });
-    let textRows = pitchDeckData[i].content.map(text => ({ text: text, options: { bullet: true, fontSize: 20, color: "1a202c", breakLine: true } }));
-    slide.addText(textRows, { x: 0.5, y: 1.8, w: '90%', h: 4, valign: 'top' });
+function checkValidation() {
+  let banner = document.getElementById('validation-banner');
+  let msg = "";
+  if (window.calcData) {
+      if (window.calcData.price > 0 && window.calcData.price <= window.calcData.unitCost) msg = t('val_err_price');
+      else if (window.calcData.annualOpex <= 0 && window.calcData.totalCapEx > 0) msg = t('val_err_opex');
   }
-  pptx.writeFile({ fileName: `${document.getElementById('projName').value || 'Project'}_PitchDeck.pptx` });
+  if (msg !== "") { banner.innerText = msg; banner.style.display = 'block'; } else { banner.style.display = 'none'; }
 }
 
-function openInCanva() {
-  if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
-  let textToCopy = "";
-  pitchDeckData.forEach((slide, index) => { textToCopy += `[Slide ${index + 1}: ${slide.title}]\n`; slide.content.forEach(c => { textToCopy += `- ${c}\n`; }); textToCopy += "\n"; });
-  navigator.clipboard.writeText(textToCopy).then(() => { alert("✅ تم نسخ محتوى العرض!\n\nاذهبي إلى Canva، وافتحي قالب Pitch Deck، ثم الصقي النص."); window.open('https://www.canva.com/create/pitch-decks/', '_blank'); }).catch(err => alert("حدث خطأ أثناء النسخ: " + err));
+/* ============ CHARTS ============ */
+function renderChart() {
+  if(!window.calcData) return;
+  let ctx = document.getElementById('mainChart').getContext('2d');
+  if(myChart) myChart.destroy();
+  let d = window.calcData;
+  let rev = d.baseUnits * d.price, cogs = d.baseUnits * d.unitCost, opex = d.annualOpex, profit = rev - cogs - opex;
+  const textColor = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#4a5568';
+  const gridColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0';
+
+  myChart = new Chart(ctx, {
+    type: 'bar', data: { labels: [t('row_rev'), t('row_cogs'), t('row_opex'), t('row_ebe')], datasets: [{ data: [rev, cogs, opex, profit], backgroundColor: ['#3182ce', '#c53030', '#dd6b20', '#38a169'] }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+  });
 }
 
-/* ============ EXPORT EXCEL & PDF ============ */
-function exportExcel() {
-  if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
-  let tCapEx = `<table><tr><th>البيان</th><th>القيمة</th><th>الكمية</th><th>الاهتلاك</th><th>المجموع</th></tr>`; investItems.forEach(i => { tCapEx += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.dep}</td><td>${i.cost*i.qty}</td></tr>`; }); tCapEx += `</table>`;
-  let tBOM = `<table><tr><th>المكون</th><th>السعر</th><th>الكمية</th><th>المجموع</th></tr>`; bomItems.forEach(i => { tBOM += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.cost*i.qty}</td></tr>`; }); tBOM += `</table>`;
-  let tFixed = `<table><tr><th>المصروف</th><th>القيمة</th></tr>`; fixedItems.forEach(i => { tFixed += `<tr><td>${i.name}</td><td>${i.cost}</td></tr>`; }); tFixed += `</table>`;
-  let tHR = document.getElementById('hrTable').outerHTML, tAmort = document.getElementById('amortTable').outerHTML, tTCR = document.getElementById('tcrTable').outerHTML, tTFT = document.getElementById('tftTable').outerHTML;
-  let template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI'; text-align: center; margin-bottom: 20px; } th, td { border: 1px solid #000; padding: 5px; } th { background-color: #f2f2f2; font-weight: bold; color: #1e3a5f; } h2 { text-align: right; color: #1e3a5f; margin-top: 30px; margin-bottom: 10px;}</style></head><body><h2>1. CapEx</h2>${tCapEx}<h2>2. BOM</h2>${tBOM}<h2>3. Charges</h2>${tFixed}<h2>4. Salaires</h2>${tHR}<h2>5. Amortissement</h2>${tAmort}<h2>6. TCR</h2>${tTCR}<h2>7. TFT</h2>${tTFT}</body></html>`;
-  let blob = new Blob([template], { type: 'application/vnd.ms-excel' }); let link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "FinStart_Financials.xls"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-}
-
-async function exportPDF() {
-  if (!window.calcData) calculateAll();
-  let projName = document.getElementById('projName').value || "مشروعي", dateStr = new Date().toLocaleDateString('fr-FR');
-  let pdf = new jspdf.jsPDF('p', 'mm', 'a4'), pageWidth = pdf.internal.pageSize.getWidth(), pageHeight = pdf.internal.pageSize.getHeight(), margin = 15, currentY = margin;
-
-  async function addSection(htmlContent) {
-    let tempDiv = document.createElement('div'); tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.style.top = '0'; tempDiv.style.width = '800px'; tempDiv.style.backgroundColor = '#ffffff'; tempDiv.style.padding = '10px'; tempDiv.style.fontFamily = 'Segoe UI'; tempDiv.style.color = '#000000'; tempDiv.style.direction = L === 'ar' ? 'rtl' : 'ltr'; tempDiv.innerHTML = htmlContent; document.body.appendChild(tempDiv);
-    let canvas = await html2canvas(tempDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }); let imgData = canvas.toDataURL('image/jpeg', 1.0); let imgWidth = pageWidth - (margin * 2); let imgHeight = (canvas.height * imgWidth) / canvas.width;
-    if (currentY + imgHeight > pageHeight - margin) { pdf.addPage(); currentY = margin; }
-    pdf.addImage(imgData, 'JPEG', margin, currentY, imgWidth, imgHeight); currentY += imgHeight + 10; document.body.removeChild(tempDiv);
+function renderBreakEvenChart() {
+  if(!window.calcData || window.calcData.price <= window.calcData.unitCost) return;
+  let d = window.calcData;
+  let ctx = document.getElementById('beChart').getContext('2d');
+  if(beChart) beChart.destroy();
+  
+  let bepUnits = d.annualOpex / (d.price - d.unitCost);
+  let maxUnits = Math.max(bepUnits * 2, d.baseUnits, 10);
+  let labels = [], revenueData = [], totalCostData = [];
+  
+  for(let i=0; i<=5; i++) {
+      let units = (maxUnits / 5) * i;
+      labels.push(fmt(units)); revenueData.push(units * d.price); totalCostData.push(d.annualOpex + (units * d.unitCost));
   }
+  const textColor = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#4a5568';
+  const gridColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0';
 
-  let logoHtml = logoBase64 ? `<img src="${logoBase64}" style="max-height: 80px; margin-bottom: 20px;">` : '';
-  await addSection(`<div style="text-align: center; padding: 30px 0;">${logoHtml}<h1 style="color: #1e3a5f; font-size: 40px; margin: 0;">📊 FinStart DZ</h1><h2 style="color: #4a5568; font-size: 24px; margin-top: 20px;">${t('report_title')}</h2><p style="color: #718096; font-size: 16px; margin-top: 40px;">${projName}</p><p style="color: #718096; font-size: 14px;">${dateStr}</p></div>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">1. ${t('info_title')}</h3><table style="width: 100%; font-size: 14px; margin-top: 15px;"><tr><td style="padding: 8px; font-weight: bold; width: 150px;">${t('p_name')}:</td><td style="padding: 8px;">${projName}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_idea')}:</td><td style="padding: 8px;">${document.getElementById('projIdea').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_sector')}:</td><td style="padding: 8px;">${document.getElementById('projSector').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_capital')}:</td><td style="padding: 8px;">${fmt(document.getElementById('projCapital').value)}</td></tr></table>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">2. ${t('h_readiness')}</h3><div style="font-size: 16px; margin-top: 15px;"><strong>${t('lbl_readiness')} <span style="color: #38a169; font-size: 24px;">${document.getElementById('readinessScoreText').innerText}</span></strong></div>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">3. ${t('h_invest')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('c_item')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_cost')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_qty')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('col_total')}</th></tr>${investItems.map(i => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${i.name}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost)}</td><td style="border: 1px solid #ccc; padding: 8px;">${i.qty}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost*i.qty)}</td></tr>`).join('')}</table>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">4. ${t('h_hr')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_role')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_count')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_basic')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_total')}</th></tr>${emps.map(e => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${e.role}</td><td style="border: 1px solid #ccc; padding: 8px;">${e.count}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary)}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary*1.26*e.count)}</td></tr>`).join('')}</table>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">5. ${t('amort_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;">${document.getElementById('amortTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 8px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 8px;"')}</table>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">6. ${t('tcr_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center; margin-top: 15px;">${document.getElementById('tcrTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 6px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 6px;"')}</table>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">7. ${t('tft_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center; margin-top: 15px;">${document.getElementById('tftTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 6px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 6px;"')}</table>`);
-  if(document.getElementById('loanResult').style.display !== 'none') { await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">8. ${t('loan_title')}</h3><div style="font-size: 14px; margin-top: 15px;">${document.getElementById('loanResult').innerHTML}</div>`); }
-  if (myChart) { let chartImage = myChart.toBase64Image(); await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">9. ${t('h_charts')}</h3><div style="text-align:center; margin-top: 15px;"><img src="${chartImage}" style="width: 100%; max-width: 600px; border: 1px solid #ccc; padding: 10px;"></div>`); }
-  if (beChart) { let beImage = beChart.toBase64Image(); await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">10. ${t('h_breakeven')}</h3><div style="text-align:center; margin-top: 15px;"><img src="${beImage}" style="width: 100%; max-width: 600px; border: 1px solid #ccc; padding: 10px;"></div>`); }
-  let bmc3 = document.getElementById('bmc3').value; if (bmc3) { let bmcHTML = `<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">11. ${t('bmc_title')}</h3><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-top: 15px;">`; const bmcFields = [{ title: t('b1'), id: "bmc1" }, { title: t('b2'), id: "bmc2" }, { title: t('b3'), id: "bmc3" }, { title: t('b4'), id: "bmc4" }, { title: t('b5'), id: "bmc5" }, { title: t('b6'), id: "bmc6" }, { title: t('b7'), id: "bmc7" }, { title: t('b8'), id: "bmc8" }, { title: t('b9'), id: "bmc9" }]; bmcFields.forEach(f => { let val = document.getElementById(f.id).value; if (val) bmcHTML += `<div style="border: 1px solid #ccc; padding: 10px; background: #f9f9f9;"><strong style="display: block; margin-bottom: 5px; color: #1e3a5f;">${f.title}</strong><p style="margin: 0; white-space: pre-wrap;">${val}</p></div>`; }); bmcHTML += `</div>`; await addSection(bmcHTML); }
-  if (document.getElementById('swotResult').style.display !== 'none') { let swotHTML = `<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">12. ${t('swot_title')}</h3><div style="font-size: 12px; margin-top: 15px;">`; swotHTML += `<div style="background: #f0fff4; padding: 10px; margin-bottom: 10px; border-right: 4px solid #38a169;"><strong>${t('swot_s')}:</strong> ${document.getElementById('swotS').innerText}</div><div style="background: #fff5f5; padding: 10px; margin-bottom: 10px; border-right: 4px solid #c53030;"><strong>${t('swot_w')}:</strong> ${document.getElementById('swotW').innerText}</div><div style="background: #ebf8ff; padding: 10px; margin-bottom: 10px; border-right: 4px solid #3182ce;"><strong>${t('swot_o')}:</strong> ${document.getElementById('swotO').innerText}</div><div style="background: #fffaf0; padding: 10px; margin-bottom: 10px; border-right: 4px solid #dd6b20;"><strong>${t('swot_t')}:</strong> ${document.getElementById('swotT').innerText}</div><div style="background: #faf5ff; padding: 15px; font-weight: bold; border-radius: 5px;"><strong>${t('swot_rec')}:</strong> ${document.getElementById('swotRec').innerText}</div></div>`; await addSection(swotHTML); }
-  pdf.save(`Rapport_${projName.replace(/\s+/g, '_')}.pdf`);
+  beChart = new Chart(ctx, {
+    type: 'line', data: { labels: labels, datasets: [
+        { label: t('row_rev'), data: revenueData, borderColor: '#3182ce', fill: false, tension: 0.1 },
+        { label: t('row_opex'), data: totalCostData, borderColor: '#c53030', fill: false, tension: 0.1 }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor } } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+  });
 }
 
-/* ============ CHAT & AUTO SAVE ============ */
-function toggleChat() {
-  let chatWin = document.getElementById('chat-window');
-  if (chatWin.style.display === 'flex' || chatWin.style.display === 'block') { chatWin.style.display = 'none'; } else { chatWin.style.display = 'flex'; }
+/* ============ SENSITIVITY ============ */
+function calculateSensitivity() {
+  if(!window.calcData) return alert("يرجى حساب الجداول أولاً");
+  let salesChange = parseFloat(document.getElementById('sensSales').value) / 100 || 0;
+  let varChange = parseFloat(document.getElementById('sensVar').value) / 100 || 0;
+  let fixChange = parseFloat(document.getElementById('sensFix').value) / 100 || 0;
+  let d = window.calcData;
+  
+  let origRev = d.baseUnits * d.price, origVar = d.baseUnits * d.unitCost, origFix = d.annualOpex, origProfit = origRev - origVar - origFix;
+  let newRev = origRev * (1 + salesChange), newVar = origVar * (1 + varChange), newFix = origFix * (1 + fixChange);
+  let newProfit = newRev - newVar - newFix, diff = newProfit - origProfit;
+  let color = diff >= 0 ? 'ok-num' : 'big-num', sign = diff >= 0 ? '+' : '';
+  
+  document.getElementById('sensResult').style.display = 'block'; 
+  document.getElementById('sensResult').innerHTML = `<p><strong>الربح الأصلي:</strong> ${fmt(origProfit)} دج</p><p><strong>السيناريو الجديد:</strong> <span class="${color}">${fmt(newProfit)} دج</span></p><hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>التأثير:</strong> <span class="${color}">${sign}${fmt(diff)} دج</span></p>`;
 }
-function handleChatEnter(event) { if (event.key === 'Enter') sendChatMessage(); }
-async function sendChatMessage() {
-  let input = document.getElementById('chat-input'); let msg = input.value.trim(); if (!msg) return;
-  let chatMessages = document.getElementById('chat-messages'); chatMessages.innerHTML += `<div class="chat-msg user">${msg}</div>`; input.value = ''; chatMessages.scrollTop = chatMessages.scrollHeight;
-  let loadingDiv = document.createElement('div'); loadingDiv.className = 'chat-msg ai'; loadingDiv.innerText = "⏳ جاري التفكير..."; chatMessages.appendChild(loadingDiv); chatMessages.scrollTop = chatMessages.scrollHeight;
-  let result = await callAI(msg); loadingDiv.innerText = result; chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-function startNewChat() { document.getElementById('chat-messages').innerHTML = `<div class="chat-msg ai">مرحباً! أنا مساعدك المالي. كيف يمكنني مساعدتك في مشروعك اليوم؟</div>`; }
 
-function triggerAutoSave() { let badge = document.getElementById('autosave-badge'); badge.style.opacity = '1'; setTimeout(() => { badge.style.opacity = '0'; }, 2000); }
-function resetData() { if(confirm("مسح الكل؟")) location.reload(); }
-
-/* ============ INITIALIZATION ============ */
-document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
-document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
-applyLang('ar'); updateReadiness(); calculateLoan(); renderPitchPreview();
-</script>
-</body>
-</html>  
+/* ============ LOAN & DSCR ============ */
+function calculateLoan() {
+    let amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+    let rate = parseFloat(document.getElementById('loanRate').value) / 100 || 0;
+    let years = parseFloat(document.getElementById('loanYears').value) || 1;
+    let months = years * 12, monthlyRate = rate / 12, monthlyPayment = 0;
+    if (amount > 0 && months > 0) {
+        if (monthlyRate > 0) monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+        else monthlyPayment = amount / months;
+    }
+    let totalPayment = monthlyPayment * months, totalInterest = totalPayment - amount, dscrHtml = "";
+    if (window.calcData && monthlyPayment > 0) {
+        let d = window.calcData;
+        let noi = (d.baseUnits * d.price) - (d.baseUnits * d.unitCost) - d.annualOpex;
+        let ads = monthlyPayment * 12;
+        let dscr = ads > 0 ? (noi / ads) : 0;
+        let dscrColor = dscr >= 1.2 ? 'var(--s)' : 'var(--d)';
+        dscrHtml = `<hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>${t('res_dscr')}</strong> <span style="color:${dscrColor}; font-size:20px; font-weight:bold;">${dscr.toFixed(2)}</span></p><p style="font-size:12px; color:${dscrColor};">${dscr >= 1.2 ? t('dscr_good') : t('dscr_risky')}</p>`;
+    }
+    document.getElementById('loanResult').style.display = 'block';
+    document.getElementById('loanResult').innerHTML = `<p><strong>${t('res_monthly')}</strong> <span class="big-num">${fmt(monthlyPayment)} دج</span></p><p><strong>${t('res_total_interest')}</strong> ${fmt(totalInterest)} دج</p><p><strong>${t('res_total_payment')}</strong> ${fmt(totalPayment)} دج</p>${dscrHtml}`;
+} 
