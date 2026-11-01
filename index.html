@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FinStart DZ - Global Edition</title>
-<!-- المكتبات الأساسية -->
+<title>FinStart DZ - App Edition</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- مكتبة PptxGenJS لإنشاء ملفات بوربوينت -->
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 
 <style>
@@ -23,35 +21,18 @@ body.dark-mode {
 *{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial,sans-serif;}
 body{background:var(--bg);margin:0;color:var(--text);transition:background 0.3s, color 0.3s;}
 
-/* ============ PRESENTATION MODE ============ */
-body.presentation-mode header, 
-body.presentation-mode .tabs, 
-body.presentation-mode .toolbar, 
-body.presentation-mode input, 
-body.presentation-mode select, 
-body.presentation-mode textarea, 
-body.presentation-mode .add-btn, 
-body.presentation-mode .row-item button,
-body.presentation-mode .btn,
-body.presentation-mode .pitch-controls { display: none !important; }
-body.presentation-mode .container { max-width: 95%; margin-top: 10px; }
-body.presentation-mode .card { padding: 10px; box-shadow: none; border: 2px solid var(--a); margin-bottom: 10px; }
-body.presentation-mode .chart-box { height: 450px; }
-body.presentation-mode .tab-content { display: none; }
-body.presentation-mode .tab-content.active { display: block; }
-
-/* ============ HEADER & TABS ============ */
+/* ============ DESKTOP LAYOUT (Default) ============ */
 header{background:linear-gradient(135deg,#1e3a5f,#2b5a8c);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .lang-btn, .theme-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;margin:0 3px;transition:0.2s;}
 .lang-btn.active, .theme-btn:hover{background:#fff;color:#1e3a5f;}
-.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;}
+
+.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;}
 .tab-btn{background:none;border:none;padding:14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:0.2s;}
 .tab-btn.active{color:var(--a);border-bottom-color:var(--a);}
 
-/* ============ CONTAINER & CARDS ============ */
 .container{max-width:1250px;margin:20px auto;padding:0 15px;}
 .tab-content{display:none;}.tab-content.active{display:block;}
-.card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.07);transition:background 0.3s;}
+.card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
 .card h2{color:var(--p);border-bottom:2px solid var(--b);padding-bottom:10px;margin-top:0;font-size:18px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
@@ -66,14 +47,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-s
 .row-item button{background:var(--d);color:#fff;border:none;height:38px;border-radius:8px;cursor:pointer;}
 .add-btn{background:var(--a);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:6px;}
 
-/* ============ TABLES (Responsive) ============ */
 .table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
 table.data{width:100%;border-collapse:collapse;font-size:12px;background:var(--c);color:var(--text);min-width:600px;}
 table.data th,table.data td{border:1px solid var(--b);padding:8px;text-align:center;}
 table.data th{background:var(--b);color:var(--p);font-weight:700;}
 table.data tr:nth-child(even){background:var(--table-hover);}
 
-/* ============ MISC UI ============ */
 .result{background:var(--table-hover);padding:15px;border-radius:10px;margin-top:12px;border-right:4px solid var(--a);}
 .big-num{color:var(--d);font-weight:bold;}.ok-num{color:var(--s);font-weight:bold;}
 .bmc-container{display:grid;grid-template-columns:repeat(5, 1fr);gap:8px;margin-top:15px;}
@@ -87,46 +66,107 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 .progress-bar { width: 100%; background: var(--b); border-radius: 10px; height: 20px; overflow: hidden; margin-top: 10px; }
 .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #d69e2e, #38a169); transition: width 1s ease-in-out; }
 .score-text { font-weight: bold; font-size: 24px; color: var(--p); }
-
-/* ============ PITCH DECK PREVIEW ============ */
 .pitch-slide-preview { background: #fff; color: #000; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 15px; min-height: 200px; }
 .pitch-slide-preview h3 { margin-top: 0; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
 .pitch-slide-preview ul { padding-right: 20px; }
 .pitch-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+#autosave-badge { position: fixed; bottom: 20px; right: 20px; background: var(--s); color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.5s; z-index: 1000; }
+#validation-banner { display: none; background-color: var(--d); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 999; }
 
-/* ============ MOBILE RESPONSIVENESS ============ */
-@media(max-width: 768px) {
-  .grid, .grid3 { grid-template-columns: 1fr; }
+/* ============ MOBILE APP LAYOUT (Screens < 768px) ============ */
+@media (max-width: 768px) {
+  /* Make body leave space for bottom nav */
+  body { padding-bottom: 75px; }
+  
+  /* Fixed Header */
+  header { position: sticky; top: 0; z-index: 1000; padding: 12px; flex-direction: column; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  header h1 { font-size: 18px; margin-bottom: 8px; }
+  
+  /* Bottom Navigation Bar (App Style) */
+  .tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--c);
+    border-bottom: none;
+    border-top: 1px solid var(--b);
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    padding: 0;
+    z-index: 1001;
+    gap: 0;
+  }
+  .tab-btn {
+    flex: 0 0 auto;
+    padding: 12px 15px;
+    font-size: 12px;
+    border-bottom: none;
+    border-top: 3px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--muted);
+  }
+  .tab-btn.active {
+    border-bottom: none;
+    border-top-color: var(--a);
+    background: var(--table-hover);
+    color: var(--a);
+  }
+
+  /* Stack grids */
+  .grid, .grid3 { grid-template-columns: 1fr; gap: 10px; }
+  
+  /* Adjust Cards */
+  .card { padding: 15px; margin-bottom: 12px; border-radius: 10px; }
+  
+  /* Inputs - larger for touch */
+  input, select, textarea { font-size: 16px; padding: 12px; }
+  
+  /* Costs Rows - Stack them vertically */
+  .row-item { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    background: var(--bg); 
+    padding: 12px; 
+    border-radius: 8px; 
+    border: 1px solid var(--b); 
+    margin-bottom: 12px; 
+  }
+  .row-item input { width: 100%; }
+  .row-item button { width: 100%; height: 35px; margin-top: 5px; }
+  
+  /* BMC Grid */
   .bmc-container { grid-template-columns: 1fr; }
   .bmc-box { grid-area: auto !important; }
   
-  header { flex-direction: column; text-align: center; }
-  .card { padding: 15px; }
+  /* Tables */
+  table.data { min-width: 700px; } /* Force scroll to prevent cramping */
   
-  /* تحسين شكل حقول الإدخال في الهاتف */
-  .row-item { display: flex; flex-direction: column; gap: 8px; background: var(--bg); padding: 12px; border-radius: 8px; border: 1px solid var(--b); margin-bottom: 12px; }
-  .row-item input { width: 100%; }
-  .row-item button { width: 100%; height: 35px; }
-  
-  input, select, textarea { font-size: 16px; /* يمنع التكبير التلقائي في الآيفون */ }
+  /* Toolbars */
+  .toolbar { flex-direction: column; }
+  .toolbar button { width: 100%; }
+  .pitch-controls { flex-direction: column; }
+  .pitch-controls button { width: 100%; }
 }
-
-/* ============ AUTOSAVE BADGE ============ */
-#autosave-badge { position: fixed; bottom: 20px; right: 20px; background: var(--s); color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-#validation-banner { display: none; background-color: var(--d); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 999; }
 </style>
 </head>
 <body>
 
-<div id="autosave-badge">💾 تم الحفظ التلقائي</div>
-<div id="validation-banner">⚠️ تنبيه: هناك أخطاء في البيانات!</div>
+<div id="autosave-badge">💾 تم الحفظ</div>
+<div id="validation-banner">⚠️ تنبيه!</div>
 
 <header>
-  <div><h1>📊 FinStart DZ <span style="font-size:12px;background:#38a169;padding:2px 8px;border-radius:10px;margin-left:8px;">GLOBAL</span></h1></div>
+  <div><h1>📊 FinStart DZ <span style="font-size:10px;background:#38a169;padding:2px 6px;border-radius:10px;">APP</span></h1></div>
   <div>
-    <button class="theme-btn" onclick="togglePresentation()" title="وضع العرض التقديمي">📺 عرض</button>
+    <button class="theme-btn" onclick="togglePresentation()">📺 عرض</button>
     <button class="theme-btn" onclick="toggleTheme()">🌙/☀️</button>
-    <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">العربية</button>
+    <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">AR</button>
     <button class="lang-btn" data-lang="fr" onclick="applyLang('fr')">FR</button>
     <button class="lang-btn" data-lang="en" onclick="applyLang('en')">EN</button>
   </div>
@@ -137,16 +177,16 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <button class="tab-btn" data-tab="tab2" data-i18n="t2">2. التكاليف</button>
   <button class="tab-btn" data-tab="tab8" data-i18n="t8">3. الرواتب</button>
   <button class="tab-btn" data-tab="tab3" data-i18n="t3">4. التحليل المالي</button>
-  <button class="tab-btn" data-tab="tab10" data-i18n="t10">5. محاكي القروض</button>
+  <button class="tab-btn" data-tab="tab10" data-i18n="t10">5. القروض</button>
   <button class="tab-btn" data-tab="tab4" data-i18n="t4">6. المنافسون</button>
   <button class="tab-btn" data-tab="tab5" data-i18n="t5">7. BMC</button>
-  <button class="tab-btn" data-tab="tab9" data-i18n="t9">8. تحليل SWOT</button>
-  <button class="tab-btn" data-tab="tab6" data-i18n="t6">9. المساعد الذكي</button>
-  <button class="tab-btn" data-tab="tab11" data-i18n="t11">10. المحاسب الذكي</button>
-  <button class="tab-btn" data-tab="tab12" data-i18n="t12">11. مؤشرات الاستثمار</button>
-  <button class="tab-btn" data-tab="tab13" data-i18n="t13">12. شريك المسار</button>
-  <button class="tab-btn" data-tab="tab14" data-i18n="t14">13. سوق المشاريع</button>
-  <button class="tab-btn" data-tab="tab15" data-i18n="t15">14. مولّد العرض التقديمي</button>
+  <button class="tab-btn" data-tab="tab9" data-i18n="t9">8. SWOT</button>
+  <button class="tab-btn" data-tab="tab6" data-i18n="t6">9. المساعد</button>
+  <button class="tab-btn" data-tab="tab11" data-i18n="t11">10. المحاسب</button>
+  <button class="tab-btn" data-tab="tab12" data-i18n="t12">11. الاستثمار</button>
+  <button class="tab-btn" data-tab="tab13" data-i18n="t13">12. المسار</button>
+  <button class="tab-btn" data-tab="tab14" data-i18n="t14">13. السوق</button>
+  <button class="tab-btn" data-tab="tab15" data-i18n="t15">14. العرض</button>
 </nav>
 
 <div class="container">
@@ -155,7 +195,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <div class="card">
     <h2 data-i18n="info_title">📋 معلومات المشروع</h2>
     <div class="grid">
-      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" placeholder="أدخل اسم مشروعك هنا..." oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" placeholder="أدخل اسم مشروعك..." oninput="updateReadiness()"></div>
       <div><label data-i18n="p_type">نوع المشروع</label>
         <select id="projType" onchange="onTypeChange()">
           <option value="hybrid" data-i18n="type_hybrid">جهاز + منصة/تطبيق</option>
@@ -165,13 +205,13 @@ table.data tr:nth-child(even){background:var(--table-hover);}
       </div>
     </div>
     <div class="grid" style="margin-top:12px;">
-      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" placeholder="مثال: التعليم، الصحة، الزراعة..." oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_target">الجمهور المستهدف</label><input type="text" id="projTarget" placeholder="مثال: الطلاب، الشركات..."></div>
+      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" placeholder="مثال: التعليم، الصحة..." oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_target">الجمهور</label><input type="text" id="projTarget" placeholder="مثال: الطلاب..."></div>
     </div>
-    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="3" placeholder="اشرح فكرة مشروعك بالتفصيل..." oninput="updateReadiness()"></textarea></div>
+    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="3" placeholder="اشرح فكرتك..." oninput="updateReadiness()"></textarea></div>
     
     <div style="margin-top:12px;">
-      <label data-i18n="p_logo">شعار المشروع (للـ PDF) - اختياري</label>
+      <label data-i18n="p_logo">شعار المشروع (للـ PDF)</label>
       <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)" style="padding:5px;">
       <div id="logoPreview" style="margin-top:10px; display:none;">
         <img id="logoImg" src="" style="max-height: 60px; border:1px solid var(--b); padding:5px;">
@@ -192,49 +232,46 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab2">
   <div class="card">
     <h2 data-i18n="h_invest">🏗️ التكاليف الاستثمارية (CapEx)</h2>
-    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 40px; gap:8px; font-weight:bold; margin-bottom:5px;">
-      <span data-i18n="c_item">البيان</span><span data-i18n="c_cost">القيمة</span><span data-i18n="c_qty">الكمية</span><span data-i18n="c_dep">الاهتلاك</span><span></span>
-    </div>
     <div id="investList"></div>
     <button class="add-btn" onclick="addInvest()" data-i18n="btn_add">+ إضافة</button>
   </div>
   <div class="card">
-    <h2 data-i18n="h_bom">🛠️ تكلفة المنتج الواحد (BOM)</h2>
+    <h2 data-i18n="h_bom">🛠️ تكلفة المنتج (BOM)</h2>
     <div id="bomList"></div>
     <button class="add-btn" onclick="addBOM()" data-i18n="btn_add">+ إضافة</button>
   </div>
   <div class="card">
-    <h2 data-i18n="h_fixed">💸 المصاريف التشغيلية الشهرية</h2>
+    <h2 data-i18n="h_fixed">💸 المصاريف الشهرية</h2>
     <div id="fixedList"></div>
     <button class="add-btn" onclick="addFixed()" data-i18n="btn_add">+ إضافة</button>
   </div>
   
   <div class="card" style="background:#fffaf0; border:1px solid #dd6b20;">
-    <h2 data-i18n="h_inflation" style="color:#dd6b20; border-bottom-color:#fbd38d;">📈 معدل التضخم السنوي المتوقع</h2>
+    <h2 data-i18n="h_inflation" style="color:#dd6b20; border-bottom-color:#fbd38d;">📈 معدل التضخم</h2>
     <div class="grid">
       <div>
         <label data-i18n="lbl_inflation">نسبة التضخم (%)</label>
         <input type="number" id="inflationRate" value="5" step="0.1" onchange="calculateAll()">
       </div>
       <div style="display:flex; align-items:flex-end;">
-        <p style="font-size:12px; color:var(--muted); margin:0;">يُستخدم لرفع التكاليف والإيرادات في جداول السنوات الخمس القادمة بشكل واقعي.</p>
+        <p style="font-size:12px; color:var(--muted); margin:0;">لحساب الجداول لـ 5 سنوات قادمة.</p>
       </div>
     </div>
   </div>
 
-  <button class="btn-calc" onclick="calculateAll()" data-i18n="btn_calc">🧮 احسب جميع الجداول المالية</button>
+  <button class="btn-calc" onclick="calculateAll()" data-i18n="btn_calc">🧮 احسب الجداول</button>
 </section>
 
 <!-- TAB 3: HR -->
 <section class="tab-content" id="tab8">
   <div class="card">
-    <h2 data-i18n="h_hr">👥 جدول الرواتب (CNAS 26%)</h2>
+    <h2 data-i18n="h_hr">👥 جدول الرواتب</h2>
     <div class="table-responsive">
       <table class="data" id="hrTable">
         <thead><tr>
-          <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأجر الأساسي</th>
-          <th data-i18n="hr_cnas_emp">حصة العامل 9%</th><th data-i18n="hr_net">الصافي</th>
-          <th data-i18n="hr_cnas_er">حصة صاحب العمل 26%</th><th data-i18n="hr_total">التكلفة الإجمالية</th><th></th>
+          <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأساسي</th>
+          <th data-i18n="hr_cnas_emp">9%</th><th data-i18n="hr_net">الصافي</th>
+          <th data-i18n="hr_cnas_er">26%</th><th data-i18n="hr_total">الإجمالي</th><th></th>
         </tr></thead>
         <tbody id="hrBody"></tbody>
       </table>
@@ -246,10 +283,10 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 4: FINANCIALS -->
 <section class="tab-content" id="tab3">
   <div class="card" id="readinessCard">
-    <h2 data-i18n="h_readiness">🎯 مؤشر جاهزية المشروع للتمويل</h2>
+    <h2 data-i18n="h_readiness">🎯 مؤشر الجاهزية</h2>
     <div class="score-container">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span data-i18n="lbl_readiness">نسبة الجاهزية:</span>
+        <span data-i18n="lbl_readiness">الجاهزية:</span>
         <span class="score-text" id="readinessScoreText">0%</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="readinessBar"></div></div>
@@ -258,32 +295,31 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   </div>
 
   <div class="card">
-    <h2 data-i18n="h_amort">📉 جدول الاهتلاك (5 سنوات)</h2>
+    <h2 data-i18n="h_amort">📉 جدول الاهتلاك</h2>
     <div class="table-responsive"><table class="data" id="amortTable"></table></div>
   </div>
   <div class="card">
-    <h2 data-i18n="h_tcr">📊 جدول حسابات النتائج (TCR) - 5 سنوات</h2>
+    <h2 data-i18n="h_tcr">📊 جدول النتائج (TCR)</h2>
     <div class="table-responsive"><table class="data" id="tcrTable"></table></div>
   </div>
   <div class="card">
-    <h2 data-i18n="h_tft">💸 جدول تدفقات الخزينة (TFT)</h2>
+    <h2 data-i18n="h_tft">💸 جدول التدفقات (TFT)</h2>
     <div class="table-responsive"><table class="data" id="tftTable"></table></div>
   </div>
   
   <div class="grid">
     <div class="card">
-      <h2 data-i18n="h_breakeven">📈 نقطة التعادل (Break-Even)</h2>
+      <h2 data-i18n="h_breakeven">📈 نقطة التعادل</h2>
       <div class="chart-box" style="height:250px;"><canvas id="beChart"></canvas></div>
     </div>
     <div class="card">
-      <h2 data-i18n="h_sensitivity">⚖️ تحليل الحساسية (What-If)</h2>
-      <p style="font-size:12px; color:var(--muted);" data-i18n="sens_desc">ماذا يحدث لربحك إذا تغيرت الظروف؟</p>
+      <h2 data-i18n="h_sensitivity">⚖️ الحساسية</h2>
       <div class="grid3" style="margin-bottom:10px;">
-        <div><label data-i18n="sens_sales">تغير المبيعات (%)</label><input type="number" id="sensSales" value="0"></div>
-        <div><label data-i18n="sens_var">تغير التكلفة المتغيرة (%)</label><input type="number" id="sensVar" value="0"></div>
-        <div><label data-i18n="sens_fix">تغير التكاليف الثابتة (%)</label><input type="number" id="sensFix" value="0"></div>
+        <div><label data-i18n="sens_sales">المبيعات (%)</label><input type="number" id="sensSales" value="0"></div>
+        <div><label data-i18n="sens_var">المتغيرة (%)</label><input type="number" id="sensVar" value="0"></div>
+        <div><label data-i18n="sens_fix">الثابتة (%)</label><input type="number" id="sensFix" value="0"></div>
       </div>
-      <button class="btn btn-primary" onclick="calculateSensitivity()" style="width:100%;" data-i18n="btn_sens">احسب السيناريو الجديد</button>
+      <button class="btn btn-primary" onclick="calculateSensitivity()" style="width:100%;" data-i18n="btn_sens">احسب</button>
       <div id="sensResult" class="result" style="display:none; margin-top:15px; font-size:13px;"></div>
     </div>
   </div>
@@ -294,14 +330,13 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 5: LOAN -->
 <section class="tab-content" id="tab10">
   <div class="card">
-    <h2 data-i18n="h_loan">🏦 محاكي القروض البنكية</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="loan_desc">احسب القسط الشهري للقرض البنكي لتعرف التزاماتك المالية.</p>
+    <h2 data-i18n="h_loan">🏦 محاكي القروض</h2>
     <div class="grid">
       <div><label data-i18n="loan_amount">مبلغ القرض (دج)</label><input type="number" id="loanAmount" value="3000000"></div>
-      <div><label data-i18n="loan_rate">نسبة الفائدة السنوية (%)</label><input type="number" id="loanRate" value="5" step="0.1"></div>
-      <div><label data-i18n="loan_years">مدة السداد (سنوات)</label><input type="number" id="loanYears" value="5"></div>
+      <div><label data-i18n="loan_rate">الفائدة (%)</label><input type="number" id="loanRate" value="5" step="0.1"></div>
+      <div><label data-i18n="loan_years">المدة (سنوات)</label><input type="number" id="loanYears" value="5"></div>
     </div>
-    <button class="btn-calc" onclick="calculateLoan()" data-i18n="btn_calc_loan" style="margin-top:20px;">🧮 احسب القسط الشهري و DSCR</button>
+    <button class="btn-calc" onclick="calculateLoan()" data-i18n="btn_calc_loan" style="margin-top:20px;">🧮 احسب DSCR</button>
     <div id="loanResult" class="result" style="display:none; margin-top:20px; font-size:15px;"></div>
   </div>
 </section>
@@ -309,8 +344,8 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 6: COMPETITORS -->
 <section class="tab-content" id="tab4">
   <div class="card">
-    <h2 data-i18n="h_comp">⚔️ تحليل المنافسين (بحث حقيقي)</h2>
-    <button class="btn btn-ai" onclick="aiAnalyzeCompetitors()" data-i18n="btn_ai_comp">🤖 بحث بالذكاء الاصطناعي</button>
+    <h2 data-i18n="h_comp">⚔️ المنافسون</h2>
+    <button class="btn btn-ai" onclick="aiAnalyzeCompetitors()" data-i18n="btn_ai_comp">🤖 بحث</button>
     <div id="compResult" class="table-responsive" style="margin-top:15px;"></div>
   </div>
 </section>
@@ -319,7 +354,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab5">
   <div class="card">
     <h2 data-i18n="h_bmc">🧩 BMC</h2>
-    <button class="btn btn-ai" onclick="aiGenerateBMC()" data-i18n="btn_ai_bmc">🤖 توليد BMC</button>
+    <button class="btn btn-ai" onclick="aiGenerateBMC()" data-i18n="btn_ai_bmc">🤖 توليد</button>
     <div class="bmc-container">
       <div class="bmc-box bmc-partners"><h4 data-i18n="b1">🤝 الشركاء</h4><textarea id="bmc1"></textarea></div>
       <div class="bmc-box bmc-activities"><h4 data-i18n="b2">⚙️ الأنشطة</h4><textarea id="bmc2"></textarea></div>
@@ -337,32 +372,25 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 8: SWOT -->
 <section class="tab-content" id="tab9">
   <div class="card">
-    <h2 data-i18n="h_swot">🧠 التحليل الاستراتيجي (SWOT)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="swot_desc">يقوم الذكاء الاصطناعي بتحليل فكرة مشروعك واستخراج نقاط القوة والضعف والفرص والتهديدات.</p>
-    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد تحليل SWOT</button>
-    
+    <h2 data-i18n="h_swot">🧠 SWOT</h2>
+    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد</button>
     <div id="swotResult" style="margin-top:20px; display:none;">
       <div class="grid" style="gap:15px;">
         <div class="result" style="background:#f0fff4; border-color:#38a169; color:#1a202c;">
-          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">نقاط القوة</span></h3>
-          <ul id="swotS" style="padding-right:20px; font-size:13px;"></ul>
+          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">القوة</span></h3><ul id="swotS" style="padding-right:20px; font-size:13px;"></ul>
         </div>
         <div class="result" style="background:#fff5f5; border-color:#c53030; color:#1a202c;">
-          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">نقاط الضعف</span></h3>
-          <ul id="swotW" style="padding-right:20px; font-size:13px;"></ul>
+          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">الضعف</span></h3><ul id="swotW" style="padding-right:20px; font-size:13px;"></ul>
         </div>
         <div class="result" style="background:#ebf8ff; border-color:#3182ce; color:#1a202c;">
-          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص</span></h3>
-          <ul id="swotO" style="padding-right:20px; font-size:13px;"></ul>
+          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص</span></h3><ul id="swotO" style="padding-right:20px; font-size:13px;"></ul>
         </div>
         <div class="result" style="background:#fffaf0; border-color:#dd6b20; color:#1a202c;">
-          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات</span></h3>
-          <ul id="swotT" style="padding-right:20px; font-size:13px;"></ul>
+          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات</span></h3><ul id="swotT" style="padding-right:20px; font-size:13px;"></ul>
         </div>
       </div>
       <div class="result" style="background:#faf5ff; border-color:#805ad5; margin-top:15px; color:#1a202c;">
-        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية الاستراتيجية</span></h3>
-        <p id="swotRec" style="font-size:14px; font-weight:bold;"></p>
+        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية</span></h3><p id="swotRec" style="font-size:14px; font-weight:bold;"></p>
       </div>
     </div>
   </div>
@@ -383,26 +411,19 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 11: SMART ACCOUNTANT -->
 <section class="tab-content" id="tab11">
   <div class="card">
-    <h2 data-i18n="h_acc">🧾 المحاسب الذكي (مراجعة مالية)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="acc_desc">يقوم الذكاء الاصطناعي بمراجعة أرقامك وبياناتك المالية لاكتشاف الأخطاء وتقديم نصائح.</p>
-    <button class="btn btn-ai" onclick="aiSmartAccountant()" data-i18n="btn_ai_acc" style="width:100%;">🔍 مراجعة بياناتي المالية بالذكاء الاصطناعي</button>
-    <div id="accResult" style="background:var(--table-hover); padding:20px; border-radius:8px; margin-top:15px; display:none; font-size:14px; line-height:1.6;"></div>
+    <h2 data-i18n="h_acc">🧾 المحاسب الذكي</h2>
+    <button class="btn btn-ai" onclick="aiSmartAccountant()" data-i18n="btn_ai_acc" style="width:100%;">🔍 مراجعة</button>
+    <div id="accResult" style="background:var(--table-hover); padding:20px; border-radius:8px; margin-top:15px; display:none; font-size:14px;"></div>
   </div>
 </section>
 
 <!-- TAB 12: NPV / IRR -->
 <section class="tab-content" id="tab12">
   <div class="card">
-    <h2 data-i18n="h_npv">📈 مستشار الأرقام (مؤشرات الاستثمار)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="npv_desc">يتم احتساب هذه المؤشرات بناءً على تدفقاتك النقدية (TFT).</p>
+    <h2 data-i18n="h_npv">📈 مؤشرات الاستثمار</h2>
     <div class="grid" style="margin-bottom: 15px;">
-      <div>
-        <label data-i18n="lbl_discount">معدل الخصم (%)</label>
-        <input type="number" id="discountRate" value="10" step="1" onchange="calculateNPV_IRR()">
-      </div>
-      <div style="display:flex; align-items:flex-end;">
-        <button class="btn btn-primary" onclick="calculateNPV_IRR()" style="width:100%;" data-i18n="btn_calc_npv">احسب المؤشرات</button>
-      </div>
+      <div><label data-i18n="lbl_discount">الخصم (%)</label><input type="number" id="discountRate" value="10" onchange="calculateNPV_IRR()"></div>
+      <div style="display:flex; align-items:flex-end;"><button class="btn btn-primary" onclick="calculateNPV_IRR()" style="width:100%;" data-i18n="btn_calc_npv">احسب</button></div>
     </div>
     <div id="npvResult" class="grid3" style="display:none;"></div>
   </div>
@@ -411,7 +432,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 13: PATH PARTNER -->
 <section class="tab-content" id="tab13">
   <div class="card">
-    <h2 data-i18n="h_path">🛣️ شريك المسار (تتبع حالة المشروع)</h2>
+    <h2 data-i18n="h_path">🛣️ شريك المسار</h2>
     <div id="checklistContainer" style="margin-top: 15px;"></div>
   </div>
 </section>
@@ -419,9 +440,9 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 14: MARKET -->
 <section class="tab-content" id="tab14">
   <div class="card">
-    <h2 data-i18n="h_market">🏪 سوق المشاريع (Marketplace)</h2>
+    <h2 data-i18n="h_market">🏪 سوق المشاريع</h2>
     <div style="text-align: center; margin-bottom: 20px;">
-      <button class="btn btn-success" onclick="publishToMarket()" data-i18n="btn_publish">🚀 انشر مشروعي في السوق</button>
+      <button class="btn btn-success" onclick="publishToMarket()" data-i18n="btn_publish">🚀 نشر</button>
     </div>
     <div id="marketGrid"></div>
   </div>
@@ -430,31 +451,28 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <!-- TAB 15: PITCH DECK GENERATOR -->
 <section class="tab-content" id="tab15">
   <div class="card">
-    <h2 data-i18n="h_pitch_deck">🎤 مولّد العرض التقديمي (Pitch Deck)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="pitch_deck_desc">يقوم الذكاء الاصطناعي بإنشاء عرض تقديمي احترافي من 11 قسماً بناءً على بيانات مشروعك.</p>
-    
+    <h2 data-i18n="h_pitch_deck">🎤 مولّد العرض التقديمي</h2>
     <div class="pitch-controls">
-      <button class="btn btn-ai" onclick="aiGeneratePitchDeck()" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض التقديمي</button>
-      <button class="btn btn-success" id="btn_pptx" onclick="exportPitchToPPTX()" style="display:none;">📥 تحميل PowerPoint (.pptx)</button>
-      <button class="btn btn-primary" id="btn_canva" onclick="openInCanva()" style="display:none;">🎨 نسخ النص لـ Canva</button>
+      <button class="btn btn-ai" onclick="aiGeneratePitchDeck()" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض</button>
+      <button class="btn btn-success" id="btn_pptx" onclick="exportPitchToPPTX()" style="display:none;" data-i18n="btn_download_pptx">📥 تحميل PPTX</button>
+      <button class="btn btn-primary" id="btn_canva" onclick="openInCanva()" style="display:none;" data-i18n="btn_open_canva">🎨 Canva</button>
     </div>
-    
     <div id="pitchDeckPreview" style="margin-top:20px; display:none;"></div>
   </div>
 </section>
 
 <div class="toolbar">
-  <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 تصدير Excel (xls)</button>
-  <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 تصدير تقرير PDF</button>
+  <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 Excel</button>
+  <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 PDF</button>
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v28.0 - Global Edition</footer>
+<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v29.0 - App Edition</footer>
 
 <script>
- /* ============ TRANSLATIONS ============ */
+/* ============ TRANSLATIONS ============ */
 const T = {
-  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب", t12:"11. الاستثمار", t13:"12. المسار", t14:"13. السوق", t15:"14. العرض التقديمي",
+  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب", t12:"11. الاستثمار", t13:"12. المسار", t14:"13. السوق", t15:"14. العرض",
     info_title:"📋 معلومات المشروع", p_name:"اسم المشروع", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
     p_sector:"القطاع", p_target:"الجمهور", p_idea:"فكرة المشروع", p_logo:"شعار المشروع (اختياري)",
     h_cap:"💰 رأس المال والمبيعات", p_capital:"رأس المال (دج)", p_units:"مبيعات سنة 1", p_price:"سعر البيع (دج)", btn_next:"➡️ التالي",
@@ -493,7 +511,7 @@ const T = {
     h_breakeven:"📈 Seuil", h_sensitivity:"⚖️ Sensibilité", sens_desc:"Impact:", sens_sales:"Ventes (%)", sens_var:"Coût Var (%)", sens_fix:"Coûts Fixes (%)", btn_sens:"Calculer",
     h_loan:"🏦 Prêt", loan_desc:"Calculez la mensualité.", loan_amount:"Montant (DA)", loan_rate:"Taux (%)", loan_years:"Durée (Ans)", btn_calc_loan:"🧮 Calculer DSCR",
     res_monthly:"Mensualité:", res_total_interest:"Intérêts:", res_total_payment:"Total:", res_dscr:"DSCR:", dscr_good:"Sûr", dscr_risky:"Risqué",
-    h_comp:"⚔️ Concurrents", btn_ai_comp:"🤖 Chercher", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Générer BMC", b1:"🤝 Partenaires", b2:"⚙️ Activités", b3:"💎 Valeur", b4:"👥 Clients", b5:"📢 Canaux", b6:"❤️ Relations", b7:"🔑 Ressources", b8:"💰 Revenus", b9:"💸 Coûts",
+    h_comp:"⚔️ Concurrents", btn_ai_comp:"🤖 Chercher", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Générer", b1:"🤝 Partenaires", b2:"⚙️ Activités", b3:"💎 Valeur", b4:"👥 Clients", b5:"📢 Canaux", b6:"❤️ Relations", b7:"🔑 Ressources", b8:"💰 Revenus", b9:"💸 Coûts",
     h_swot:"🧠 SWOT", swot_desc:"Analyse IA", btn_ai_swot:"🚀 Générer", swot_s:"Forces", swot_w:"Faiblesses", swot_o:"Opportunités", swot_t:"Menaces", swot_rec:"Recommandation",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Demander", btn_save:"💾 Sauver", btn_pdf:"📄 PDF", btn_reset:"🗑️ Effacer", btn_excel:"📊 Excel",
     h_acc:"🧾 Comptable IA", acc_desc:"Analysez vos chiffres", btn_ai_acc:"🔍 Analyser",
@@ -1136,5 +1154,4 @@ document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', 
 applyLang('ar'); updateReadiness(); calculateLoan(); renderPitchPreview();
 </script>
 </body>
-</html> 
-  
+</html>  
