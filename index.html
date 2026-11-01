@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FinStart DZ - Global Edition</title>
 <!-- المكتبات الأساسية -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -23,7 +23,7 @@ body.dark-mode {
 *{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial,sans-serif;}
 body{background:var(--bg);margin:0;color:var(--text);transition:background 0.3s, color 0.3s;}
 
-/* Presentation Mode CSS */
+/* ============ PRESENTATION MODE ============ */
 body.presentation-mode header, 
 body.presentation-mode .tabs, 
 body.presentation-mode .toolbar, 
@@ -39,27 +39,25 @@ body.presentation-mode .card { padding: 10px; box-shadow: none; border: 2px soli
 body.presentation-mode .chart-box { height: 450px; }
 body.presentation-mode .tab-content { display: none; }
 body.presentation-mode .tab-content.active { display: block; }
-body.presentation-mode .tab-btn { display: inline-block; padding: 20px; font-size: 18px; }
 
-/* Validation Banner */
-#validation-banner { display: none; background-color: var(--d); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 999; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
-header{background:linear-gradient(135deg,#1e3a5f,#2b5a8c);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+/* ============ HEADER & TABS ============ */
+header{background:linear-gradient(135deg,#1e3a5f,#2b5a8c);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
 .lang-btn, .theme-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;margin:0 3px;transition:0.2s;}
 .lang-btn.active, .theme-btn:hover{background:#fff;color:#1e3a5f;}
-.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;}
+.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;}
 .tab-btn{background:none;border:none;padding:14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:0.2s;}
 .tab-btn.active{color:var(--a);border-bottom-color:var(--a);}
+
+/* ============ CONTAINER & CARDS ============ */
 .container{max-width:1250px;margin:20px auto;padding:0 15px;}
 .tab-content{display:none;}.tab-content.active{display:block;}
 .card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.07);transition:background 0.3s;}
 .card h2{color:var(--p);border-bottom:2px solid var(--b);padding-bottom:10px;margin-top:0;font-size:18px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-@media(max-width:768px){.grid,.grid3{grid-template-columns:1fr;}}
 label{display:block;margin-bottom:5px;font-weight:600;color:var(--muted);font-size:12px;}
-input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--text);}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;font-size:14px;font-family:inherit;background:var(--input-bg);color:var(--text);}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(49,130,206,.15);}
 .btn{border:none;padding:11px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s;}
 .btn-primary{background:var(--a);color:#fff;}.btn-success{background:var(--s);color:#fff;}.btn-danger{background:var(--d);color:#fff;}.btn-ai{background:linear-gradient(135deg,#805ad5,#6b46c1);color:#fff;}
 .btn-calc{background:linear-gradient(135deg,#d69e2e,#b7791f);color:#fff;font-size:16px;padding:16px;width:100%;cursor:pointer;border:none;border-radius:10px;font-weight:700;}
@@ -67,10 +65,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);}
 .row-item{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 40px;gap:8px;margin-bottom:8px;align-items:center;}
 .row-item button{background:var(--d);color:#fff;border:none;height:38px;border-radius:8px;cursor:pointer;}
 .add-btn{background:var(--a);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:6px;}
-table.data{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px;background:var(--c);color:var(--text);}
+
+/* ============ TABLES (Responsive) ============ */
+.table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
+table.data{width:100%;border-collapse:collapse;font-size:12px;background:var(--c);color:var(--text);min-width:600px;}
 table.data th,table.data td{border:1px solid var(--b);padding:8px;text-align:center;}
 table.data th{background:var(--b);color:var(--p);font-weight:700;}
 table.data tr:nth-child(even){background:var(--table-hover);}
+
+/* ============ MISC UI ============ */
 .result{background:var(--table-hover);padding:15px;border-radius:10px;margin-top:12px;border-right:4px solid var(--a);}
 .big-num{color:var(--d);font-weight:bold;}.ok-num{color:var(--s);font-weight:bold;}
 .bmc-container{display:grid;grid-template-columns:repeat(5, 1fr);gap:8px;margin-top:15px;}
@@ -79,26 +82,38 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 .bmc-partners{grid-area:1 / 1 / 3 / 2;}.bmc-activities{grid-area:1 / 2 / 2 / 3;}.bmc-resources{grid-area:2 / 2 / 3 / 3;}
 .bmc-value{grid-area:1 / 3 / 3 / 4;}.bmc-relations{grid-area:1 / 4 / 2 / 5;}.bmc-channels{grid-area:2 / 4 / 3 / 5;}
 .bmc-segments{grid-area:1 / 5 / 3 / 6;}.bmc-costs{grid-area:3 / 1 / 4 / 3;}.bmc-revenues{grid-area:3 / 3 / 4 / 6;}
-@media(max-width:900px){.bmc-container{grid-template-columns:1fr;}.bmc-box{grid-area:auto!important;}}
 .chart-box{position:relative;height:300px;width:100%;margin-top:20px;}
 .score-container { background: var(--bg); border-radius: 10px; padding: 15px; margin-top: 15px; border: 1px solid var(--b); }
 .progress-bar { width: 100%; background: var(--b); border-radius: 10px; height: 20px; overflow: hidden; margin-top: 10px; }
 .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #d69e2e, #38a169); transition: width 1s ease-in-out; }
 .score-text { font-weight: bold; font-size: 24px; color: var(--p); }
-#autosave-badge { position: fixed; bottom: 20px; right: 20px; background: var(--s); color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
-/* Market CSS */
-.market-card { border: 1px solid var(--b); border-radius: 10px; padding: 15px; margin-bottom: 10px; background: var(--bg); display: flex; justify-content: space-between; align-items: center; }
-.market-card h3 { margin: 0 0 5px 0; font-size: 16px; color: var(--p); }
-.market-card p { margin: 0; font-size: 12px; color: var(--muted); }
-.checklist-item { display: flex; align-items: center; margin-bottom: 10px; font-size: 14px; }
-.checklist-item input { width: auto; margin-left: 10px; }
-
-/* Pitch Deck Styles */
+/* ============ PITCH DECK PREVIEW ============ */
 .pitch-slide-preview { background: #fff; color: #000; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 15px; min-height: 200px; }
 .pitch-slide-preview h3 { margin-top: 0; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
 .pitch-slide-preview ul { padding-right: 20px; }
 .pitch-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+/* ============ MOBILE RESPONSIVENESS ============ */
+@media(max-width: 768px) {
+  .grid, .grid3 { grid-template-columns: 1fr; }
+  .bmc-container { grid-template-columns: 1fr; }
+  .bmc-box { grid-area: auto !important; }
+  
+  header { flex-direction: column; text-align: center; }
+  .card { padding: 15px; }
+  
+  /* تحسين شكل حقول الإدخال في الهاتف */
+  .row-item { display: flex; flex-direction: column; gap: 8px; background: var(--bg); padding: 12px; border-radius: 8px; border: 1px solid var(--b); margin-bottom: 12px; }
+  .row-item input { width: 100%; }
+  .row-item button { width: 100%; height: 35px; }
+  
+  input, select, textarea { font-size: 16px; /* يمنع التكبير التلقائي في الآيفون */ }
+}
+
+/* ============ AUTOSAVE BADGE ============ */
+#autosave-badge { position: fixed; bottom: 20px; right: 20px; background: var(--s); color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.5s; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+#validation-banner { display: none; background-color: var(--d); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 999; }
 </style>
 </head>
 <body>
@@ -127,7 +142,6 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <button class="tab-btn" data-tab="tab5" data-i18n="t5">7. BMC</button>
   <button class="tab-btn" data-tab="tab9" data-i18n="t9">8. تحليل SWOT</button>
   <button class="tab-btn" data-tab="tab6" data-i18n="t6">9. المساعد الذكي</button>
-  <!-- New Tabs -->
   <button class="tab-btn" data-tab="tab11" data-i18n="t11">10. المحاسب الذكي</button>
   <button class="tab-btn" data-tab="tab12" data-i18n="t12">11. مؤشرات الاستثمار</button>
   <button class="tab-btn" data-tab="tab13" data-i18n="t13">12. شريك المسار</button>
@@ -141,7 +155,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <div class="card">
     <h2 data-i18n="info_title">📋 معلومات المشروع</h2>
     <div class="grid">
-      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" value="Smart Attendance System" oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" placeholder="أدخل اسم مشروعك هنا..." oninput="updateReadiness()"></div>
       <div><label data-i18n="p_type">نوع المشروع</label>
         <select id="projType" onchange="onTypeChange()">
           <option value="hybrid" data-i18n="type_hybrid">جهاز + منصة/تطبيق</option>
@@ -151,13 +165,13 @@ table.data tr:nth-child(even){background:var(--table-hover);}
       </div>
     </div>
     <div class="grid" style="margin-top:12px;">
-      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" value="التعليم / التكنولوجيا" oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_target">الجمهور</label><input type="text" id="projTarget" value="الجامعات والمدارس"></div>
+      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" placeholder="مثال: التعليم، الصحة، الزراعة..." oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_target">الجمهور المستهدف</label><input type="text" id="projTarget" placeholder="مثال: الطلاب، الشركات..."></div>
     </div>
-    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="2" oninput="updateReadiness()">نظام حضور ذكي يعتمد على Raspberry Pi و RFID و التعرف على الوجه.</textarea></div>
+    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="3" placeholder="اشرح فكرة مشروعك بالتفصيل..." oninput="updateReadiness()"></textarea></div>
     
     <div style="margin-top:12px;">
-      <label data-i18n="p_logo">شعار المشروع (يظهر في تقرير PDF) - اختياري</label>
+      <label data-i18n="p_logo">شعار المشروع (للـ PDF) - اختياري</label>
       <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)" style="padding:5px;">
       <div id="logoPreview" style="margin-top:10px; display:none;">
         <img id="logoImg" src="" style="max-height: 60px; border:1px solid var(--b); padding:5px;">
@@ -166,9 +180,9 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 
     <h3 data-i18n="h_cap">💰 رأس المال والمبيعات</h3>
     <div class="grid3">
-      <div><label data-i18n="p_capital">رأس المال (دج)</label><input type="number" id="projCapital" value="5000000" oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_units">الوحدات/مبيعات (سنة 1)</label><input type="number" id="projUnits" value="120" oninput="updateReadiness()"></div>
-      <div><label data-i18n="p_price">سعر البيع (دج)</label><input type="number" id="projPrice" value="50000" oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_capital">رأس المال (دج)</label><input type="number" id="projCapital" placeholder="0" oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_units">الوحدات/مبيعات (سنة 1)</label><input type="number" id="projUnits" placeholder="0" oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_price">سعر البيع (دج)</label><input type="number" id="projPrice" placeholder="0" oninput="updateReadiness()"></div>
     </div>
     <div class="toolbar" style="margin-top:20px;"><button class="btn-calc" onclick="goToTab('tab2')" data-i18n="btn_next">➡️ التالي</button></div>
   </div>
@@ -215,7 +229,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab8">
   <div class="card">
     <h2 data-i18n="h_hr">👥 جدول الرواتب (CNAS 26%)</h2>
-    <div style="overflow-x:auto;">
+    <div class="table-responsive">
       <table class="data" id="hrTable">
         <thead><tr>
           <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأجر الأساسي</th>
@@ -245,15 +259,15 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 
   <div class="card">
     <h2 data-i18n="h_amort">📉 جدول الاهتلاك (5 سنوات)</h2>
-    <div style="overflow-x:auto;"><table class="data" id="amortTable"></table></div>
+    <div class="table-responsive"><table class="data" id="amortTable"></table></div>
   </div>
   <div class="card">
     <h2 data-i18n="h_tcr">📊 جدول حسابات النتائج (TCR) - 5 سنوات</h2>
-    <div style="overflow-x:auto;"><table class="data" id="tcrTable"></table></div>
+    <div class="table-responsive"><table class="data" id="tcrTable"></table></div>
   </div>
   <div class="card">
     <h2 data-i18n="h_tft">💸 جدول تدفقات الخزينة (TFT)</h2>
-    <div style="overflow-x:auto;"><table class="data" id="tftTable"></table></div>
+    <div class="table-responsive"><table class="data" id="tftTable"></table></div>
   </div>
   
   <div class="grid">
@@ -297,7 +311,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <div class="card">
     <h2 data-i18n="h_comp">⚔️ تحليل المنافسين (بحث حقيقي)</h2>
     <button class="btn btn-ai" onclick="aiAnalyzeCompetitors()" data-i18n="btn_ai_comp">🤖 بحث بالذكاء الاصطناعي</button>
-    <div id="compResult" style="margin-top:15px;"></div>
+    <div id="compResult" class="table-responsive" style="margin-top:15px;"></div>
   </div>
 </section>
 
@@ -370,7 +384,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab11">
   <div class="card">
     <h2 data-i18n="h_acc">🧾 المحاسب الذكي (مراجعة مالية)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="acc_desc">يقوم الذكاء الاصطناعي بمراجعة أرقامك وبياناتك المالية لاكتشاف الأخطاء وتقديم نصائح لتقليل التكاليف وزيادة الأرباح.</p>
+    <p style="font-size:12px; color:var(--muted);" data-i18n="acc_desc">يقوم الذكاء الاصطناعي بمراجعة أرقامك وبياناتك المالية لاكتشاف الأخطاء وتقديم نصائح.</p>
     <button class="btn btn-ai" onclick="aiSmartAccountant()" data-i18n="btn_ai_acc" style="width:100%;">🔍 مراجعة بياناتي المالية بالذكاء الاصطناعي</button>
     <div id="accResult" style="background:var(--table-hover); padding:20px; border-radius:8px; margin-top:15px; display:none; font-size:14px; line-height:1.6;"></div>
   </div>
@@ -380,7 +394,7 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab12">
   <div class="card">
     <h2 data-i18n="h_npv">📈 مستشار الأرقام (مؤشرات الاستثمار)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="npv_desc">يتم احتساب هذه المؤشرات بناءً على تدفقاتك النقدية (TFT). معدل الخصم الافتراضي هو 10%.</p>
+    <p style="font-size:12px; color:var(--muted);" data-i18n="npv_desc">يتم احتساب هذه المؤشرات بناءً على تدفقاتك النقدية (TFT).</p>
     <div class="grid" style="margin-bottom: 15px;">
       <div>
         <label data-i18n="lbl_discount">معدل الخصم (%)</label>
@@ -398,7 +412,6 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab13">
   <div class="card">
     <h2 data-i18n="h_path">🛣️ شريك المسار (تتبع حالة المشروع)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="path_desc">تابع خطوات إنجاز مشروعك حتى تصل إلى التمويل.</p>
     <div id="checklistContainer" style="margin-top: 15px;"></div>
   </div>
 </section>
@@ -407,15 +420,10 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab14">
   <div class="card">
     <h2 data-i18n="h_market">🏪 سوق المشاريع (Marketplace)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="market_desc">تصفح مشاريع طلاب آخرين، أو انشر مشروعك للمستثمرين.</p>
-    
     <div style="text-align: center; margin-bottom: 20px;">
       <button class="btn btn-success" onclick="publishToMarket()" data-i18n="btn_publish">🚀 انشر مشروعي في السوق</button>
     </div>
-
-    <div id="marketGrid">
-      <!-- سيتم ملؤها بالبطاقات -->
-    </div>
+    <div id="marketGrid"></div>
   </div>
 </section>
 
@@ -423,12 +431,12 @@ table.data tr:nth-child(even){background:var(--table-hover);}
 <section class="tab-content" id="tab15">
   <div class="card">
     <h2 data-i18n="h_pitch_deck">🎤 مولّد العرض التقديمي (Pitch Deck)</h2>
-    <p style="font-size:12px; color:var(--muted);" data-i18n="pitch_deck_desc">يقوم الذكاء الاصطناعي بإنشاء عرض تقديمي احترافي من 11 قسماً قياسياً (مثل الذي قدمته)، ويمكنك تصديره إلى PowerPoint أو فتحه في Canva.</p>
+    <p style="font-size:12px; color:var(--muted);" data-i18n="pitch_deck_desc">يقوم الذكاء الاصطناعي بإنشاء عرض تقديمي احترافي من 11 قسماً بناءً على بيانات مشروعك.</p>
     
     <div class="pitch-controls">
-      <button class="btn btn-ai" onclick="aiGeneratePitchDeck()" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض التقديمي بالذكاء الاصطناعي</button>
-      <button class="btn btn-success" onclick="exportPitchToPPTX()" data-i18n="btn_download_pptx" style="display:none;">📥 تحميل PowerPoint (.pptx)</button>
-      <button class="btn btn-primary" onclick="openInCanva()" data-i18n="btn_open_canva" style="display:none;">🎨 فتح في Canva</button>
+      <button class="btn btn-ai" onclick="aiGeneratePitchDeck()" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض التقديمي</button>
+      <button class="btn btn-success" id="btn_pptx" onclick="exportPitchToPPTX()" style="display:none;">📥 تحميل PowerPoint (.pptx)</button>
+      <button class="btn btn-primary" id="btn_canva" onclick="openInCanva()" style="display:none;">🎨 نسخ النص لـ Canva</button>
     </div>
     
     <div id="pitchDeckPreview" style="margin-top:20px; display:none;"></div>
@@ -441,103 +449,122 @@ table.data tr:nth-child(even){background:var(--table-hover);}
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v27.0 - Global Edition</footer>
+<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v28.0 - Global Edition</footer>
 
 <script>
-  /* ============ TRANSLATIONS ============ */
+ /* ============ TRANSLATIONS ============ */
 const T = {
-  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب الذكي", t12:"11. مؤشرات الاستثمار", t13:"12. شريك المسار", t14:"13. سوق المشاريع", t15:"14. مولّد العرض التقديمي",
-    info_title:"📋 المعلومات", p_name:"الاسم", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
-    p_sector:"القطاع", p_target:"الجمهور", p_idea:"الفكرة", p_logo:"شعار المشروع (للـ PDF)",
-    h_cap:"💰 رأس المال", p_capital:"رأس المال (دج)", p_units:"مبيعات سنة 1", p_price:"سعر البيع (دج)", btn_next:"➡️ التالي",
-    h_invest:"🏗️ التكاليف الاستثمارية", c_item:"البيان", c_cost:"القيمة", c_qty:"الكمية", c_dep:"الاهتلاك", btn_add:"+ إضافة",
-    h_bom:"🛠️ تكلفة المنتج", h_fixed:"💸 مصاريف شهرية", h_inflation:"📈 معدل التضخم", lbl_inflation:"نسبة التضخم (%)", btn_calc:"🧮 احسب الجداول",
-    h_hr:"👥 الرواتب", hr_role:"المنصب", hr_count:"العدد", hr_basic:"الأساسي", hr_cnas_emp:"حصة العامل 9%", hr_net:"الصافي", hr_cnas_er:"حصة صاحب العمل 26%", hr_total:"الإجمالي",
-    h_readiness:"🎯 مؤشر جاهزية المشروع للتمويل", lbl_readiness:"نسبة الجاهزية:",
-    msg_r0:"يجب إكمال البيانات الأساسية أولاً.", msg_r50:"دراسة مالية جيدة، ينقصك بعض العناصر (BMC أو SWOT).", msg_r80:"دراسة مالية قوية جداً وجاهزة للعرض على المستثمرين!", msg_r100:"مكتمل 100%. مشروعك جاهز تماماً للحصول على التمويل!",
+  ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب", t12:"11. الاستثمار", t13:"12. المسار", t14:"13. السوق", t15:"14. العرض التقديمي",
+    info_title:"📋 معلومات المشروع", p_name:"اسم المشروع", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
+    p_sector:"القطاع", p_target:"الجمهور", p_idea:"فكرة المشروع", p_logo:"شعار المشروع (اختياري)",
+    h_cap:"💰 رأس المال والمبيعات", p_capital:"رأس المال (دج)", p_units:"مبيعات سنة 1", p_price:"سعر البيع (دج)", btn_next:"➡️ التالي",
+    h_invest:"🏗️ التكاليف الاستثمارية (CapEx)", c_item:"البيان", c_cost:"القيمة", c_qty:"الكمية", c_dep:"الاهتلاك", btn_add:"+ إضافة",
+    h_bom:"🛠️ تكلفة المنتج الواحد (BOM)", h_fixed:"💸 المصاريف التشغيلية الشهرية", h_inflation:"📈 معدل التضخم", lbl_inflation:"نسبة التضخم (%)", btn_calc:"🧮 احسب الجداول",
+    h_hr:"👥 جدول الرواتب", hr_role:"المنصب", hr_count:"العدد", hr_basic:"الأساسي", hr_cnas_emp:"حصة العامل 9%", hr_net:"الصافي", hr_cnas_er:"حصة صاحب العمل 26%", hr_total:"الإجمالي",
+    h_readiness:"🎯 مؤشر الجاهزية", lbl_readiness:"الجاهزية:", msg_r0:"أدخل البيانات الأساسية.", msg_r50:"دراسة جيدة، ينقصك BMC أو SWOT.", msg_r80:"دراسة قوية جداً!", msg_r100:"مكتمل 100% جاهز للتمويل!",
     h_amort:"📉 جدول الاهتلاك", h_tcr:"📊 جدول النتائج (TCR)", h_tft:"💸 جدول التدفقات (TFT)", h_charts:"📊 تطور الأرباح",
-    h_breakeven:"📈 نقطة التعادل", h_sensitivity:"⚖️ تحليل الحساسية", sens_desc:"ماذا يحدث لربحك إذا تغيرت الظروف؟", sens_sales:"تغير المبيعات (%)", sens_var:"تغير التكلفة المتغيرة (%)", sens_fix:"تغير التكاليف الثابتة (%)", btn_sens:"احسب السيناريو",
-    h_loan:"🏦 محاكي القروض", loan_desc:"احسب القسط الشهري للقرض البنكي لتعرف التزاماتك المالية.", loan_amount:"مبلغ القرض (دج)", loan_rate:"نسبة الفائدة السنوية (%)", loan_years:"مدة السداد (سنوات)", btn_calc_loan:"🧮 احسب القسط و DSCR",
-    res_monthly:"القسط الشهري:", res_total_interest:"إجمالي الفوائد:", res_total_payment:"إجمالي المبلغ المسدد:", res_dscr:"نسبة تغطية الدين (DSCR):", dscr_good:"ممتاز (آمن للبنك)", dscr_risky:"مخاطرة (قد يُرفض القرض)",
-    h_comp:"⚔️ المنافسون", btn_ai_comp:"🤖 بحث عن المنافسين", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 توليد BMC", b1:"🤝 الشركاء", b2:"⚙️ الأنشطة", b3:"💎 القيمة", b4:"👥 العملاء", b5:"📢 القنوات", b6:"❤️ العلاقات", b7:"🔑 الموارد", b8:"💰 الإيرادات", b9:"💸 التكاليف",
-    h_swot:"🧠 تحليل SWOT", swot_desc:"تحليل ذكي لمشروعك", btn_ai_swot:"🚀 توليد التحليل", swot_s:"نقاط القوة", swot_w:"نقاط الضعف", swot_o:"الفرص", swot_t:"التهديدات", swot_rec:"التوصية الاستراتيجية",
-    h_ai:"🧠 المساعد", ai_q:"سؤالك", btn_ask:"🚀 اسأل", btn_save:"💾 حفظ", btn_pdf:"📄 PDF", btn_reset:"🗑️ مسح", btn_excel:"📊 تصدير Excel",
-    h_acc:"🧾 المحاسب الذكي (مراجعة مالية)", acc_desc:"يقوم الذكاء الاصطناعي بمراجعة أرقامك وبياناتك المالية لاكتشاف الأخطاء وتقديم نصائح لتقليل التكاليف وزيادة الأرباح.", btn_ai_acc:"🔍 مراجعة بياناتي المالية بالذكاء الاصطناعي",
-    h_npv:"📈 مستشار الأرقام (مؤشرات الاستثمار)", npv_desc:"يتم احتساب هذه المؤشرات بناءً على تدفقاتك النقدية (TFT). معدل الخصم الافتراضي هو 10%.", lbl_discount:"معدل الخصم (%)", btn_calc_npv:"احسب المؤشرات", 
-    res_npv:"صافي القيمة الحالية (NPV)", res_irr:"معدل العائد الداخلي (IRR)", res_payback:"فترة الاسترداد (سنوات)", npv_good:"مؤشر ممتاز (مشروع مجدي)", npv_bad:"مؤشر ضعيف (مشروع غير مجدي حالياً)",
-    h_path:"🛣️ شريك المسار (تتبع حالة المشروع)", path_desc:"تابع خطوات إنجاز مشروعك حتى تصل إلى التمويل.", step1:"إكمال البيانات الأساسية", step2:"حساب الجداول المالية", step3:"توليد نموذج العمل (BMC)", step4:"إجراء تحليل SWOT", step5:"نشر المشروع في السوق",
-    h_market:"🏪 سوق المشاريع (Marketplace)", market_desc:"تصفح مشاريع طلاب آخرين، أو انشر مشروعك للمستثمرين.", btn_publish:"🚀 انشر مشروعي في السوق", pub_success:"✅ تم نشر مشروعك بنجاح في السوق!", btn_view:"عرض التفاصيل", profit_margin:"هامش الربح",
-    h_pitch_deck:"🎤 مولّد العرض التقديمي (Pitch Deck)", pitch_deck_desc:"يقوم الذكاء الاصطناعي بإنشاء عرض تقديمي احترافي من 11 قسماً، ويمكنك تصديره إلى PowerPoint أو فتحه في Canva.", btn_ai_pitch_deck:"🤖 توليد العرض التقديمي بالذكاء الاصطناعي", btn_download_pptx:"📥 تحميل PowerPoint (.pptx)", btn_open_canva:"🎨 نسخ النص لـ Canva",
-    row_rev:"رقم الأعمال", row_cogs:"تكلفة المبيعات", row_va:"القيمة المضافة", row_opex:"المصاريف التشغيلية", row_ebe:"الفائض الخام (EBE)", row_dep:"الاهتلاك", row_net:"الربح الصافي",
+    h_breakeven:"📈 نقطة التعادل", h_sensitivity:"⚖️ تحليل الحساسية", sens_desc:"تأثير التغيرات على الربح:", sens_sales:"تغير المبيعات (%)", sens_var:"تغير التكلفة المتغيرة (%)", sens_fix:"تغير التكاليف الثابتة (%)", btn_sens:"احسب",
+    h_loan:"🏦 محاكي القروض", loan_desc:"احسب القسط الشهري.", loan_amount:"مبلغ القرض (دج)", loan_rate:"الفائدة (%)", loan_years:"المدة (سنوات)", btn_calc_loan:"🧮 احسب القسط و DSCR",
+    res_monthly:"القسط الشهري:", res_total_interest:"إجمالي الفوائد:", res_total_payment:"الإجمالي:", res_dscr:"نسبة DSCR:", dscr_good:"آمن", dscr_risky:"مخاطرة",
+    h_comp:"⚔️ تحليل المنافسين", btn_ai_comp:"🤖 بحث", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 توليد BMC", b1:"🤝 الشركاء", b2:"⚙️ الأنشطة", b3:"💎 القيمة", b4:"👥 العملاء", b5:"📢 القنوات", b6:"❤️ العلاقات", b7:"🔑 الموارد", b8:"💰 الإيرادات", b9:"💸 التكاليف",
+    h_swot:"🧠 تحليل SWOT", swot_desc:"تحليل ذكي للمشروع", btn_ai_swot:"🚀 توليد", swot_s:"القوة", swot_w:"الضعف", swot_o:"الفرص", swot_t:"التهديدات", swot_rec:"التوصية",
+    h_ai:"🧠 المساعد المالي", ai_q:"سؤالك", btn_ask:"🚀 اسأل", btn_save:"💾 حفظ", btn_pdf:"📄 PDF", btn_reset:"🗑️ مسح", btn_excel:"📊 Excel",
+    h_acc:"🧾 المحاسب الذكي", acc_desc:"مراجعة الأرقام بالذكاء الاصطناعي", btn_ai_acc:"🔍 مراجعة",
+    h_npv:"📈 مؤشرات الاستثمار", npv_desc:"بناءً على التدفقات النقدية.", lbl_discount:"الخصم (%)", btn_calc_npv:"احسب", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"الاسترداد", npv_good:"مجدي", npv_bad:"غير مجدي",
+    h_path:"🛣️ شريك المسار", path_desc:"تتبع إنجاز المشروع", step1:"البيانات الأساسية", step2:"الجداول المالية", step3:"BMC", step4:"SWOT", step5:"النشر في السوق",
+    h_market:"🏪 سوق المشاريع", market_desc:"تصفح أو انشر مشروعك", btn_publish:"🚀 نشر المشروع", pub_success:"✅ تم النشر!", btn_view:"عرض", profit_margin:"الهامش",
+    h_pitch_deck:"🎤 مولّد العرض التقديمي", pitch_deck_desc:"توليد عرض تقديمي احترافي من 11 قسماً.", btn_ai_pitch_deck:"🤖 توليد العرض", btn_download_pptx:"📥 تحميل PowerPoint", btn_open_canva:"🎨 نسخ لـ Canva",
+    row_rev:"الإيرادات", row_cogs:"تكلفة المبيعات", row_va:"القيمة المضافة", row_opex:"المصاريف التشغيلية", row_ebe:"EBE", row_dep:"الاهتلاك", row_net:"الربح الصافي",
     row_opflow:"تدفق التشغيل", row_invflow:"تدفق الاستثمار", row_cash:"تغير الخزينة",
-    col_year:"السنة", col_total:"المجموع", tcr_title:"جدول حسابات النتائج (TCR)", tft_title:"جدول تدفقات الخزينة (TFT)", amort_title:"جدول الاهتلاك", loan_title:"محاكي القروض",
-    report_title:"تقرير الدراسة المالية والاستراتيجية", bmc_title:"نموذج العمل التجاري (BMC)", swot_title:"التحليل الاستراتيجي (SWOT)",
-    val_err_price:"⚠️ تنبيه خطير: سعر البيع أقل من تكلفة المنتج! أنت تبيع بخسارة.", val_err_opex:"⚠️ تنبيه: التكاليف التشغيلية صفر. هل نسيت إدخالها؟", val_ok:""
+    col_year:"السنة", col_total:"المجموع", tcr_title:"جدول النتائج", tft_title:"جدول التدفقات", amort_title:"الاهتلاك", loan_title:"القروض",
+    report_title:"تقرير الدراسة المالية", bmc_title:"نموذج BMC", swot_title:"تحليل SWOT",
+    val_err_price:"⚠️ سعر البيع أقل من التكلفة!", val_err_opex:"⚠️ التكاليف التشغيلية صفر!", val_ok:""
   },
   fr:{ t1:"1. Infos", t2:"2. Coûts", t8:"3. RH", t3:"4. Financier", t10:"5. Prêts", t4:"6. Concurrents", t5:"7. BMC", t9:"8. SWOT", t6:"9. Assistant", t11:"10. Comptable", t12:"11. Investissement", t13:"12. Parcours", t14:"13. Marché", t15:"14. Pitch Deck",
     info_title:"📋 Infos", p_name:"Nom", p_type:"Type", type_hybrid:"Matériel + Logiciel", type_hw:"Matériel", type_sw:"Logiciel",
-    p_sector:"Secteur", p_target:"Cible", p_idea:"Idée", p_logo:"Logo (pour le PDF)",
+    p_sector:"Secteur", p_target:"Cible", p_idea:"Idée", p_logo:"Logo (PDF)",
     h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Ventes (An 1)", p_price:"Prix (DA)", btn_next:"➡️ Suivant",
     h_invest:"🏗️ CapEx", c_item:"Désignation", c_cost:"Coût", c_qty:"Qté", c_dep:"Amort.", btn_add:"+ Ajouter",
-    h_bom:"🛠️ Coût Unitaire", h_fixed:"💸 Charges Mensuelles", h_inflation:"📈 Taux d'Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculer",
-    h_hr:"👥 Salaires", hr_role:"Poste", hr_count:"Nb", hr_basic:"Base", hr_cnas_emp:"Part employé 9%", hr_net:"Net", hr_cnas_er:"Part employeur 26%", hr_total:"Total",
-    h_readiness:"🎯 Indice de Préparation au Financement", lbl_readiness:"Préparation :",
-    msg_r0:"Veuillez compléter les informations de base.", msg_r50:"Bonne étude, il manque le BMC ou le SWOT.", msg_r80:"Étude très solide, prête pour les investisseurs !", msg_r100:"100% Complet. Projet prêt pour le financement !",
+    h_bom:"🛠️ Coût Unitaire", h_fixed:"💸 Charges Mensuelles", h_inflation:"📈 Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculer",
+    h_hr:"👥 Salaires", hr_role:"Poste", hr_count:"Nb", hr_basic:"Base", hr_cnas_emp:"Employé 9%", hr_net:"Net", hr_cnas_er:"Employeur 26%", hr_total:"Total",
+    h_readiness:"🎯 Préparation", lbl_readiness:"Prêt:", msg_r0:"Complétez les infos.", msg_r50:"Manque BMC/SWOT.", msg_r80:"Très solide!", msg_r100:"100% Prêt!",
     h_amort:"📉 Amortissement", h_tcr:"📊 Résultat (TCR)", h_tft:"💸 Trésorerie (TFT)", h_charts:"📊 Évolution",
-    h_breakeven:"📈 Seuil de Rentabilité", h_sensitivity:"⚖️ Analyse de Sensibilité", sens_desc:"Que se passe-t-il si les conditions changent ?", sens_sales:"Variation Ventes (%)", sens_var:"Variation Coût Var (%)", sens_fix:"Variation Coûts Fixes (%)", btn_sens:"Calculer le Scénario",
-    h_loan:"🏦 Simulateur de Prêt", loan_desc:"Calculez votre mensualité et le DSCR.", loan_amount:"Montant du prêt (DA)", loan_rate:"Taux d'intérêt (%)", loan_years:"Durée (années)", btn_calc_loan:"🧮 Calculer",
-    res_monthly:"Mensualité :", res_total_interest:"Total Intérêts :", res_total_payment:"Total Remboursé :", res_dscr:"Ratio DSCR :", dscr_good:"Excellent (Sûr pour la banque)", dscr_risky:"Risqué (Prêt peut-être refusé)",
-    h_comp:"⚔️ Concurrents", btn_ai_comp:"🤖 Rechercher", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Générer BMC", b1:"🤝 Partenaires", b2:"⚙️ Activités", b3:"💎 Valeur", b4:"👥 Clients", b5:"📢 Canaux", b6:"❤️ Relations", b7:"🔑 Ressources", b8:"💰 Revenus", b9:"💸 Coûts",
-    h_swot:"🧠 Analyse SWOT", swot_desc:"Analyse IA de votre projet", btn_ai_swot:"🚀 Générer l'analyse", swot_s:"Forces", swot_w:"Faiblesses", swot_o:"Opportunités", swot_t:"Menaces", swot_rec:"Recommandation Stratégique",
+    h_breakeven:"📈 Seuil", h_sensitivity:"⚖️ Sensibilité", sens_desc:"Impact:", sens_sales:"Ventes (%)", sens_var:"Coût Var (%)", sens_fix:"Coûts Fixes (%)", btn_sens:"Calculer",
+    h_loan:"🏦 Prêt", loan_desc:"Calculez la mensualité.", loan_amount:"Montant (DA)", loan_rate:"Taux (%)", loan_years:"Durée (Ans)", btn_calc_loan:"🧮 Calculer DSCR",
+    res_monthly:"Mensualité:", res_total_interest:"Intérêts:", res_total_payment:"Total:", res_dscr:"DSCR:", dscr_good:"Sûr", dscr_risky:"Risqué",
+    h_comp:"⚔️ Concurrents", btn_ai_comp:"🤖 Chercher", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Générer BMC", b1:"🤝 Partenaires", b2:"⚙️ Activités", b3:"💎 Valeur", b4:"👥 Clients", b5:"📢 Canaux", b6:"❤️ Relations", b7:"🔑 Ressources", b8:"💰 Revenus", b9:"💸 Coûts",
+    h_swot:"🧠 SWOT", swot_desc:"Analyse IA", btn_ai_swot:"🚀 Générer", swot_s:"Forces", swot_w:"Faiblesses", swot_o:"Opportunités", swot_t:"Menaces", swot_rec:"Recommandation",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Demander", btn_save:"💾 Sauver", btn_pdf:"📄 PDF", btn_reset:"🗑️ Effacer", btn_excel:"📊 Excel",
-    h_acc:"🧾 Comptable Intelligent", acc_desc:"L'IA analyse vos données financières pour trouver des erreurs et optimiser.", btn_ai_acc:"🔍 Analyser mes données",
-    h_npv:"📈 Conseiller en Investissement", npv_desc:"Calculé sur la base de vos flux de trésorerie (TFT). Taux d'actualisation par défaut : 10%.", lbl_discount:"Taux d'actualisation (%)", btn_calc_npv:"Calculer",
-    res_npv:"VAN (Valeur Actuelle Nette)", res_irr:"TRI (Taux de Rentabilité Interne)", res_payback:"Période de récupération", npv_good:"Excellent (Projet rentable)", npv_bad:"Faible (Projet non rentable)",
-    h_path:"🛣️ Partenaire de Parcours", path_desc:"Suivez l'avancement de votre projet.", step1:"Données de base complétées", step2:"Tableaux financiers calculés", step3:"BMC généré", step4:"Analyse SWOT générée", step5:"Projet publié sur le marché",
-    h_market:"🏪 Marché des Projets", market_desc:"Découvrez les projets des étudiants, ou publiez le vôtre.", btn_publish:"🚀 Publier mon projet", pub_success:"✅ Projet publié avec succès !", btn_view:"Voir détails", profit_margin:"Marge",
-    h_pitch_deck:"🎤 Générateur de Pitch Deck", pitch_deck_desc:"L'IA génère une présentation de 11 slides, exportable en PPTX ou Canva.", btn_ai_pitch_deck:"🤖 Générer le Pitch Deck", btn_download_pptx:"📥 Télécharger (.pptx)", btn_open_canva:"🎨 Copier pour Canva",
-    row_rev:"Chiffre d'Affaires", row_cogs:"Coût des Ventes", row_va:"Valeur Ajoutée", row_opex:"Charges Opérationnelles", row_ebe:"EBE", row_dep:"Amortissements", row_net:"Résultat Net",
-    row_opflow:"Flux d'Exploitation", row_invflow:"Flux d'Investissement", row_cash:"Variation de Trésorerie",
-    col_year:"Année", col_total:"Total", tcr_title:"Compte de Résultat (TCR)", tft_title:"Tableau des Flux (TFT)", amort_title:"Tableau d'Amortissement", loan_title:"Simulateur de Prêt",
-    report_title:"Rapport d'Étude Financière et Stratégique", bmc_title:"Business Model Canvas (BMC)", swot_title:"Analyse SWOT",
-    val_err_price:"⚠️ Alerte: Le prix de vente est inférieur au coût unitaire !", val_err_opex:"⚠️ Alerte: Charges opérationnelles à zéro.", val_ok:""
+    h_acc:"🧾 Comptable IA", acc_desc:"Analysez vos chiffres", btn_ai_acc:"🔍 Analyser",
+    h_npv:"📈 Investissement", npv_desc:"Basé sur les flux.", lbl_discount:"Taux (%)", btn_calc_npv:"Calculer", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"Récupération", npv_good:"Rentable", npv_bad:"Non rentable",
+    h_path:"🛣️ Parcours", path_desc:"Suivi", step1:"Infos", step2:"Finances", step3:"BMC", step4:"SWOT", step5:"Publication",
+    h_market:"🏪 Marché", market_desc:"Projets étudiants", btn_publish:"🚀 Publier", pub_success:"✅ Publié!", btn_view:"Voir", profit_margin:"Marge",
+    h_pitch_deck:"🎤 Pitch Deck", pitch_deck_desc:"Générer 11 slides pro.", btn_ai_pitch_deck:"🤖 Générer", btn_download_pptx:"📥 Télécharger PPTX", btn_open_canva:"🎨 Copier Canva",
+    row_rev:"Revenus", row_cogs:"Coût Ventes", row_va:"Valeur Ajoutée", row_opex:"Charges", row_ebe:"EBE", row_dep:"Amort.", row_net:"Résultat Net",
+    row_opflow:"Flux Op.", row_invflow:"Flux Inv.", row_cash:"Trésorerie",
+    col_year:"Année", col_total:"Total", tcr_title:"Résultat", tft_title:"Trésorerie", amort_title:"Amortissement", loan_title:"Prêt",
+    report_title:"Rapport Financier", bmc_title:"BMC", swot_title:"SWOT",
+    val_err_price:"⚠️ Prix < Coût!", val_err_opex:"⚠️ Charges = 0!", val_ok:""
   },
   en:{ t1:"1. Info", t2:"2. Costs", t8:"3. HR", t3:"4. Financials", t10:"5. Loan", t4:"6. Competitors", t5:"7. BMC", t9:"8. SWOT", t6:"9. Assistant", t11:"10. Accountant", t12:"11. Investment", t13:"12. Journey", t14:"13. Market", t15:"14. Pitch Deck",
     info_title:"📋 Info", p_name:"Name", p_type:"Type", type_hybrid:"Hardware + Software", type_hw:"Hardware", type_sw:"Software",
-    p_sector:"Sector", p_target:"Target", p_idea:"Idea", p_logo:"Project Logo (PDF)",
-    h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Sales (Year 1)", p_price:"Price (DA)", btn_next:"➡️ Next",
+    p_sector:"Sector", p_target:"Target", p_idea:"Idea", p_logo:"Logo (PDF)",
+    h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Sales (Y1)", p_price:"Price (DA)", btn_next:"➡️ Next",
     h_invest:"🏗️ CapEx", c_item:"Item", c_cost:"Cost", c_qty:"Qty", c_dep:"Depr.", btn_add:"+ Add",
-    h_bom:"🛠️ Unit Cost", h_fixed:"💸 Monthly Expenses", h_inflation:"📈 Inflation Rate", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculate",
+    h_bom:"🛠️ Unit Cost", h_fixed:"💸 Monthly Expenses", h_inflation:"📈 Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculate",
     h_hr:"👥 Salaries", hr_role:"Role", hr_count:"Count", hr_basic:"Base", hr_cnas_emp:"Employee 9%", hr_net:"Net", hr_cnas_er:"Employer 26%", hr_total:"Total",
-    h_readiness:"🎯 Funding Readiness Score", lbl_readiness:"Readiness:",
-    msg_r0:"Please complete the basic info.", msg_r50:"Good study, missing BMC or SWOT.", msg_r80:"Very strong study, ready for investors!", msg_r100:"100% Complete. Ready for funding!",
-    h_amort:"📉 Depreciation", h_tcr:"📊 Income Statement", h_tft:"💸 Cash Flow", h_charts:"📊 Evolution",
-    h_breakeven:"📈 Break-Even", h_sensitivity:"⚖️ Sensitivity Analysis", sens_desc:"What happens if conditions change?", sens_sales:"Sales Change (%)", sens_var:"Var Cost Change (%)", sens_fix:"Fixed Cost Change (%)", btn_sens:"Calculate Scenario",
-    h_loan:"🏦 Loan Simulator", loan_desc:"Calculate monthly payment and DSCR.", loan_amount:"Loan Amount (DA)", loan_rate:"Interest Rate (%)", loan_years:"Duration (Years)", btn_calc_loan:"🧮 Calculate",
-    res_monthly:"Monthly Payment:", res_total_interest:"Total Interest:", res_total_payment:"Total Payment:", res_dscr:"DSCR:", dscr_good:"Excellent (Bank Safe)", dscr_risky:"Risky (Loan may be denied)",
-    h_comp:"⚔️ Competitors", btn_ai_comp:"🤖 Search", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Generate BMC", b1:"🤝 Partners", b2:"⚙️ Activities", b3:"💎 Value", b4:"👥 Clients", b5:"📢 Channels", b6:"❤️ Relations", b7:"🔑 Resources", b8:"💰 Revenues", b9:"💸 Costs",
-    h_swot:"🧠 SWOT Analysis", swot_desc:"AI Analysis of your project", btn_ai_swot:"🚀 Generate Analysis", swot_s:"Strengths", swot_w:"Weaknesses", swot_o:"Opportunities", swot_t:"Threats", swot_rec:"Strategic Recommendation",
+    h_readiness:"🎯 Readiness", lbl_readiness:"Ready:", msg_r0:"Enter basic info.", msg_r50:"Missing BMC/SWOT.", msg_r80:"Very strong!", msg_r100:"100% Ready!",
+    h_amort:"📉 Depreciation", h_tcr:"📊 Income (TCR)", h_tft:"💸 Cash Flow (TFT)", h_charts:"📊 Evolution",
+    h_breakeven:"📈 Break-Even", h_sensitivity:"⚖️ Sensitivity", sens_desc:"Impact:", sens_sales:"Sales (%)", sens_var:"Var Cost (%)", sens_fix:"Fixed Costs (%)", btn_sens:"Calculate",
+    h_loan:"🏦 Loan", loan_desc:"Calculate monthly payment.", loan_amount:"Amount (DA)", loan_rate:"Rate (%)", loan_years:"Years", btn_calc_loan:"🧮 Calculate DSCR",
+    res_monthly:"Monthly:", res_total_interest:"Interest:", res_total_payment:"Total:", res_dscr:"DSCR:", dscr_good:"Safe", dscr_risky:"Risky",
+    h_comp:"⚔️ Competitors", btn_ai_comp:"🤖 Search", h_bmc:"🧩 BMC", btn_ai_bmc:"🤖 Generate", b1:"🤝 Partners", b2:"⚙️ Activities", b3:"💎 Value", b4:"👥 Clients", b5:"📢 Channels", b6:"❤️ Relations", b7:"🔑 Resources", b8:"💰 Revenues", b9:"💸 Costs",
+    h_swot:"🧠 SWOT", swot_desc:"AI Analysis", btn_ai_swot:"🚀 Generate", swot_s:"Strengths", swot_w:"Weaknesses", swot_o:"Opportunities", swot_t:"Threats", swot_rec:"Recommendation",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Ask", btn_save:"💾 Save", btn_pdf:"📄 PDF", btn_reset:"🗑️ Clear", btn_excel:"📊 Excel",
-    h_acc:"🧾 Smart Accountant", acc_desc:"AI analyzes your financial data to find errors and optimize.", btn_ai_acc:"🔍 Analyze my data",
-    h_npv:"📈 Investment Advisor", npv_desc:"Calculated based on your Cash Flows (TFT). Default discount rate: 10%.", lbl_discount:"Discount Rate (%)", btn_calc_npv:"Calculate",
-    res_npv:"NPV (Net Present Value)", res_irr:"IRR (Internal Rate of Return)", res_payback:"Payback Period", npv_good:"Excellent (Profitable)", npv_bad:"Weak (Not profitable)",
-    h_path:"🛣️ Path Partner", path_desc:"Track your project's progress.", step1:"Basic info completed", step2:"Financials calculated", step3:"BMC generated", step4:"SWOT generated", step5:"Project published to market",
-    h_market:"🏪 Project Marketplace", market_desc:"Browse student projects, or publish yours.", btn_publish:"🚀 Publish my project", pub_success:"✅ Project published successfully!", btn_view:"View Details", profit_margin:"Margin",
-    h_pitch_deck:"🎤 Pitch Deck Generator", pitch_deck_desc:"AI generates an 11-slide pitch deck, exportable to PPTX or Canva.", btn_ai_pitch_deck:"🤖 Generate Pitch Deck", btn_download_pptx:"📥 Download (.pptx)", btn_open_canva:"🎨 Copy for Canva",
-    row_rev:"Revenue", row_cogs:"Cost of Goods Sold", row_va:"Value Added", row_opex:"Operating Expenses", row_ebe:"EBITDA", row_dep:"Depreciation", row_net:"Net Profit",
-    row_opflow:"Operating Cash Flow", row_invflow:"Investment Cash Flow", row_cash:"Cash Variation",
-    col_year:"Year", col_total:"Total", tcr_title:"Income Statement (TCR)", tft_title:"Cash Flow Statement (TFT)", amort_title:"Depreciation Schedule", loan_title:"Loan Simulator",
-    report_title:"Financial and Strategic Study Report", bmc_title:"Business Model Canvas (BMC)", swot_title:"SWOT Analysis",
-    val_err_price:"⚠️ Alert: Selling price is lower than unit cost!", val_err_opex:"⚠️ Alert: Operating expenses are zero.", val_ok:""
+    h_acc:"🧾 Smart Accountant", acc_desc:"AI review", btn_ai_acc:"🔍 Review",
+    h_npv:"📈 Investment", npv_desc:"Based on cash flows.", lbl_discount:"Rate (%)", btn_calc_npv:"Calculate", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"Payback", npv_good:"Profitable", npv_bad:"Not profitable",
+    h_path:"🛣️ Journey", path_desc:"Track progress", step1:"Basic Info", step2:"Financials", step3:"BMC", step4:"SWOT", step5:"Published",
+    h_market:"🏪 Market", market_desc:"Student projects", btn_publish:"🚀 Publish", pub_success:"✅ Published!", btn_view:"View", profit_margin:"Margin",
+    h_pitch_deck:"🎤 Pitch Deck", pitch_deck_desc:"Generate 11 pro slides.", btn_ai_pitch_deck:"🤖 Generate", btn_download_pptx:"📥 Download PPTX", btn_open_canva:"🎨 Copy Canva",
+    row_rev:"Revenue", row_cogs:"COGS", row_va:"Value Added", row_opex:"OpEx", row_ebe:"EBITDA", row_dep:"Depreciation", row_net:"Net Profit",
+    row_opflow:"Op. Cash Flow", row_invflow:"Inv. Cash Flow", row_cash:"Cash Flow",
+    col_year:"Year", col_total:"Total", tcr_title:"Income", tft_title:"Cash Flow", amort_title:"Depreciation", loan_title:"Loan",
+    report_title:"Financial Report", bmc_title:"BMC", swot_title:"SWOT",
+    val_err_price:"⚠️ Price < Cost!", val_err_opex:"⚠️ OpEx = 0!", val_ok:""
   }
 };
 let L = 'ar'; const t = k => T[L][k] || k;
 
-/* ============ LOGO & PRESENTATION MODE ============ */
+/* ============ STATE ============ */
 let logoBase64 = null;
+let investItems = [];
+let bomItems = [];
+let fixedItems = [];
+let emps = [];
+let myChart = null;
+let beChart = null;
+let tftCashFlows = [];
+let pitchDeckData = null;
+
+/* ============ INIT & UI ============ */
+if(localStorage.getItem('finstart_theme') === 'dark') document.body.classList.add('dark-mode');
+
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('finstart_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  if(window.calcData) { renderChart(); renderBreakEvenChart(); }
+}
+
+function togglePresentation() {
+  document.body.classList.toggle('presentation-mode');
+  if(document.body.classList.contains('presentation-mode')) alert("تم تفعيل وضع العرض التقديمي. اضغط على الزر مرة أخرى للعودة.");
+}
+
 function handleLogoUpload(event) {
-  let file = event.target.files[0];
-  if(!file) return;
+  let file = event.target.files[0]; if(!file) return;
   let reader = new FileReader();
   reader.onload = function(e) {
     logoBase64 = e.target.result;
@@ -549,29 +576,8 @@ function handleLogoUpload(event) {
 }
 if(localStorage.getItem('finstart_logo')) {
   logoBase64 = localStorage.getItem('finstart_logo');
-  setTimeout(() => {
-    if(document.getElementById('logoPreview')) {
-      document.getElementById('logoPreview').style.display = 'block';
-      document.getElementById('logoImg').src = logoBase64;
-    }
-  }, 500);
+  setTimeout(() => { if(document.getElementById('logoPreview')) { document.getElementById('logoPreview').style.display = 'block'; document.getElementById('logoImg').src = logoBase64; } }, 200);
 }
-
-function togglePresentation() {
-  document.body.classList.toggle('presentation-mode');
-  if(document.body.classList.contains('presentation-mode')) {
-    alert("تم تفعيل وضع العرض التقديمي. اضغط على الزر مرة أخرى للعودة.");
-  }
-}
-
-// Theme Toggle
-function toggleTheme() {
-  document.body.classList.toggle('dark-mode');
-  if(document.body.classList.contains('dark-mode')) localStorage.setItem('finstart_theme', 'dark');
-  else localStorage.setItem('finstart_theme', 'light');
-  if(window.calcData) { renderChart(); renderBreakEvenChart(); }
-}
-if(localStorage.getItem('finstart_theme') === 'dark') document.body.classList.add('dark-mode');
 
 function applyLang(lang) {
   L = lang; document.documentElement.lang = lang; document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
@@ -585,39 +591,24 @@ function showTab(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===id)); 
   document.getElementById(id).classList.add('active'); 
   if(id==='tab3') { renderChart(); renderBreakEvenChart(); }
-  if(id==='tab13') { updateChecklist(); }
-  if(id==='tab14') { renderMarket(); }
-  if(id==='tab15') { renderPitchPreview(); }
-}
-function goToTab(id) { showTab(id); }
-
-/* ============ DATA & STATE ============ */
-let investItems = [{name:"Raspberry Pi", cost:20000, qty:120, dep:5},{name:"قارئ RFID", cost:1500, qty:120, dep:5},{name:"أسلاك", cost:150, qty:120, dep:5}];
-let bomItems = [{name:"هيكل خارجي", cost:1000, qty:1},{name:"تجميع", cost:700, qty:1}];
-let fixedItems = [{name:"إيجار", cost:12000},{name:"كهرباء", cost:4166}];
-let emps = [{role:"مطور برمجيات", count:1, salary:45000},{role:"مطور أجهزة", count:1, salary:45000},{role:"محاسب", count:1, salary:45000}];
-let myChart = null;
-let beChart = null;
-let tftCashFlows = [];
-let pitchDeckData = null;
-
-/* ============ RENDER LISTS ============ */
-function onTypeChange() {
-  let type = document.getElementById('projType').value;
-  if (type === 'software') { investItems=[{name:"تطوير",cost:800000,qty:1,dep:3}]; bomItems=[{name:"صيانة",cost:10,qty:1}]; }
-  else if (type === 'hardware') { investItems=[{name:"آلات",cost:2000000,qty:1,dep:5}]; bomItems=[{name:"شاشة",cost:150,qty:1}]; }
-  else { investItems=[{name:"Raspberry Pi",cost:20000,qty:120,dep:5},{name:"قارئ RFID",cost:1500,qty:120,dep:5}]; bomItems=[{name:"هيكل خارجي",cost:1000,qty:1}]; }
-  renderInvest(); renderBOM(); renderFixed(); renderEmps(); updateReadiness();
+  if(id==='tab13') updateChecklist();
+  if(id==='tab14') renderMarket();
+  if(id==='tab15') renderPitchPreview();
 }
 
+function onTypeChange() { /* Kept for compatibility, logic moved to dynamic entry */ }
+
+function fmt(n) { return Math.round(n || 0).toLocaleString('fr-FR'); }
+
+/* ============ RENDER DYNAMIC LISTS ============ */
 function renderInvest() {
   let h = '';
   investItems.forEach((item, i) => {
-    h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 1fr 1fr 40px;">
-      <input type="text" value="${item.name}" onchange="investItems[${i}].name=this.value">
-      <input type="number" value="${item.cost}" onchange="investItems[${i}].cost=+this.value">
-      <input type="number" value="${item.qty}" onchange="investItems[${i}].qty=+this.value">
-      <input type="number" value="${item.dep}" onchange="investItems[${i}].dep=+this.value">
+    h += `<div class="row-item">
+      <input type="text" value="${item.name}" placeholder="البيان" onchange="investItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="القيمة" onchange="investItems[${i}].cost=+this.value">
+      <input type="number" value="${item.qty}" placeholder="الكمية" onchange="investItems[${i}].qty=+this.value">
+      <input type="number" value="${item.dep}" placeholder="سنوات الاهتلاك" onchange="investItems[${i}].dep=+this.value">
       <button onclick="removeInvest(${i})">×</button>
     </div>`;
   });
@@ -627,9 +618,9 @@ function renderBOM() {
   let h = '';
   bomItems.forEach((item, i) => {
     h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 1fr 40px;">
-      <input type="text" value="${item.name}" onchange="bomItems[${i}].name=this.value">
-      <input type="number" value="${item.cost}" onchange="bomItems[${i}].cost=+this.value">
-      <input type="number" value="${item.qty}" onchange="bomItems[${i}].qty=+this.value">
+      <input type="text" value="${item.name}" placeholder="المكون" onchange="bomItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="السعر" onchange="bomItems[${i}].cost=+this.value">
+      <input type="number" value="${item.qty}" placeholder="الكمية" onchange="bomItems[${i}].qty=+this.value">
       <button onclick="removeBOM(${i})">×</button>
     </div>`;
   });
@@ -639,8 +630,8 @@ function renderFixed() {
   let h = '';
   fixedItems.forEach((item, i) => {
     h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 40px;">
-      <input type="text" value="${item.name}" onchange="fixedItems[${i}].name=this.value">
-      <input type="number" value="${item.cost}" onchange="fixedItems[${i}].cost=+this.value">
+      <input type="text" value="${item.name}" placeholder="المصروف" onchange="fixedItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="القيمة الشهرية" onchange="fixedItems[${i}].cost=+this.value">
       <button onclick="removeFixed(${i})">×</button>
     </div>`;
   });
@@ -651,16 +642,15 @@ function renderEmps() {
   emps.forEach((emp, i) => {
     let cnase = emp.salary * 0.09, net = emp.salary - cnase, cnase_er = emp.salary * 0.26, total = emp.salary + cnase_er;
     h += `<tr>
-      <td><input type="text" value="${emp.role}" onchange="emps[${i}].role=this.value" style="border:1px solid var(--b);padding:4px;text-align:center; background:transparent; color:var(--text);"></td>
-      <td><input type="number" value="${emp.count}" onchange="emps[${i}].count=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:60px;text-align:center; background:transparent; color:var(--text);"></td>
-      <td><input type="number" value="${emp.salary}" onchange="emps[${i}].salary=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:90px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="text" value="${emp.role}" placeholder="المنصب" onchange="emps[${i}].role=this.value" style="border:1px solid var(--b);padding:4px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="number" value="${emp.count}" placeholder="العدد" onchange="emps[${i}].count=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:60px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="number" value="${emp.salary}" placeholder="الراتب" onchange="emps[${i}].salary=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:90px;text-align:center; background:transparent; color:var(--text);"></td>
       <td>${fmt(cnase)}</td><td>${fmt(net)}</td><td>${fmt(cnase_er)}</td><td><strong>${fmt(total * emp.count)}</strong></td>
       <td><button onclick="removeEmp(${i})" style="background:var(--d);color:#fff;border:none;border-radius:4px;cursor:pointer;padding:4px 8px;">×</button></td>
     </tr>`;
   });
   document.getElementById('hrBody').innerHTML = h;
 }
-
 function addInvest() { investItems.push({name:"", cost:0, qty:1, dep:5}); renderInvest(); }
 function addBOM() { bomItems.push({name:"", cost:0, qty:1}); renderBOM(); }
 function addFixed() { fixedItems.push({name:"", cost:0}); renderFixed(); }
@@ -670,8 +660,6 @@ function removeBOM(i) { bomItems.splice(i,1); renderBOM(); }
 function removeFixed(i) { fixedItems.splice(i,1); renderFixed(); }
 function removeEmp(i) { emps.splice(i,1); renderEmps(); }
 
-function fmt(n) { return Math.round(n).toLocaleString('fr-FR'); }
-
 /* ============ FINANCIAL ENGINE ============ */
 function calculateAll() {
   let baseUnits = +document.getElementById('projUnits').value || 0;
@@ -679,17 +667,17 @@ function calculateAll() {
   
   let totalCapEx = 0, annualDep = 0, depData = [];
   investItems.forEach(item => {
-    let tc = item.cost * item.qty; totalCapEx += tc;
+    let tc = (item.cost || 0) * (item.qty || 0); totalCapEx += tc;
     let d = item.dep > 0 ? tc / item.dep : 0; annualDep += d;
     depData.push({name: item.name, total: tc, years: item.dep, annual: d});
   });
 
   let unitCost = 0;
-  bomItems.forEach(item => { unitCost += (item.cost * item.qty); });
+  bomItems.forEach(item => { unitCost += ((item.cost || 0) * (item.qty || 0)); });
 
   let monthlyOpex = 0;
-  fixedItems.forEach(item => { monthlyOpex += item.cost; });
-  emps.forEach(e => { monthlyOpex += (e.salary * 1.26 * e.count); });
+  fixedItems.forEach(item => { monthlyOpex += (item.cost || 0); });
+  emps.forEach(e => { monthlyOpex += ((e.salary || 0) * 1.26 * (e.count || 0)); });
   let annualOpex = monthlyOpex * 12;
 
   window.calcData = { baseUnits, price, totalCapEx, annualDep, depData, unitCost, annualOpex, monthlyOpex };
@@ -719,29 +707,15 @@ function renderTCR() {
   for(let i=1; i<=5; i++) html += `<th>${t('col_year')} ${i}</th>`;
   html += `</tr>`;
   
-  let revRow = `<tr><td>${t('row_rev')}</td>`;
-  let cogsRow = `<tr><td>${t('row_cogs')}</td>`;
-  let vaRow = `<tr><td>${t('row_va')}</td>`;
-  let opexRow = `<tr><td>${t('row_opex')}</td>`;
-  let ebeRow = `<tr><td>${t('row_ebe')}</td>`;
-  let depRow = `<tr><td>${t('row_dep')}</td>`;
+  let revRow = `<tr><td>${t('row_rev')}</td>`, cogsRow = `<tr><td>${t('row_cogs')}</td>`, vaRow = `<tr><td>${t('row_va')}</td>`;
+  let opexRow = `<tr><td>${t('row_opex')}</td>`, ebeRow = `<tr><td>${t('row_ebe')}</td>`, depRow = `<tr><td>${t('row_dep')}</td>`;
   let netRow = `<tr style="font-weight:bold;"><td>${t('row_net')}</td>`;
   
-  let u = d.baseUnits; let p = d.price; let cogsUnit = d.unitCost; let opex = d.annualOpex;
+  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
   
   for(let i=1; i<=5; i++) {
-    if(i>1) { 
-        u *= 1.20; 
-        p *= (1 + infRate); 
-        cogsUnit *= (1 + infRate); 
-        opex *= (1 + infRate); 
-    }
-    let rev = u * p;
-    let cogs = u * cogsUnit;
-    let va = rev - cogs;
-    let ebe = va - opex;
-    let dep = i <= 5 ? d.annualDep : 0;
-    let net = ebe - dep;
+    if(i>1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
+    let rev = u * p, cogs = u * cogsUnit, va = rev - cogs, ebe = va - opex, dep = i <= 5 ? d.annualDep : 0, net = ebe - dep;
 
     revRow += `<td>${fmt(rev)}</td>`; cogsRow += `<td>${fmt(cogs)}</td>`; vaRow += `<td>${fmt(va)}</td>`;
     opexRow += `<td>${fmt(opex)}</td>`; ebeRow += `<td>${fmt(ebe)}</td>`; depRow += `<td>${fmt(dep)}</td>`;
@@ -760,40 +734,28 @@ function renderTFT() {
   for(let i=1; i<=5; i++) html += `<th>${t('col_year')} ${i}</th>`;
   html += `</tr>`;
   
-  let opRow = `<tr><td>${t('row_opflow')}</td>`;
-  let invRow = `<tr><td>${t('row_invflow')}</td>`;
-  let cashRow = `<tr style="font-weight:bold;"><td>${t('row_cash')}</td>`;
-  
-  let u = d.baseUnits; let p = d.price; let cogsUnit = d.unitCost; let opex = d.annualOpex;
+  let opRow = `<tr><td>${t('row_opflow')}</td>`, invRow = `<tr><td>${t('row_invflow')}</td>`, cashRow = `<tr style="font-weight:bold;"><td>${t('row_cash')}</td>`;
+  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
   tftCashFlows = [-d.totalCapEx]; 
   
   for(let i=1; i<=5; i++) {
-    if(i>1) { 
-        u *= 1.20; 
-        p *= (1 + infRate); 
-        cogsUnit *= (1 + infRate); 
-        opex *= (1 + infRate);
-    }
+    if(i>1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
     let rev = u * p, cogs = u * cogsUnit, ebe = rev - cogs - opex, net = ebe - (i<=5?d.annualDep:0);
-    let opFlow = net + (i<=5?d.annualDep:0);
-    let invFlow = i === 1 ? -d.totalCapEx : 0;
-    let cashFlow = opFlow + invFlow;
+    let opFlow = net + (i<=5?d.annualDep:0), invFlow = i === 1 ? -d.totalCapEx : 0, cashFlow = opFlow + invFlow;
     
     tftCashFlows.push(cashFlow);
-
     opRow += `<td>${fmt(opFlow)}</td>`; invRow += `<td>${fmt(invFlow)}</td>`; cashRow += `<td class="${cashFlow>=0?'ok-num':'big-num'}">${fmt(cashFlow)}</td>`;
   }
   html += opRow+`</tr>`+invRow+`</tr>`+cashRow+`</tr>`;
   document.getElementById('tftTable').innerHTML = html;
 }
 
-/* ============ VALIDATION ============ */
 function checkValidation() {
   let banner = document.getElementById('validation-banner');
   let msg = "";
   if (window.calcData) {
-      if (window.calcData.price <= window.calcData.unitCost) msg = t('val_err_price');
-      else if (window.calcData.annualOpex <= 0) msg = t('val_err_opex');
+      if (window.calcData.price > 0 && window.calcData.price <= window.calcData.unitCost) msg = t('val_err_price');
+      else if (window.calcData.annualOpex <= 0 && window.calcData.totalCapEx > 0) msg = t('val_err_opex');
   }
   if (msg !== "") { banner.innerText = msg; banner.style.display = 'block'; } else { banner.style.display = 'none'; }
 }
@@ -804,44 +766,37 @@ function renderChart() {
   let ctx = document.getElementById('mainChart').getContext('2d');
   if(myChart) myChart.destroy();
   let d = window.calcData;
-  let rev = d.baseUnits * d.price, cogs = d.baseUnits * d.unitCost, opex = d.annualOpex;
-  let profit = rev - cogs - opex;
-  const isDark = document.body.classList.contains('dark-mode');
-  const textColor = isDark ? '#e2e8f0' : '#4a5568';
-  const gridColor = isDark ? '#4a5568' : '#e2e8f0';
+  let rev = d.baseUnits * d.price, cogs = d.baseUnits * d.unitCost, opex = d.annualOpex, profit = rev - cogs - opex;
+  const textColor = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#4a5568';
+  const gridColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0';
 
   myChart = new Chart(ctx, {
-    type: 'bar', 
-    data: { labels: [t('row_rev'), t('row_cogs'), t('row_opex'), t('row_ebe')], datasets: [{ data: [rev, cogs, opex, profit], backgroundColor: ['#3182ce', '#c53030', '#dd6b20', '#38a169'] }] },
+    type: 'bar', data: { labels: [t('row_rev'), t('row_cogs'), t('row_opex'), t('row_ebe')], datasets: [{ data: [rev, cogs, opex, profit], backgroundColor: ['#3182ce', '#c53030', '#dd6b20', '#38a169'] }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { color: gridColor } } } }
   });
 }
 
 function renderBreakEvenChart() {
-  if(!window.calcData) return;
+  if(!window.calcData || window.calcData.price <= window.calcData.unitCost) return;
   let d = window.calcData;
   let ctx = document.getElementById('beChart').getContext('2d');
   if(beChart) beChart.destroy();
-  let fixedCost = d.annualOpex, varCostPerUnit = d.unitCost, price = d.price;
-  if (price <= varCostPerUnit) return;
   
-  let bepUnits = fixedCost / (price - varCostPerUnit);
-  let maxUnits = Math.max(bepUnits * 2, d.baseUnits);
+  let bepUnits = d.annualOpex / (d.price - d.unitCost);
+  let maxUnits = Math.max(bepUnits * 2, d.baseUnits, 10);
   let labels = [], revenueData = [], totalCostData = [];
+  
   for(let i=0; i<=5; i++) {
       let units = (maxUnits / 5) * i;
-      labels.push(fmt(units)); revenueData.push(units * price); totalCostData.push(fixedCost + (units * varCostPerUnit));
+      labels.push(fmt(units)); revenueData.push(units * d.price); totalCostData.push(d.annualOpex + (units * d.unitCost));
   }
-
-  const isDark = document.body.classList.contains('dark-mode');
-  const textColor = isDark ? '#e2e8f0' : '#4a5568';
-  const gridColor = isDark ? '#4a5568' : '#e2e8f0';
+  const textColor = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#4a5568';
+  const gridColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0';
 
   beChart = new Chart(ctx, {
-    type: 'line',
-    data: { labels: labels, datasets: [
-        { label: t('row_rev'), data: revenueData, borderColor: '#3182ce', backgroundColor: 'rgba(49,130,206,0.1)', fill: true, tension: 0.1 },
-        { label: t('row_opex'), data: totalCostData, borderColor: '#c53030', backgroundColor: 'rgba(197,48,48,0.1)', fill: true, tension: 0.1 }
+    type: 'line', data: { labels: labels, datasets: [
+        { label: t('row_rev'), data: revenueData, borderColor: '#3182ce', fill: false, tension: 0.1 },
+        { label: t('row_opex'), data: totalCostData, borderColor: '#c53030', fill: false, tension: 0.1 }
     ]},
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor } } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { color: gridColor } } } }
   });
@@ -855,16 +810,13 @@ function calculateSensitivity() {
   let fixChange = parseFloat(document.getElementById('sensFix').value) / 100 || 0;
   let d = window.calcData;
   
-  let origRev = d.baseUnits * d.price, origVar = d.baseUnits * d.unitCost, origFix = d.annualOpex;
-  let origProfit = origRev - origVar - origFix;
+  let origRev = d.baseUnits * d.price, origVar = d.baseUnits * d.unitCost, origFix = d.annualOpex, origProfit = origRev - origVar - origFix;
   let newRev = origRev * (1 + salesChange), newVar = origVar * (1 + varChange), newFix = origFix * (1 + fixChange);
-  let newProfit = newRev - newVar - newFix;
-  let diff = newProfit - origProfit;
+  let newProfit = newRev - newVar - newFix, diff = newProfit - origProfit;
   let color = diff >= 0 ? 'ok-num' : 'big-num', sign = diff >= 0 ? '+' : '';
   
-  let html = `<p><strong>الربح الأصلي (السنة 1):</strong> ${fmt(origProfit)} دج</p><p><strong>الربح في السيناريو الجديد:</strong> <span class="${color}">${fmt(newProfit)} دج</span></p><hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>الفرق (التأثير):</strong> <span class="${color}">${sign}${fmt(diff)} دج</span></p>`;
-  
-  let resDiv = document.getElementById('sensResult'); resDiv.style.display = 'block'; resDiv.innerHTML = html;
+  document.getElementById('sensResult').style.display = 'block'; 
+  document.getElementById('sensResult').innerHTML = `<p><strong>الربح الأصلي:</strong> ${fmt(origProfit)} دج</p><p><strong>السيناريو الجديد:</strong> <span class="${color}">${fmt(newProfit)} دج</span></p><hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>التأثير:</strong> <span class="${color}">${sign}${fmt(diff)} دج</span></p>`;
 }
 
 /* ============ LOAN & DSCR ============ */
@@ -877,21 +829,17 @@ function calculateLoan() {
         if (monthlyRate > 0) monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
         else monthlyPayment = amount / months;
     }
-    let totalPayment = monthlyPayment * months, totalInterest = totalPayment - amount;
-    let dscrHtml = "";
+    let totalPayment = monthlyPayment * months, totalInterest = totalPayment - amount, dscrHtml = "";
     if (window.calcData && monthlyPayment > 0) {
         let d = window.calcData;
-        let netOperatingIncome = (d.baseUnits * d.price) - (d.baseUnits * d.unitCost) - d.annualOpex;
-        let annualDebtService = monthlyPayment * 12;
-        let dscr = annualDebtService > 0 ? (netOperatingIncome / annualDebtService) : 0;
+        let noi = (d.baseUnits * d.price) - (d.baseUnits * d.unitCost) - d.annualOpex;
+        let ads = monthlyPayment * 12;
+        let dscr = ads > 0 ? (noi / ads) : 0;
         let dscrColor = dscr >= 1.2 ? 'var(--s)' : 'var(--d)';
-        let dscrMsg = dscr >= 1.2 ? t('dscr_good') : t('dscr_risky');
-        dscrHtml = `<hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>${t('res_dscr')}</strong> <span style="color:${dscrColor}; font-size:20px; font-weight:bold;">${dscr.toFixed(2)}</span></p><p style="font-size:12px; color:${dscrColor};">${dscrMsg}</p>`;
+        dscrHtml = `<hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>${t('res_dscr')}</strong> <span style="color:${dscrColor}; font-size:20px; font-weight:bold;">${dscr.toFixed(2)}</span></p><p style="font-size:12px; color:${dscrColor};">${dscr >= 1.2 ? t('dscr_good') : t('dscr_risky')}</p>`;
     }
-    
-    let resultDiv = document.getElementById('loanResult');
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = `<p><strong>${t('res_monthly')}</strong> <span class="big-num">${fmt(monthlyPayment)} دج</span></p><p><strong>${t('res_total_interest')}</strong> ${fmt(totalInterest)} دج</p><p><strong>${t('res_total_payment')}</strong> ${fmt(totalPayment)} دج</p>${dscrHtml}`;
+    document.getElementById('loanResult').style.display = 'block';
+    document.getElementById('loanResult').innerHTML = `<p><strong>${t('res_monthly')}</strong> <span class="big-num">${fmt(monthlyPayment)} دج</span></p><p><strong>${t('res_total_interest')}</strong> ${fmt(totalInterest)} دج</p><p><strong>${t('res_total_payment')}</strong> ${fmt(totalPayment)} دج</p>${dscrHtml}`;
 }
 
 /* ============ NPV & IRR ============ */
@@ -914,17 +862,12 @@ function calculateNPV_IRR() {
     let rate = parseFloat(document.getElementById('discountRate').value) / 100 || 0;
     let npv = 0;
     for(let i=0; i<tftCashFlows.length; i++) npv += tftCashFlows[i] / Math.pow(1 + rate, i);
-    
     let irr = calculateIRR(tftCashFlows), payback = 0, cumulative = tftCashFlows[0];
     for(let i=1; i<tftCashFlows.length; i++) { cumulative += tftCashFlows[i]; if(cumulative >= 0) { payback = i; break; } }
 
     let resDiv = document.getElementById('npvResult'); resDiv.style.display = 'grid';
-    let npvColor = npv > 0 ? 'ok-num' : 'big-num', npvMsg = npv > 0 ? t('npv_good') : t('npv_bad');
-
-    resDiv.innerHTML = `
-        <div class="result"><p><strong>${t('res_npv')}</strong></p><p class="${npvColor}" style="font-size:20px;">${fmt(npv)} دج</p><p style="font-size:12px; color:var(--muted);">${npvMsg}</p></div>
-        <div class="result"><p><strong>${t('res_irr')}</strong></p><p class="${irr && irr > rate*100 ? 'ok-num' : 'big-num'}" style="font-size:20px;">${irr ? irr.toFixed(1) + '%' : 'N/A'}</p><p style="font-size:12px; color:var(--muted);">${irr && irr > rate*100 ? t('npv_good') : t('npv_bad')}</p></div>
-        <div class="result"><p><strong>${t('res_payback')}</strong></p><p style="font-size:20px;">${payback > 0 ? payback : '> 5'} ${L==='ar'?'سنوات':L==='fr'?'ans':'years'}</p></div>`;
+    let npvColor = npv > 0 ? 'ok-num' : 'big-num';
+    resDiv.innerHTML = `<div class="result"><p><strong>${t('res_npv')}</strong></p><p class="${npvColor}" style="font-size:20px;">${fmt(npv)} دج</p></div><div class="result"><p><strong>${t('res_irr')}</strong></p><p class="${irr && irr > rate*100 ? 'ok-num' : 'big-num'}" style="font-size:20px;">${irr ? irr.toFixed(1) + '%' : 'N/A'}</p></div><div class="result"><p><strong>${t('res_payback')}</strong></p><p style="font-size:20px;">${payback > 0 ? payback : '> 5'} ${L==='ar'?'سنوات':'ans'}</p></div>`;
 }
 
 /* ============ SMART ACCOUNTANT ============ */
@@ -932,7 +875,7 @@ async function aiSmartAccountant() {
     if(!window.calcData) return alert('يرجى حساب الجداول أولاً');
     let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري المراجعة...";
     let d = window.calcData;
-    let prompt = `أنت محاسب خبير. راجع هذه البيانات المالية لمشروع: رأس المال: ${d.totalCapEx} دج. تكلفة الوحدة: ${d.unitCost} دج. سعر البيع: ${d.price} دج. المصاريف الشهرية الثابتة: ${d.monthlyOpex} دج. المبيعات المتوقعة: ${d.baseUnits} وحدة/سنة. قم بإعطاء 3 نصائح مالية دقيقة جداً وقابلة للتطبيق لتحسين هذه الأرقام، وحذرني من أي أخطاء محاسبية خطيرة. اكتب باللغة: ${L}.`;
+    let prompt = `أنت محاسب خبير. راجع هذه البيانات المالية لمشروع: رأس المال: ${d.totalCapEx} دج. تكلفة الوحدة: ${d.unitCost} دج. سعر البيع: ${d.price} دج. المصاريف الشهرية: ${d.monthlyOpex} دج. المبيعات: ${d.baseUnits} وحدة/سنة. قم بإعطاء 3 نصائح مالية دقيقة جداً لتحسين الأرباح، وحذرني من الأخطاء. اكتب باللغة: ${L}.`;
     let result = await callAI(prompt);
     document.getElementById('accResult').style.display = 'block';
     document.getElementById('accResult').innerText = result;
@@ -945,75 +888,50 @@ function updateReadiness() {
     let name = document.getElementById('projName').value, idea = document.getElementById('projIdea').value, sector = document.getElementById('projSector').value;
     if(name.length > 2 && idea.length > 5 && sector.length > 2) score += 20;
     if(window.calcData && window.calcData.baseUnits > 0 && window.calcData.price > 0) score += 20;
-    if(window.calcData) {
-        let profit = (window.calcData.baseUnits * window.calcData.price) - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
-        if(profit > 0) score += 20;
-    }
+    if(window.calcData && (window.calcData.baseUnits * window.calcData.price) - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex > 0) score += 20;
     if(document.getElementById('bmc3').value.length > 5) score += 20;
     if(document.getElementById('swotResult').style.display !== 'none') score += 20;
     
     document.getElementById('readinessScoreText').innerText = score + '%';
     document.getElementById('readinessBar').style.width = score + '%';
-    let msg = score <= 20 ? t('msg_r0') : score <= 60 ? t('msg_r50') : score <= 80 ? t('msg_r80') : t('msg_r100');
-    document.getElementById('readinessMsg').innerText = msg;
+    document.getElementById('readinessMsg').innerText = score <= 20 ? t('msg_r0') : score <= 60 ? t('msg_r50') : score <= 80 ? t('msg_r80') : t('msg_r100');
 }
 
 function updateChecklist() {
     if(!document.getElementById('checklistContainer')) return;
-    let hasData = document.getElementById('projName').value.length > 2;
-    let hasCalc = window.calcData != null;
-    let hasBMC = document.getElementById('bmc3').value.length > 5;
-    let hasSWOT = document.getElementById('swotResult').style.display !== 'none';
-    let hasPublished = localStorage.getItem('finstart_published_' + document.getElementById('projName').value) === 'true';
-
-    let items = [{ text: t('step1'), checked: hasData },{ text: t('step2'), checked: hasCalc },{ text: t('step3'), checked: hasBMC },{ text: t('step4'), checked: hasSWOT },{ text: t('step5'), checked: hasPublished }];
+    let items = [{ text: t('step1'), checked: document.getElementById('projName').value.length > 2 },{ text: t('step2'), checked: window.calcData != null },{ text: t('step3'), checked: document.getElementById('bmc3').value.length > 5 },{ text: t('step4'), checked: document.getElementById('swotResult').style.display !== 'none' },{ text: t('step5'), checked: localStorage.getItem('finstart_published_' + document.getElementById('projName').value) === 'true' }];
     let html = '';
     items.forEach(item => { html += `<div class="checklist-item"><input type="checkbox" ${item.checked ? 'checked' : ''} disabled><span style="${item.checked ? 'color:var(--s); font-weight:bold;' : ''}">${item.text}</span></div>`; });
     document.getElementById('checklistContainer').innerHTML = html;
 }
 
 /* ============ MARKETPLACE ============ */
-const demoProjects = [
-    { name: "EcoDeliver", sector: "لوجستيك", idea: "توصيل الطلبات بالدراجات الكهربائية.", capital: 2000000, margin: "25%" },
-    { name: "AgriSmart", sector: "زراعة", idea: "أجهزة استشعار لقياس رطوبة التربة.", capital: 500000, margin: "40%" },
-    { name: "MediLink", sector: "صحة", idea: "منصة لربط المرضى بالصيدليات.", capital: 1000000, margin: "15%" }
-];
+const demoProjects = [{ name: "EcoDeliver", sector: "لوجستيك", idea: "توصيل بالدراجات.", capital: 2000000, margin: "25%" }];
 function renderMarket() {
     let grid = document.getElementById('marketGrid'); if(!grid) return;
     let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
-    let allProjects = [...userProjects, ...demoProjects];
     let html = '';
-    allProjects.forEach(p => { html += `<div class="market-card"><div><h3>${p.name}</h3><p><strong>القطاع:</strong> ${p.sector} | <strong>رأس المال:</strong> ${fmt(p.capital)} دج</p><p>${p.idea}</p></div><div><span style="background:var(--s); color:white; padding:5px 10px; border-radius:10px; font-size:12px;">${t('profit_margin')}: ${p.margin}</span></div></div>`; });
+    [...userProjects, ...demoProjects].forEach(p => { html += `<div class="market-card"><div><h3>${p.name}</h3><p><strong>القطاع:</strong> ${p.sector} | <strong>رأس المال:</strong> ${fmt(p.capital)} دج</p><p>${p.idea}</p></div><div><span style="background:var(--s); color:white; padding:5px 10px; border-radius:10px; font-size:12px;">${t('profit_margin')}: ${p.margin}</span></div></div>`; });
     grid.innerHTML = html;
 }
 function publishToMarket() {
     if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
-    let name = document.getElementById('projName').value || "مشروعي", sector = document.getElementById('projSector').value;
-    let idea = document.getElementById('projIdea').value, capital = window.calcData.totalCapEx;
-    let rev = window.calcData.baseUnits * window.calcData.price;
-    let profit = rev - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
+    let name = document.getElementById('projName').value || "مشروعي", sector = document.getElementById('projSector').value, idea = document.getElementById('projIdea').value, capital = window.calcData.totalCapEx;
+    let rev = window.calcData.baseUnits * window.calcData.price, profit = rev - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
     let margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) + "%" : "0%";
 
-    let p = { name, sector, idea, capital, margin };
     let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
-    userProjects = userProjects.filter(up => up.name !== name); userProjects.push(p);
-    localStorage.setItem('finstart_market', JSON.stringify(userProjects));
-    localStorage.setItem('finstart_published_' + name, 'true');
+    userProjects = userProjects.filter(up => up.name !== name); userProjects.push({ name, sector, idea, capital, margin });
+    localStorage.setItem('finstart_market', JSON.stringify(userProjects)); localStorage.setItem('finstart_published_' + name, 'true');
     alert(t('pub_success')); renderMarket(); updateChecklist();
 }
 
 /* ============ AI ============ */
 async function callAI(prompt, type='general', sector='') {
   try {
-    const response = await fetch('/api/ai', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, type, sector, lang: L })
-    });
+    const response = await fetch('/api/ai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, type, sector, lang: L }) });
     const data = await response.json();
-    if (!response.ok || data.error) {
-        if(data.error && data.error.includes("Rate limit")) return "⚠️ عذراً، لقد استنفدنا الحد المجاني للذكاء الاصطناعي لهذا اليوم. يرجى المحاولة غداً.";
-        throw new Error(data.error || 'API Error');
-    }
+    if (!response.ok || data.error) throw new Error(data.error || 'API Error');
     return data.result;
   } catch(e) { return "❌ خطأ: " + e.message; }
 }
@@ -1027,7 +945,7 @@ async function aiGenerateBMC() {
   try {
     let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
     document.getElementById('bmc1').value = parsed.partners || ''; document.getElementById('bmc2').value = parsed.activities || ''; document.getElementById('bmc3').value = parsed.value || ''; document.getElementById('bmc4').value = parsed.segments || ''; document.getElementById('bmc5').value = parsed.channels || ''; document.getElementById('bmc6').value = parsed.relations || ''; document.getElementById('bmc7').value = parsed.resources || ''; document.getElementById('bmc8').value = parsed.revenues || ''; document.getElementById('bmc9').value = parsed.costs || ''; updateReadiness();
-  } catch(e) { alert("خطأ: " + result); }
+  } catch(e) { alert("خطأ في التنسيق"); }
   btn.innerText = originalText;
 }
 
@@ -1036,15 +954,15 @@ async function aiAnalyzeCompetitors() {
   let result = await callAI("", 'competitors', sector);
   try {
     let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    let html = `<div style="overflow-x:auto;"><table class="data"><tr><th>${t('p_name')}</th><th>${t('hr_count')}</th><th>${t('p_capital')}</th><th>${t('p_price')}</th><th>${t('b3')}</th><th>Source</th></tr>`;
-    parsed.forEach(c => { html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank" class="btn btn-primary" style="padding:4px 8px; font-size:10px;">Link</a></td></tr>`; });
-    html += `</table></div>`; document.getElementById('compResult').innerHTML = html;
-  } catch(e) { document.getElementById('compResult').innerHTML = `<p class="big-num">فشل البحث: ${result}</p>`; }
+    let html = `<table class="data"><tr><th>${t('p_name')}</th><th>الموظفون</th><th>التمويل</th><th>السعر</th><th>الميزات</th><th>المصدر</th></tr>`;
+    parsed.forEach(c => { html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank">رابط</a></td></tr>`; });
+    document.getElementById('compResult').innerHTML = html + `</table>`;
+  } catch(e) { document.getElementById('compResult').innerHTML = `<p class="big-num">فشل البحث</p>`; }
   btn.innerText = originalText;
 }
 
 async function aiGenerateSWOT() {
-  let idea = document.getElementById('projIdea').value; if(!idea) return alert('يرجى كتابة فكرة المشروع في الصفحة الأولى أولاً');
+  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
   let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التحليل...";
   let result = await callAI(idea, 'swot');
   try {
@@ -1052,11 +970,11 @@ async function aiGenerateSWOT() {
     let fillList = (id, arr) => { let html = ''; if(Array.isArray(arr)) { arr.forEach(item => html += `<li>${item}</li>`); } else { html = `<li>${arr || 'لا يوجد'}</li>`; } document.getElementById(id).innerHTML = html; };
     fillList('swotS', parsed.strengths); fillList('swotW', parsed.weaknesses); fillList('swotO', parsed.opportunities); fillList('swotT', parsed.threats);
     document.getElementById('swotRec').innerText = parsed.recommendation || ''; document.getElementById('swotResult').style.display = 'block'; updateReadiness();
-  } catch(e) { alert("حدث خطأ في تحليل JSON. النتيجة الخام: \n" + result); }
+  } catch(e) { alert("حدث خطأ، حاول مجدداً."); }
   btn.innerText = originalText;
 }
 
-/* ============ PITCH DECK GENERATOR (NEW) ============ */
+/* ============ PITCH DECK ============ */
 const defaultPitchDeck = [
   { title: "1. General Presentation", content: ["Project Title: Smart Attendance System", "Tagline: Trust the process, track the progress", "Presented by: Attatfa Halima, Ait Ziane Fatmazohra", "Supervised by: Dr. Bouchouareb Rachida, Dr. Mellal Nassima"] },
   { title: "2. Project Summary", content: ["Raspberry Pi + Facial Recognition + RFID Card.", "Database: Comparing facial features and UID with stored data.", "Real-Time Update: Attendance is automatically recorded once a match is confirmed.", "Accuracy and Efficiency: Precise tracking and protection against tampering."] },
@@ -1079,45 +997,47 @@ async function aiGeneratePitchDeck() {
   let bmc = { partners: document.getElementById('bmc1').value, activities: document.getElementById('bmc2').value, value: document.getElementById('bmc3').value, segments: document.getElementById('bmc4').value, channels: document.getElementById('bmc5').value, relations: document.getElementById('bmc6').value, resources: document.getElementById('bmc7').value, revenues: document.getElementById('bmc8').value, costs: document.getElementById('bmc9').value };
   let swot = { s: document.getElementById('swotS').innerText, w: document.getElementById('swotW').innerText, o: document.getElementById('swotO').innerText, t: document.getElementById('swotT').innerText };
   
-  let prompt = `أنت خبير في عرض المشاريع للمستثمرين. قم بإنشاء عرض تقديمي (Pitch Deck) لمشروع فكرته: "${idea}". 
-  استخدم البيانات التالية إذا كانت متوفرة (BMC: ${JSON.stringify(bmc)}، SWOT: ${JSON.stringify(swot)}).
-  أرجع النتيجة بصيغة JSON نقية فقط (بدون أي نص إضافي أو علامات markdown) كمصفوفة من 11 كائناً.
-  كل كائن يجب أن يحتوي على المفتاحين: "title" (عنوان الشريحة) و "content" (مصفوفة من النقاط النصية).
-  يجب أن تكون العناوين الـ 11 بالضبط كالتالي:
-  1. General Presentation
-  2. Project Summary
-  3. The Team
-  4. Targeted Problem
-  5. Proposed Solution
-  6. Prototype Presentation
-  7. Added Value
-  8. Competitive Analysis
-  9. Business Model
-  10. Target Market Analysis
-  11. Project Roadmap
-  اكتب المحتوى باللغة: ${L}.`;
+  let prompt = `أنت خبير في عرض المشاريع. قم بإنشاء Pitch Deck لمشروع فكرته: "${idea}". BMC: ${JSON.stringify(bmc)}. SWOT: ${JSON.stringify(swot)}.
+  أرجع النتيجة بصيغة JSON نقية فقط (مصفوفة من 11 كائناً). كل كائن يحتوي على: "title" (عنوان الشريحة) و "content" (مصفوفة نقاط).
+  العناوين بالضبط: 1. General Presentation, 2. Project Summary, 3. The Team, 4. Targeted Problem, 5. Proposed Solution, 6. Prototype Presentation, 7. Added Value, 8. Competitive Analysis, 9. Business Model, 10. Target Market Analysis, 11. Project Roadmap.
+  اكتب باللغة: ${L}.`;
 
   let result = await callAI(prompt);
-  try {
-    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    pitchDeckData = parsed;
-    renderPitchPreview();
-    document.getElementById('btn_download_pptx').style.display = 'inline-block';
-    document.getElementById('btn_open_canva').style.display = 'inline-block';
-  } catch(e) { 
-    alert("حدث خطأ في التنسيق، سيتم استخدام القالب الافتراضي.");
-    pitchDeckData = defaultPitchDeck;
-    renderPitchPreview();
-    document.getElementById('btn_download_pptx').style.display = 'inline-block';
-    document.getElementById('btn_open_canva').style.display = 'inline-block';
+  
+  if (result.startsWith("❌") || result.startsWith("⚠️")) {
+      alert(result);
+      pitchDeckData = defaultPitchDeck;
+      renderPitchPreview();
+      document.getElementById('btn_pptx').style.display = 'inline-block';
+      document.getElementById('btn_canva').style.display = 'inline-block';
+      btn.innerText = originalText;
+      return;
   }
+
+  try {
+    let cleanResult = result;
+    let startIdx = cleanResult.indexOf('[');
+    let endIdx = cleanResult.lastIndexOf(']');
+    if(startIdx !== -1 && endIdx !== -1) cleanResult = cleanResult.substring(startIdx, endIdx + 1);
+    
+    let parsed = JSON.parse(cleanResult);
+    if(Array.isArray(parsed) && parsed.length >= 10) {
+        pitchDeckData = parsed;
+    } else { throw new Error("Not enough slides"); }
+  } catch(e) { 
+    pitchDeckData = defaultPitchDeck;
+  }
+  
+  renderPitchPreview();
+  document.getElementById('btn_pptx').style.display = 'inline-block';
+  document.getElementById('btn_canva').style.display = 'inline-block';
   btn.innerText = originalText;
 }
 
 function renderPitchPreview() {
   let container = document.getElementById('pitchDeckPreview');
   if(!container) return;
-  if(!pitchDeckData) { pitchDeckData = defaultPitchDeck; document.getElementById('btn_download_pptx').style.display = 'inline-block'; document.getElementById('btn_open_canva').style.display = 'inline-block'; }
+  if(!pitchDeckData) { pitchDeckData = defaultPitchDeck; document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; }
   
   let html = '';
   pitchDeckData.forEach((slide, index) => {
@@ -1126,77 +1046,60 @@ function renderPitchPreview() {
       <ul>${slide.content.map(c => `<li>${c}</li>`).join('')}</ul>
     </div>`;
   });
-  container.innerHTML = html;
-  container.style.display = 'block';
+  container.innerHTML = html; container.style.display = 'block';
 }
 
 function exportPitchToPPTX() {
   if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
-  
   let pptx = new PptxGenJS();
   pptx.layout = 'LAYOUT_16x9';
   
-  // Title Slide
   let slide1 = pptx.addSlide();
   slide1.background = { color: "1e3a5f" };
   slide1.addText(pitchDeckData[0].title, { x: 1, y: 2, w: '80%', h: 1, fontSize: 36, color: "FFFFFF", bold: true, align: 'center' });
   slide1.addText(pitchDeckData[0].content.join('\n'), { x: 1, y: 3.5, w: '80%', h: 2, fontSize: 18, color: "E2E8F0", align: 'center' });
 
-  // Other Slides
   for(let i = 1; i < pitchDeckData.length; i++) {
     let slide = pptx.addSlide();
     slide.background = { color: "FFFFFF" };
-    
-    // Title
     slide.addText(pitchDeckData[i].title, { x: 0.5, y: 0.5, w: '90%', h: 1, fontSize: 28, color: "1e3a5f", bold: true, border: { pt: 2, color: "3182ce" }, fill: "f0f4f8" });
-    
-    // Content (Bullet points)
     let textRows = pitchDeckData[i].content.map(text => ({ text: text, options: { bullet: true, fontSize: 20, color: "1a202c", breakLine: true } }));
     slide.addText(textRows, { x: 0.5, y: 1.8, w: '90%', h: 4, valign: 'top' });
   }
-
   pptx.writeFile({ fileName: `${document.getElementById('projName').value || 'Project'}_PitchDeck.pptx` });
 }
 
 function openInCanva() {
   if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
   let textToCopy = "";
-  pitchDeckData.forEach((slide, index) => {
-    textToCopy += `[Slide ${index + 1}: ${slide.title}]\n`;
-    slide.content.forEach(c => { textToCopy += `- ${c}\n`; });
-    textToCopy += "\n";
-  });
-  
+  pitchDeckData.forEach((slide, index) => { textToCopy += `[Slide ${index + 1}: ${slide.title}]\n`; slide.content.forEach(c => { textToCopy += `- ${c}\n`; }); textToCopy += "\n"; });
   navigator.clipboard.writeText(textToCopy).then(() => {
-    alert("✅ تم نسخ محتوى العرض التقديمي بالكامل!\n\nالخطوة التالية: اذهبي إلى Canva، وافتحي قالب Pitch Deck، ثم الصقي النص في الشرائح المخصصة.");
+    alert("✅ تم نسخ محتوى العرض!\n\nاذهبي إلى Canva، وافتحي قالب Pitch Deck، ثم الصقي النص.");
     window.open('https://www.canva.com/create/pitch-decks/', '_blank');
-  }).catch(err => {
-    alert("حدث خطأ أثناء النسخ: " + err);
-  });
+  }).catch(err => alert("حدث خطأ أثناء النسخ: " + err));
 }
 
-/* ============ EXPORT EXCEL ============ */
+/* ============ EXPORT EXCEL & PDF ============ */
 function exportExcel() {
-  if (!window.calcData) { alert("يرجى حساب الجداول أولاً."); return; }
-  let tableCapEx = `<table><tr><th>البيان</th><th>القيمة</th><th>الكمية</th><th>الاهتلاك</th><th>المجموع</th></tr>`; investItems.forEach(i => { tableCapEx += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.dep}</td><td>${i.cost*i.qty}</td></tr>`; }); tableCapEx += `</table>`;
-  let tableBOM = `<table><tr><th>المكون</th><th>السعر</th><th>الكمية</th><th>المجموع</th></tr>`; bomItems.forEach(i => { tableBOM += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.cost*i.qty}</td></tr>`; }); tableBOM += `</table>`;
-  let tableFixed = `<table><tr><th>المصروف</th><th>القيمة</th></tr>`; fixedItems.forEach(i => { tableFixed += `<tr><td>${i.name}</td><td>${i.cost}</td></tr>`; }); tableFixed += `</table>`;
-  let tableHR = document.getElementById('hrTable').outerHTML, tableAmort = document.getElementById('amortTable').outerHTML, tableTCR = document.getElementById('tcrTable').outerHTML, tableTFT = document.getElementById('tftTable').outerHTML;
+  if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
+  let tCapEx = `<table><tr><th>البيان</th><th>القيمة</th><th>الكمية</th><th>الاهتلاك</th><th>المجموع</th></tr>`; investItems.forEach(i => { tCapEx += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.dep}</td><td>${i.cost*i.qty}</td></tr>`; }); tCapEx += `</table>`;
+  let tBOM = `<table><tr><th>المكون</th><th>السعر</th><th>الكمية</th><th>المجموع</th></tr>`; bomItems.forEach(i => { tBOM += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.cost*i.qty}</td></tr>`; }); tBOM += `</table>`;
+  let tFixed = `<table><tr><th>المصروف</th><th>القيمة</th></tr>`; fixedItems.forEach(i => { tFixed += `<tr><td>${i.name}</td><td>${i.cost}</td></tr>`; }); tFixed += `</table>`;
+  let tHR = document.getElementById('hrTable').outerHTML, tAmort = document.getElementById('amortTable').outerHTML, tTCR = document.getElementById('tcrTable').outerHTML, tTFT = document.getElementById('tftTable').outerHTML;
 
   let template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Financials</x:Name><x:WorksheetOptions><x:DisplayRightToLeft/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><style>table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI'; text-align: center; margin-bottom: 20px; } th, td { border: 1px solid #000; padding: 5px; } th { background-color: #f2f2f2; font-weight: bold; color: #1e3a5f; } h2 { text-align: right; color: #1e3a5f; margin-top: 30px; margin-bottom: 10px;}</style></head><body>
-  <h2>1. التكاليف الاستثمارية (CapEx)</h2>${tableCapEx}<h2>2. تكلفة المنتج الواحد (BOM)</h2>${tableBOM}<h2>3. المصاريف التشغيلية الشهرية</h2>${tableFixed}<h2>4. جدول الرواتب والأجور</h2>${tableHR}<h2>5. جدول الاهتلاك</h2>${tableAmort}<h2>6. جدول حسابات النتائج (TCR)</h2>${tableTCR}<h2>7. جدول تدفقات الخزينة (TFT)</h2>${tableTFT}</body></html>`;
+  <h2>1. التكاليف الاستثمارية (CapEx)</h2>${tCapEx}<h2>2. تكلفة المنتج (BOM)</h2>${tBOM}<h2>3. المصاريف التشغيلية</h2>${tFixed}<h2>4. الرواتب</h2>${tHR}<h2>5. الاهتلاك</h2>${tAmort}<h2>6. النتائج (TCR)</h2>${tTCR}<h2>7. التدفقات (TFT)</h2>${tTFT}</body></html>`;
 
-  let blob = new Blob([template], { type: 'application/vnd.ms-excel' }); let link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "FinStart_Complete_Financials.xls"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  let blob = new Blob([template], { type: 'application/vnd.ms-excel' }); let link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "FinStart_Financials.xls"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
 
-/* ============ EXPORT PDF ============ */
 async function exportPDF() {
   if (!window.calcData) calculateAll();
   let projName = document.getElementById('projName').value || "مشروعي", dateStr = new Date().toLocaleDateString('fr-FR');
   let pdf = new jspdf.jsPDF('p', 'mm', 'a4'), pageWidth = pdf.internal.pageSize.getWidth(), pageHeight = pdf.internal.pageSize.getHeight(), margin = 15, currentY = margin;
 
   async function addSection(htmlContent) {
-    let tempDiv = document.createElement('div'); tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.style.top = '0'; tempDiv.style.width = '800px'; tempDiv.style.backgroundColor = '#ffffff'; tempDiv.style.padding = '10px'; tempDiv.style.fontFamily = 'Segoe UI, Tahoma, Arial'; tempDiv.style.color = '#000000'; tempDiv.style.direction = L === 'ar' ? 'rtl' : 'ltr'; tempDiv.innerHTML = htmlContent; document.body.appendChild(tempDiv);
+    let tempDiv = document.createElement('div'); tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.style.top = '0'; tempDiv.style.width = '800px'; tempDiv.style.backgroundColor = '#ffffff'; tempDiv.style.padding = '10px'; tempDiv.style.fontFamily = 'Segoe UI'; tempDiv.style.color = '#000000'; tempDiv.style.direction = L === 'ar' ? 'rtl' : 'ltr'; tempDiv.innerHTML = htmlContent; document.body.appendChild(tempDiv);
     let canvas = await html2canvas(tempDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }); let imgData = canvas.toDataURL('image/jpeg', 1.0); let imgWidth = pageWidth - (margin * 2); let imgHeight = (canvas.height * imgWidth) / canvas.width;
     if (currentY + imgHeight > pageHeight - margin) { pdf.addPage(); currentY = margin; }
     pdf.addImage(imgData, 'JPEG', margin, currentY, imgWidth, imgHeight); currentY += imgHeight + 10; document.body.removeChild(tempDiv);
@@ -1205,7 +1108,7 @@ async function exportPDF() {
   let logoHtml = logoBase64 ? `<img src="${logoBase64}" style="max-height: 80px; margin-bottom: 20px;">` : '';
   await addSection(`<div style="text-align: center; padding: 30px 0;">${logoHtml}<h1 style="color: #1e3a5f; font-size: 40px; margin: 0;">📊 FinStart DZ</h1><h2 style="color: #4a5568; font-size: 24px; margin-top: 20px;">${t('report_title')}</h2><p style="color: #718096; font-size: 16px; margin-top: 40px;">${projName}</p><p style="color: #718096; font-size: 14px;">${dateStr}</p></div>`);
   await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">1. ${t('info_title')}</h3><table style="width: 100%; font-size: 14px; margin-top: 15px;"><tr><td style="padding: 8px; font-weight: bold; width: 150px;">${t('p_name')}:</td><td style="padding: 8px;">${projName}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_idea')}:</td><td style="padding: 8px;">${document.getElementById('projIdea').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_sector')}:</td><td style="padding: 8px;">${document.getElementById('projSector').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_capital')}:</td><td style="padding: 8px;">${fmt(document.getElementById('projCapital').value)}</td></tr></table>`);
-  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">2. ${t('h_readiness')}</h3><div style="font-size: 16px; margin-top: 15px;"><strong>${t('lbl_readiness')} <span style="color: #38a169; font-size: 24px;">${document.getElementById('readinessScoreText').innerText}</span></strong><p style="font-size:12px; color:#4a5568;">${document.getElementById('readinessMsg').innerText}</p></div>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">2. ${t('h_readiness')}</h3><div style="font-size: 16px; margin-top: 15px;"><strong>${t('lbl_readiness')} <span style="color: #38a169; font-size: 24px;">${document.getElementById('readinessScoreText').innerText}</span></strong></div>`);
   await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">3. ${t('h_invest')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('c_item')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_cost')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_qty')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('col_total')}</th></tr>${investItems.map(i => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${i.name}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost)}</td><td style="border: 1px solid #ccc; padding: 8px;">${i.qty}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost*i.qty)}</td></tr>`).join('')}</table>`);
   await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">4. ${t('h_hr')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_role')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_count')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_basic')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_total')}</th></tr>${emps.map(e => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${e.role}</td><td style="border: 1px solid #ccc; padding: 8px;">${e.count}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary)}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary*1.26*e.count)}</td></tr>`).join('')}</table>`);
   await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">5. ${t('amort_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;">${document.getElementById('amortTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 8px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 8px;"')}</table>`);
@@ -1219,12 +1122,19 @@ async function exportPDF() {
   pdf.save(`Rapport_${projName.replace(/\s+/g, '_')}.pdf`);
 }
 
+function triggerAutoSave() {
+  let badge = document.getElementById('autosave-badge');
+  badge.style.opacity = '1';
+  setTimeout(() => { badge.style.opacity = '0'; }, 2000);
+}
+
 function resetData() { if(confirm("مسح الكل؟")) location.reload(); }
 document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
 document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
 
 // Init
-onTypeChange(); applyLang('ar'); updateReadiness(); calculateLoan(); renderPitchPreview();
+applyLang('ar'); updateReadiness(); calculateLoan(); renderPitchPreview();
 </script>
 </body>
-</html>
+</html> 
+  
