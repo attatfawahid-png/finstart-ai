@@ -3,282 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#1e3a5f">
-<title>FinStart DZ — PRO Edition</title>
+<title>FinStart DZ - App Edition</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 
 <style>
-:root{--p:#1e3a5f;--a:#3182ce;--bg:#f0f4f8;--c:#fff;--b:#e2e8f0;--s:#38a169;--d:#c53030;--text:#1a202c;--muted:#4a5568;--table-hover:#f9fbfd;--input-bg:#fff;--gradient-header:linear-gradient(135deg,#1e3a5f,#2b5a8c);--gradient-ai:linear-gradient(135deg,#805ad5,#6b46c1);--gradient-calc:linear-gradient(135deg,#d69e2e,#b7791f);--gradient-success:linear-gradient(135deg,#38a169,#2f855a);--shadow-sm:0 2px 6px rgba(0,0,0,.05);--shadow-md:0 4px 16px rgba(0,0,0,.08);--shadow-lg:0 10px 30px rgba(0,0,0,.12);--shadow-glow:0 4px 20px rgba(49,130,206,.3);--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--transition:0.25s cubic-bezier(0.4,0,0.2,1);}
-body.dark-mode{--p:#63b3ed;--a:#4299e1;--bg:#0f1419;--c:#1a202c;--b:#2d3748;--s:#48bb78;--d:#f56565;--text:#f7fafc;--muted:#a0aec0;--table-hover:#2d3748;--input-bg:#1a202c;--gradient-header:linear-gradient(135deg,#0f1419,#1a202c);--shadow-md:0 4px 16px rgba(0,0,0,.4);--shadow-lg:0 10px 30px rgba(0,0,0,.5);}
-*{box-sizing:border-box;font-family:'Segoe UI','Tahoma',Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);margin:0;color:var(--text);transition:background .3s,color .3s;overflow-x:hidden;}
-::-webkit-scrollbar{width:8px;height:8px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px;}::-webkit-scrollbar-thumb:hover{background:var(--a);}
-header{background:var(--gradient-header);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:900;box-shadow:0 2px 10px rgba(0,0,0,.15);}
-.header-brand h1{margin:0;font-size:22px;display:flex;align-items:center;gap:8px;}
-.badge-pro{font-size:10px;background:var(--gradient-success);padding:3px 8px;border-radius:10px;font-weight:700;letter-spacing:.5px;animation:pulse-badge 2s ease-in-out infinite;}
-@keyframes pulse-badge{0%,100%{opacity:1;}50%{opacity:.75;}}
-.header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.theme-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 12px;border-radius:20px;cursor:pointer;font-size:14px;transition:var(--transition);}
-.theme-btn:hover{background:rgba(255,255,255,.3);transform:translateY(-2px);}
-.lang-switch{display:flex;gap:3px;background:rgba(0,0,0,.15);padding:3px;border-radius:20px;}
-.lang-btn{background:transparent;border:none;color:#fff;padding:6px 12px;border-radius:16px;cursor:pointer;font-size:12px;font-weight:600;transition:var(--transition);}
-.lang-btn.active{background:#fff;color:var(--p);box-shadow:0 2px 6px rgba(0,0,0,.2);}
-.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:var(--shadow-sm);position:sticky;top:62px;z-index:800;}
-.tab-btn{background:none;border:none;padding:14px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:var(--transition);position:relative;}
-.tab-btn:hover{color:var(--a);background:var(--table-hover);}
+:root {
+  --p:#1e3a5f; --a:#3182ce; --bg:#f0f4f8; --c:#fff; --b:#e2e8f0; --s:#38a169; --d:#c53030;
+  --text:#1a202c; --muted:#4a5568; --table-hover:#f9fbfd; --input-bg:#fff;
+}
+body.dark-mode {
+  --p:#63b3ed; --a:#4299e1; --bg:#1a202c; --c:#2d3748; --b:#4a5568; --s:#48bb78; --d:#f56565;
+  --text:#f7fafc; --muted:#a0aec0; --table-hover:#4a5568; --input-bg:#1a202c;
+}
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial,sans-serif;}
+body{background:var(--bg);margin:0;color:var(--text);transition:background 0.3s, color 0.3s;}
+
+/* ============ DESKTOP LAYOUT ============ */
+header{background:linear-gradient(135deg,#1e3a5f,#2b5a8c);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.lang-btn, .theme-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;margin:0 3px;transition:0.2s;}
+.lang-btn.active, .theme-btn:hover{background:#fff;color:#1e3a5f;}
+
+.tabs{display:flex;flex-wrap:wrap;background:var(--c);border-bottom:1px solid var(--b);padding:0 15px;gap:4px;overflow-x:auto;}
+.tab-btn{background:none;border:none;padding:14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:0.2s;}
 .tab-btn.active{color:var(--a);border-bottom-color:var(--a);}
-.tab-btn.active::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:3px;background:var(--a);animation:slide-in .3s ease;}
-@keyframes slide-in{from{transform:scaleX(0);}to{transform:scaleX(1);}}
-.container{max-width:1250px;margin:20px auto;padding:0 15px;animation:fadeUp .4s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.tab-content{display:none;}
-.tab-content.active{display:block;animation:fadeIn .3s ease;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.card{background:var(--c);border-radius:var(--radius-lg);padding:22px;margin-bottom:18px;box-shadow:var(--shadow-md);border:1px solid rgba(255,255,255,.05);transition:var(--transition);}
-.card:hover{box-shadow:var(--shadow-lg);}
-.card h2{color:var(--p);border-bottom:2px solid var(--b);padding-bottom:10px;margin-top:0;font-size:18px;display:flex;align-items:center;gap:8px;}
-.card h3{color:var(--p);margin-top:20px;font-size:15px;}
+
+.container{max-width:1250px;margin:20px auto;padding:0 15px;}
+.tab-content{display:none;}.tab-content.active{display:block;}
+.card{background:var(--c);border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.07);}
+.card h2{color:var(--p);border-bottom:2px solid var(--b);padding-bottom:10px;margin-top:0;font-size:18px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 label{display:block;margin-bottom:5px;font-weight:600;color:var(--muted);font-size:12px;}
-input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--b);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--input-bg);color:var(--text);transition:var(--transition);}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(49,130,206,.15);transform:translateY(-1px);}
-input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
-input[type="number"]{-moz-appearance:textfield;}
-.btn{border:none;padding:11px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:var(--transition);position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
-.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-glow);}
-.btn:active{transform:translateY(0);}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important;}
-.btn-primary{background:var(--a);color:#fff;}
-.btn-success{background:var(--s);color:#fff;}
-.btn-danger{background:var(--d);color:#fff;}
-.btn-ai{background:var(--gradient-ai);color:#fff;}
-.btn-calc{background:var(--gradient-calc);color:#fff;font-size:16px;padding:16px;width:100%;cursor:pointer;border:none;border-radius:12px;font-weight:700;letter-spacing:.3px;}
-.btn-calc:hover{box-shadow:0 6px 24px rgba(214,158,46,.4);}
-.btn.loading{pointer-events:none;opacity:.7;}
-.btn.loading::after{content:'';width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;margin-right:8px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.btn::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,.4);transform:translate(-50%,-50%);transition:width .6s,height .6s;}
-.btn:active::before{width:300px;height:300px;}
-.add-btn{background:var(--a);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:6px;font-weight:600;transition:var(--transition);}
-.add-btn:hover{background:#2b6cb0;transform:translateY(-1px);}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0;}
-.toolbar-main{padding:15px;background:var(--c);border-radius:12px;box-shadow:var(--shadow-sm);position:sticky;bottom:10px;z-index:50;}
-.row-item{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 40px;gap:8px;margin-bottom:10px;align-items:center;padding:8px;background:var(--table-hover);border-radius:8px;animation:fadeIn .3s ease;}
-.row-item button{background:var(--d);color:#fff;border:none;height:38px;border-radius:8px;cursor:pointer;font-size:18px;font-weight:bold;transition:var(--transition);}
-.row-item button:hover{background:#9b2c2c;transform:scale(1.05);}
-.table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;border-radius:var(--radius-sm);}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;font-size:14px;font-family:inherit;background:var(--input-bg);color:var(--text);}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(49,130,206,.15);}
+.btn{border:none;padding:11px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s;}
+.btn-primary{background:var(--a);color:#fff;}.btn-success{background:var(--s);color:#fff;}.btn-danger{background:var(--d);color:#fff;}.btn-ai{background:linear-gradient(135deg,#805ad5,#6b46c1);color:#fff;}
+.btn-calc{background:linear-gradient(135deg,#d69e2e,#b7791f);color:#fff;font-size:16px;padding:16px;width:100%;cursor:pointer;border:none;border-radius:10px;font-weight:700;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;}
+.row-item{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 40px;gap:8px;margin-bottom:8px;align-items:center;}
+.row-item button{background:var(--d);color:#fff;border:none;height:38px;border-radius:8px;cursor:pointer;}
+.add-btn{background:var(--a);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;margin-top:6px;}
+
+.table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
 table.data{width:100%;border-collapse:collapse;font-size:12px;background:var(--c);color:var(--text);min-width:600px;}
-table.data th,table.data td{border:1px solid var(--b);padding:10px 8px;text-align:center;}
-table.data th{background:var(--b);color:var(--p);font-weight:700;position:sticky;top:0;}
+table.data th,table.data td{border:1px solid var(--b);padding:8px;text-align:center;}
+table.data th{background:var(--b);color:var(--p);font-weight:700;}
 table.data tr:nth-child(even){background:var(--table-hover);}
-table.data tr:hover{background:rgba(49,130,206,.08);}
-.result{background:var(--table-hover);padding:15px;border-radius:10px;margin-top:12px;border-right:4px solid var(--a);animation:fadeIn .3s ease;}
-.big-num{color:var(--d);font-weight:bold;}
-.ok-num{color:var(--s);font-weight:bold;}
-.score-container{background:var(--bg);border-radius:12px;padding:18px;margin-top:15px;border:1px solid var(--b);}
-.progress-bar{width:100%;background:var(--b);border-radius:10px;height:22px;overflow:hidden;margin-top:12px;box-shadow:inset 0 2px 4px rgba(0,0,0,.08);}
-.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#d69e2e,#38a169);transition:width 1.2s cubic-bezier(0.4,0,0.2,1);border-radius:10px;position:relative;}
-.progress-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shine 2s infinite;}
-@keyframes shine{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
-.score-text{font-weight:bold;font-size:28px;color:var(--p);}
-.bmc-container{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:15px;}
-.bmc-box{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:12px;transition:var(--transition);}
-.bmc-box:hover{border-color:var(--a);box-shadow:var(--shadow-sm);}
-.bmc-box h4{margin:0 0 8px 0;font-size:13px;color:var(--p);}
-.bmc-box textarea{width:100%;height:90px;font-size:12px;resize:none;border:none;background:transparent;color:var(--text);font-family:inherit;}
-.bmc-partners{grid-area:1/1/3/2;}.bmc-activities{grid-area:1/2/2/3;}.bmc-resources{grid-area:2/2/3/3;}.bmc-value{grid-area:1/3/3/4;}.bmc-relations{grid-area:1/4/2/5;}.bmc-channels{grid-area:2/4/3/5;}.bmc-segments{grid-area:1/5/3/6;}.bmc-costs{grid-area:3/1/4/3;}.bmc-revenues{grid-area:3/3/4/6;}
+
+.result{background:var(--table-hover);padding:15px;border-radius:10px;margin-top:12px;border-right:4px solid var(--a);}
+.big-num{color:var(--d);font-weight:bold;}.ok-num{color:var(--s);font-weight:bold;}
+.bmc-container{display:grid;grid-template-columns:repeat(5, 1fr);gap:8px;margin-top:15px;}
+.bmc-box{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:12px;}
+.bmc-box textarea{width:100%;height:90px;font-size:12px;resize:none;border:none;background:transparent;color:var(--text);}
+.bmc-partners{grid-area:1 / 1 / 3 / 2;}.bmc-activities{grid-area:1 / 2 / 2 / 3;}.bmc-resources{grid-area:2 / 2 / 3 / 3;}
+.bmc-value{grid-area:1 / 3 / 3 / 4;}.bmc-relations{grid-area:1 / 4 / 2 / 5;}.bmc-channels{grid-area:2 / 4 / 3 / 5;}
+.bmc-segments{grid-area:1 / 5 / 3 / 6;}.bmc-costs{grid-area:3 / 1 / 4 / 3;}.bmc-revenues{grid-area:3 / 3 / 4 / 6;}
 .chart-box{position:relative;height:300px;width:100%;margin-top:20px;}
-.swot-s{background:#f0fff4;border-color:#38a169;color:#1a202c;}.swot-s h3{color:#22543d;}
-.swot-w{background:#fff5f5;border-color:#c53030;color:#1a202c;}.swot-w h3{color:#742a2a;}
-.swot-o{background:#ebf8ff;border-color:#3182ce;color:#1a202c;}.swot-o h3{color:#2a4365;}
-.swot-t{background:#fffaf0;border-color:#dd6b20;color:#1a202c;}.swot-t h3{color:#7b341e;}
-.swot-rec{background:#faf5ff;border-color:#805ad5;color:#1a202c;}.swot-rec h3{color:#44337a;}.swot-rec p{font-size:14px;font-weight:bold;}
-#swotS,#swotW,#swotO,#swotT{padding-right:20px;font-size:13px;}
-.pitch-slide-preview{background:#fff;color:#000;border:1px solid #ccc;border-radius:10px;padding:20px;margin-bottom:15px;min-height:200px;box-shadow:var(--shadow-sm);transition:var(--transition);}
-.pitch-slide-preview:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
-.pitch-slide-preview h3{margin-top:0;color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;font-size:16px;}
-.pitch-slide-preview ul{padding-right:20px;line-height:1.7;}
-.pitch-controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-#autosave-badge{position:fixed;bottom:20px;right:20px;background:var(--gradient-success);color:#fff;padding:10px 18px;border-radius:24px;font-size:12px;font-weight:600;opacity:0;transition:opacity .5s,transform .3s;z-index:1000;box-shadow:0 4px 15px rgba(56,161,105,.4);display:flex;align-items:center;gap:8px;transform:translateY(20px);}
-#autosave-badge.show{opacity:1;transform:translateY(0);}
-.badge-dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:dot-pulse 1.5s ease-in-out infinite;}
-@keyframes dot-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
-#validation-banner{display:none;background:var(--d);color:#fff;text-align:center;padding:12px;font-weight:bold;font-size:14px;position:sticky;top:0;z-index:999;animation:shake .5s ease;}
-@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
-#toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:3000;display:flex;flex-direction:column;gap:10px;pointer-events:none;width:90%;max-width:400px;}
-.toast{background:var(--c);color:var(--text);padding:14px 18px;border-radius:12px;box-shadow:var(--shadow-lg);border-right:4px solid var(--a);display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;animation:toast-in .3s ease;pointer-events:auto;}
-.toast.success{border-right-color:var(--s);}
-.toast.error{border-right-color:var(--d);}
-.toast.warning{border-right-color:#d69e2e;}
-.toast.info{border-right-color:var(--a);}
-.toast-icon{font-size:20px;flex-shrink:0;}
-.toast.hide{animation:toast-out .3s ease forwards;}
-@keyframes toast-in{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes toast-out{to{opacity:0;transform:translateY(-20px);}}
-#loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:4000;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
-#loading-overlay.show{display:flex;}
-.loading-box{background:var(--c);padding:35px 45px;border-radius:16px;text-align:center;box-shadow:var(--shadow-lg);animation:pop-in .3s ease;}
-@keyframes pop-in{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
-.spinner{width:50px;height:50px;margin:0 auto 15px;border:4px solid var(--b);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite;}
-#loading-text{margin:0;color:var(--muted);font-weight:600;}
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);display:none;justify-content:center;align-items:center;z-index:2000;backdrop-filter:blur(4px);animation:fadeIn .2s ease;}
-.modal-overlay.show{display:flex;}
-.modal-content{background:var(--c);border-radius:16px;padding:25px;width:90%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 40px rgba(0,0,0,.4);animation:modal-pop .3s ease;}
-.modal-sm{max-width:400px;}
-@keyframes modal-pop{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
-.modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--b);padding-bottom:10px;margin-bottom:15px;}
-.modal-header h3{margin:0;color:var(--p);font-size:18px;}
-.close-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);transition:var(--transition);}
-.close-btn:hover{color:var(--d);transform:rotate(90deg);}
-.project-item{border:1px solid var(--b);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;background:var(--bg);transition:var(--transition);gap:10px;}
-.project-item:hover{border-color:var(--a);transform:translateX(-3px);}
-.project-item h4{margin:0 0 5px 0;color:var(--p);font-size:14px;}
-.project-item p{margin:0;font-size:12px;color:var(--muted);}
-.project-actions{display:flex;gap:6px;flex-shrink:0;}
-.project-actions button{padding:6px 10px;border-radius:6px;border:none;cursor:pointer;font-size:14px;transition:var(--transition);}
-.project-load{background:var(--a);color:#fff;}
-.project-del{background:var(--d);color:#fff;}
-#chat-toggle{position:fixed;bottom:80px;right:20px;width:60px;height:60px;border-radius:50%;background:var(--gradient-ai);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 4px 15px rgba(128,90,213,.4);z-index:1002;display:flex;justify-content:center;align-items:center;transition:var(--transition);animation:float 3s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-#chat-toggle:hover{transform:scale(1.1);box-shadow:0 6px 25px rgba(128,90,213,.6);}
-#chat-window{position:fixed;bottom:150px;right:20px;width:360px;height:470px;background:var(--c);border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.25);z-index:1003;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--b);animation:modal-pop .25s ease;}
-#chat-window.show{display:flex;}
-.chat-header{background:var(--gradient-ai);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:14px;}
-.chat-header-actions{display:flex;gap:6px;}
-.chat-header-actions button{background:rgba(255,255,255,.2);border:none;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;transition:var(--transition);}
-.chat-header-actions button:hover{background:rgba(255,255,255,.35);}
-.chat-messages{flex-grow:1;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg);}
-.chat-msg{max-width:80%;padding:10px 15px;border-radius:16px;font-size:14px;line-height:1.5;word-wrap:break-word;animation:fadeIn .3s ease;}
-.chat-msg.user{background:var(--a);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
-.chat-msg.ai{background:var(--c);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--b);}
-.chat-input-area{display:flex;padding:10px;border-top:1px solid var(--b);background:var(--c);gap:8px;}
-.chat-input-area input{flex-grow:1;border-radius:24px;padding:10px 16px;font-size:14px;}
-.chat-input-area button{background:var(--a);color:#fff;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;justify-content:center;align-items:center;transition:var(--transition);flex-shrink:0;}
-.chat-input-area button:hover{background:#2b6cb0;transform:scale(1.05);}
-.card-inflation{background:linear-gradient(135deg,rgba(214,158,46,.08),rgba(237,137,54,.05)) !important;border:1px solid #dd6b20 !important;}
-.card-inflation h2{color:#dd6b20 !important;border-bottom-color:#fbd38d !important;}
-.checklist-item{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:10px;background:var(--bg);border-radius:10px;border:1px solid var(--b);transition:var(--transition);}
-.checklist-item:hover{border-color:var(--a);}
-.checklist-item input[type="checkbox"]{width:22px;height:22px;cursor:pointer;accent-color:var(--s);}
-.checklist-item span{font-size:14px;}
-.market-card{background:var(--bg);border:1px solid var(--b);border-radius:12px;padding:18px;margin-bottom:14px;display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;transition:var(--transition);}
-.market-card:hover{border-color:var(--a);box-shadow:var(--shadow-md);}
-.market-card h3{margin:0 0 6px 0;color:var(--p);font-size:16px;}
-.market-card p{margin:4px 0;font-size:12px;color:var(--muted);}
-body.presentation-mode header{display:none;}
-body.presentation-mode .tabs{display:none;}
-body.presentation-mode .container{max-width:100%;padding:20px;}
-body.presentation-mode .card{font-size:1.15em;box-shadow:none;border:2px solid var(--b);}
-.tab-content.active .card{animation:fadeInUp .4s ease backwards;}
-.tab-content.active .card:nth-child(1){animation-delay:.05s;}
-.tab-content.active .card:nth-child(2){animation-delay:.1s;}
-.tab-content.active .card:nth-child(3){animation-delay:.15s;}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
-footer{text-align:center;padding:25px 20px;color:var(--muted);font-size:12px;border-top:1px solid var(--b);margin-top:30px;}
-footer p{margin:4px 0;}
-@media (max-width:768px){
-  body{padding-bottom:85px;}
-  header{position:sticky;top:0;padding:12px 14px;flex-direction:column;gap:10px;}
-  .header-brand h1{font-size:18px;}
-  .header-actions{width:100%;justify-content:center;gap:6px;}
-  .theme-btn{padding:6px 10px;font-size:12px;}
-  .tabs{position:fixed;bottom:0;left:0;width:100%;display:flex;flex-wrap:nowrap;overflow-x:auto;background:var(--c);border-top:1px solid var(--b);border-bottom:none;padding:0;z-index:1001;gap:0;box-shadow:0 -4px 12px rgba(0,0,0,.1);top:auto;}
-  .tab-btn{flex:0 0 auto;padding:12px 15px;font-size:12px;border-bottom:none;border-top:3px solid transparent;display:flex;flex-direction:column;align-items:center;}
-  .tab-btn.active{border-top-color:var(--a);border-bottom:none;background:var(--table-hover);}
-  .tab-btn.active::after{display:none;}
-  .container{padding:0 12px;margin:12px auto;}
-  .card{padding:15px;margin-bottom:12px;border-radius:12px;}
-  .card h2{font-size:16px;}
-  .grid,.grid3{grid-template-columns:1fr;gap:10px;}
-  input,select,textarea{font-size:16px;padding:12px;}
-  .row-item{display:flex;flex-direction:column;gap:8px;background:var(--bg);padding:12px;border-radius:8px;border:1px solid var(--b);margin-bottom:12px;}
-  .row-item input,.row-item button{width:100%;}
-  .row-item button{height:38px;}
-  .bmc-container{grid-template-columns:1fr;}
-  .bmc-box{grid-area:auto !important;}
-  table.data{min-width:700px;}
-  .toolbar{flex-direction:column;}
-  .toolbar button{width:100%;}
-  .pitch-controls{flex-direction:column;}
-  .pitch-controls button{width:100%;}
-  #chat-toggle{bottom:90px;right:15px;width:54px;height:54px;font-size:22px;}
-  #chat-window{bottom:155px;right:15px;width:calc(100% - 30px);height:calc(100vh - 220px);max-height:500px;}
-  #autosave-badge{bottom:90px;right:75px;}
-  #toast-container{top:15px;width:92%;}
-  .toolbar-main{flex-direction:column;bottom:80px;}
-  .toolbar-main button{width:100%;}
+.score-container { background: var(--bg); border-radius: 10px; padding: 15px; margin-top: 15px; border: 1px solid var(--b); }
+.progress-bar { width: 100%; background: var(--b); border-radius: 10px; height: 20px; overflow: hidden; margin-top: 10px; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #d69e2e, #38a169); transition: width 1s ease-in-out; }
+.score-text { font-weight: bold; font-size: 24px; color: var(--p); }
+.pitch-slide-preview { background: #fff; color: #000; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 15px; min-height: 200px; }
+.pitch-slide-preview h3 { margin-top: 0; color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+.pitch-slide-preview ul { padding-right: 20px; }
+.pitch-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+#autosave-badge { position: fixed; bottom: 80px; right: 20px; background: var(--s); color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; opacity: 0; transition: opacity 0.5s; z-index: 1000; }
+#validation-banner { display: none; background-color: var(--d); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 999; }
+
+/* ============ FLOATING CHAT ============ */
+#chat-toggle { position: fixed; bottom: 80px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #805ad5, #6b46c1); color: white; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(128,90,213,0.4); z-index: 1002; display: flex; justify-content: center; align-items: center; transition: transform 0.2s; }
+#chat-toggle:hover { transform: scale(1.1); }
+#chat-window { position: fixed; bottom: 150px; right: 20px; width: 350px; height: 450px; background: var(--c); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1003; display: none; flex-direction: column; overflow: hidden; border: 1px solid var(--b); }
+.chat-header { background: linear-gradient(135deg, #805ad5, #6b46c1); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.chat-header span { cursor: pointer; }
+.chat-messages { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.chat-msg { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 14px; line-height: 1.4; }
+.chat-msg.user { background: var(--a); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+.chat-msg.ai { background: var(--bg); color: var(--text); align-self: flex-start; border-bottom-left-radius: 2px; }
+.chat-input-area { display: flex; padding: 10px; border-top: 1px solid var(--b); background: var(--c); }
+.chat-input-area input { flex-grow: 1; margin-left: 10px; border-radius: 20px; padding: 10px 15px; }
+.chat-input-area button { background: var(--a); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; }
+
+/* ============ MOBILE APP LAYOUT ============ */
+@media (max-width: 768px) {
+  body { padding-bottom: 80px; }
+  header { position: sticky; top: 0; z-index: 1000; padding: 12px; flex-direction: column; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  header h1 { font-size: 18px; margin-bottom: 8px; }
+  
+  .tabs { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; flex-wrap: nowrap; overflow-x: auto; background: var(--c); border-bottom: none; border-top: 1px solid var(--b); box-shadow: 0 -4px 12px rgba(0,0,0,0.1); padding: 0; z-index: 1001; gap: 0; }
+  .tab-btn { flex: 0 0 auto; padding: 12px 15px; font-size: 12px; border-bottom: none; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; }
+  .tab-btn.active { border-bottom: none; border-top-color: var(--a); background: var(--table-hover); }
+
+  .grid, .grid3 { grid-template-columns: 1fr; gap: 10px; }
+  .card { padding: 15px; margin-bottom: 12px; border-radius: 10px; }
+  input, select, textarea { font-size: 16px; padding: 12px; }
+  .row-item { display: flex; flex-direction: column; gap: 8px; background: var(--bg); padding: 12px; border-radius: 8px; border: 1px solid var(--b); margin-bottom: 12px; }
+  .row-item input { width: 100%; }
+  .row-item button { width: 100%; height: 35px; margin-top: 5px; }
+  .bmc-container { grid-template-columns: 1fr; }
+  .bmc-box { grid-area: auto !important; }
+  table.data { min-width: 700px; }
+  
+  /* ⚠️ التعديل الوحيد: جعل الأزرار 2x2 لتوفير مساحة الشاشة */
+  .toolbar { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; padding: 10px !important; margin: 10px 0 !important; }
+  .toolbar button { width: 100% !important; margin: 0 !important; padding: 12px 5px !important; font-size: 13px !important; }
+  
+  .pitch-controls { flex-direction: column; }
+  .pitch-controls button { width: 100%; }
+  
+  /* Mobile Chat */
+  #chat-toggle { bottom: 90px; right: 15px; width: 50px; height: 50px; font-size: 20px; }
+  #chat-window { bottom: 150px; right: 15px; width: calc(100% - 30px); height: 400px; }
+  #autosave-badge { bottom: 90px; right: 75px; }
 }
-.hidden{display:none !important;}
-.text-center{text-align:center;}
 </style>
 </head>
 <body>
 
-<div id="toast-container"></div>
-<div id="loading-overlay">
-  <div class="loading-box"><div class="spinner"></div><p id="loading-text">جاري المعالجة...</p></div>
-</div>
-<div id="confirm-modal" class="modal-overlay">
-  <div class="modal-content modal-sm">
-    <div class="modal-header"><h3 id="confirm-title">تأكيد</h3></div>
-    <p id="confirm-message" style="margin:20px 0;text-align:center;font-size:15px;"></p>
-    <div style="display:flex;gap:10px;">
-      <button class="btn btn-danger" style="flex:1;" onclick="confirmAction(true)">تأكيد</button>
-      <button class="btn" style="flex:1;background:var(--b);color:var(--text);" onclick="confirmAction(false)">إلغاء</button>
-    </div>
-  </div>
-</div>
-<div id="projectsModal" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>📁 مشاريعي المحفوظة</h3>
-      <button class="close-btn" onclick="closeProjectsModal()">✖</button>
-    </div>
-    <div style="margin-bottom:15px;">
-      <button class="btn btn-primary" style="width:100%;" onclick="newProject()">➕ بدء مشروع جديد</button>
-    </div>
-    <div id="projectsList"></div>
-  </div>
-</div>
-
-<button id="chat-toggle" onclick="toggleChat()">💬</button>
-<div id="chat-window">
-  <div class="chat-header">
-    <span>🤖 المساعد الذكي</span>
-    <div class="chat-header-actions">
-      <button onclick="startNewChat()">+ جديد</button>
-      <button onclick="toggleChat()">✖</button>
-    </div>
-  </div>
-  <div class="chat-messages" id="chat-messages">
-    <div class="chat-msg ai">مرحباً! أنا مساعدك المالي. كيف أساعدك اليوم؟</div>
-  </div>
-  <div class="chat-input-area">
-    <input type="text" id="chat-input" placeholder="اكتب رسالتك..." onkeypress="handleChatEnter(event)">
-    <button onclick="sendChatMessage()">➤</button>
-  </div>
-</div>
-
-<div id="autosave-badge"><span class="badge-dot"></span><span id="autosave-text">تم الحفظ</span></div>
+<div id="autosave-badge">💾 تم الحفظ</div>
 <div id="validation-banner">⚠️ تنبيه!</div>
 
-<header>
-  <div class="header-brand"><h1>📊 FinStart DZ <span class="badge-pro">PRO</span></h1></div>
-  <div class="header-actions">
-    <button class="theme-btn" onclick="openProjectsModal()" title="مشاريعي">📁</button>
-    <button class="theme-btn" onclick="saveCurrentProject()" title="حفظ">💾</button>
-    <button class="theme-btn" onclick="togglePresentation()" title="عرض">📺</button>
-    <button class="theme-btn" onclick="toggleTheme()" title="الوضع">🌙</button>
-    <div class="lang-switch">
-      <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">AR</button>
-      <button class="lang-btn" data-lang="fr" onclick="applyLang('fr')">FR</button>
-      <button class="lang-btn" data-lang="en" onclick="applyLang('en')">EN</button>
+<!-- Floating Chat -->
+<button id="chat-toggle" onclick="toggleChat()">💬</button>
+<div id="chat-window">
+    <div class="chat-header">
+        <span>🤖 المساعد الذكي (AI)</span>
+        <span onclick="toggleChat()">✖</span>
     </div>
+    <div class="chat-messages" id="chat-messages">
+        <div class="chat-msg ai">مرحباً! أنا مساعدك المالي. كيف يمكنني مساعدتك في مشروعك اليوم؟</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="اكتب رسالتك..." onkeypress="handleChatEnter(event)">
+        <button onclick="sendChatMessage()">➤</button>
+    </div>
+</div>
+
+<header>
+  <div><h1>📊 FinStart DZ <span style="font-size:10px;background:#38a169;padding:2px 6px;border-radius:10px;">APP</span></h1></div>
+  <div>
+    <button class="theme-btn" onclick="togglePresentation()">📺 عرض</button>
+    <button class="theme-btn" onclick="toggleTheme()">🌙/☀️</button>
+    <button class="lang-btn active" data-lang="ar" onclick="applyLang('ar')">AR</button>
+    <button class="lang-btn" data-lang="fr" onclick="applyLang('fr')">FR</button>
+    <button class="lang-btn" data-lang="en" onclick="applyLang('en')">EN</button>
   </div>
 </header>
 
@@ -300,11 +171,12 @@ footer p{margin:4px 0;}
 </nav>
 
 <div class="container">
+<!-- TAB 1: INFO -->
 <section class="tab-content active" id="tab1">
   <div class="card">
     <h2 data-i18n="info_title">📋 معلومات المشروع</h2>
     <div class="grid">
-      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" placeholder="أدخل اسم مشروعك..." oninput="onInputChange()"></div>
+      <div><label data-i18n="p_name">اسم المشروع</label><input type="text" id="projName" placeholder="أدخل اسم مشروعك..." oninput="updateReadiness()"></div>
       <div><label data-i18n="p_type">نوع المشروع</label>
         <select id="projType" onchange="onTypeChange()">
           <option value="hybrid" data-i18n="type_hybrid">جهاز + منصة/تطبيق</option>
@@ -314,25 +186,30 @@ footer p{margin:4px 0;}
       </div>
     </div>
     <div class="grid" style="margin-top:12px;">
-      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" placeholder="مثال: التعليم، الصحة..." oninput="onInputChange()"></div>
+      <div><label data-i18n="p_sector">القطاع</label><input type="text" id="projSector" placeholder="مثال: التعليم، الصحة..." oninput="updateReadiness()"></div>
       <div><label data-i18n="p_target">الجمهور</label><input type="text" id="projTarget" placeholder="مثال: الطلاب..."></div>
     </div>
-    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="3" placeholder="اشرح فكرتك..." oninput="onInputChange()"></textarea></div>
+    <div style="margin-top:12px;"><label data-i18n="p_idea">فكرة المشروع</label><textarea id="projIdea" rows="3" placeholder="اشرح فكرتك..." oninput="updateReadiness()"></textarea></div>
+    
     <div style="margin-top:12px;">
-      <label data-i18n="p_logo">شعار المشروع (اختياري)</label>
+      <label data-i18n="p_logo">شعار المشروع (للـ PDF)</label>
       <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)" style="padding:5px;">
-      <div id="logoPreview" style="margin-top:10px;display:none;"><img id="logoImg" src="" style="max-height:60px;border:1px solid var(--b);padding:5px;border-radius:8px;"></div>
+      <div id="logoPreview" style="margin-top:10px; display:none;">
+        <img id="logoImg" src="" style="max-height: 60px; border:1px solid var(--b); padding:5px;">
+      </div>
     </div>
+
     <h3 data-i18n="h_cap">💰 رأس المال والمبيعات</h3>
     <div class="grid3">
-      <div><label data-i18n="p_capital">رأس المال (دج)</label><input type="number" id="projCapital" placeholder="0" oninput="onInputChange()"></div>
-      <div><label data-i18n="p_units">مبيعات سنة 1</label><input type="number" id="projUnits" placeholder="0" oninput="onInputChange()"></div>
-      <div><label data-i18n="p_price">سعر البيع (دج)</label><input type="number" id="projPrice" placeholder="0" oninput="onInputChange()"></div>
+      <div><label data-i18n="p_capital">رأس المال (دج)</label><input type="number" id="projCapital" placeholder="0" oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_units">الوحدات/مبيعات (سنة 1)</label><input type="number" id="projUnits" placeholder="0" oninput="updateReadiness()"></div>
+      <div><label data-i18n="p_price">سعر البيع (دج)</label><input type="number" id="projPrice" placeholder="0" oninput="updateReadiness()"></div>
     </div>
     <div class="toolbar" style="margin-top:20px;"><button class="btn-calc" onclick="goToTab('tab2')" data-i18n="btn_next">➡️ التالي</button></div>
   </div>
 </section>
 
+<!-- TAB 2: COSTS -->
 <section class="tab-content" id="tab2">
   <div class="card">
     <h2 data-i18n="h_invest">🏗️ التكاليف الاستثمارية (CapEx)</h2>
@@ -340,25 +217,33 @@ footer p{margin:4px 0;}
     <button class="add-btn" onclick="addInvest()" data-i18n="btn_add">+ إضافة</button>
   </div>
   <div class="card">
-    <h2 data-i18n="h_bom">🛠️ تكلفة المنتج الواحد (BOM)</h2>
+    <h2 data-i18n="h_bom">🛠️ تكلفة المنتج (BOM)</h2>
     <div id="bomList"></div>
     <button class="add-btn" onclick="addBOM()" data-i18n="btn_add">+ إضافة</button>
   </div>
   <div class="card">
-    <h2 data-i18n="h_fixed">💸 المصاريف التشغيلية الشهرية</h2>
+    <h2 data-i18n="h_fixed">💸 المصاريف الشهرية</h2>
     <div id="fixedList"></div>
     <button class="add-btn" onclick="addFixed()" data-i18n="btn_add">+ إضافة</button>
   </div>
-  <div class="card card-inflation">
-    <h2 data-i18n="h_inflation">📈 معدل التضخم</h2>
+  
+  <div class="card" style="background:#fffaf0; border:1px solid #dd6b20;">
+    <h2 data-i18n="h_inflation" style="color:#dd6b20; border-bottom-color:#fbd38d;">📈 معدل التضخم</h2>
     <div class="grid">
-      <div><label data-i18n="lbl_inflation">نسبة التضخم (%)</label><input type="number" id="inflationRate" value="5" step="0.1" onchange="onInputChange()"></div>
-      <div style="display:flex;align-items:flex-end;"><p style="font-size:12px;color:var(--muted);margin:0;">لحساب الجداول لـ 5 سنوات قادمة.</p></div>
+      <div>
+        <label data-i18n="lbl_inflation">نسبة التضخم (%)</label>
+        <input type="number" id="inflationRate" value="5" step="0.1" onchange="calculateAll()">
+      </div>
+      <div style="display:flex; align-items:flex-end;">
+        <p style="font-size:12px; color:var(--muted); margin:0;">لحساب الجداول لـ 5 سنوات قادمة.</p>
+      </div>
     </div>
   </div>
+
   <button class="btn-calc" onclick="calculateAll()" data-i18n="btn_calc">🧮 احسب الجداول</button>
 </section>
 
+<!-- TAB 3: HR -->
 <section class="tab-content" id="tab8">
   <div class="card">
     <h2 data-i18n="h_hr">👥 جدول الرواتب</h2>
@@ -366,8 +251,8 @@ footer p{margin:4px 0;}
       <table class="data" id="hrTable">
         <thead><tr>
           <th data-i18n="hr_role">المنصب</th><th data-i18n="hr_count">العدد</th><th data-i18n="hr_basic">الأساسي</th>
-          <th data-i18n="hr_cnas_emp">حصة العامل 9%</th><th data-i18n="hr_net">الصافي</th>
-          <th data-i18n="hr_cnas_er">حصة صاحب العمل 26%</th><th data-i18n="hr_total">الإجمالي</th><th></th>
+          <th data-i18n="hr_cnas_emp">9%</th><th data-i18n="hr_net">الصافي</th>
+          <th data-i18n="hr_cnas_er">26%</th><th data-i18n="hr_total">الإجمالي</th><th></th>
         </tr></thead>
         <tbody id="hrBody"></tbody>
       </table>
@@ -376,37 +261,54 @@ footer p{margin:4px 0;}
   </div>
 </section>
 
+<!-- TAB 4: FINANCIALS -->
 <section class="tab-content" id="tab3">
   <div class="card" id="readinessCard">
     <h2 data-i18n="h_readiness">🎯 مؤشر الجاهزية</h2>
     <div class="score-container">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
         <span data-i18n="lbl_readiness">الجاهزية:</span>
         <span class="score-text" id="readinessScoreText">0%</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="readinessBar"></div></div>
-      <p style="font-size:12px;color:var(--muted);margin-top:10px;" id="readinessMsg"></p>
+      <p style="font-size:12px; color:var(--muted); margin-top:10px;" id="readinessMsg"></p>
     </div>
   </div>
-  <div class="card"><h2 data-i18n="h_amort">📉 جدول الاهتلاك</h2><div class="table-responsive"><table class="data" id="amortTable"></table></div></div>
-  <div class="card"><h2 data-i18n="h_tcr">📊 جدول النتائج (TCR)</h2><div class="table-responsive"><table class="data" id="tcrTable"></table></div></div>
-  <div class="card"><h2 data-i18n="h_tft">💸 جدول التدفقات (TFT)</h2><div class="table-responsive"><table class="data" id="tftTable"></table></div></div>
+
+  <div class="card">
+    <h2 data-i18n="h_amort">📉 جدول الاهتلاك</h2>
+    <div class="table-responsive"><table class="data" id="amortTable"></table></div>
+  </div>
+  <div class="card">
+    <h2 data-i18n="h_tcr">📊 جدول النتائج (TCR)</h2>
+    <div class="table-responsive"><table class="data" id="tcrTable"></table></div>
+  </div>
+  <div class="card">
+    <h2 data-i18n="h_tft">💸 جدول التدفقات (TFT)</h2>
+    <div class="table-responsive"><table class="data" id="tftTable"></table></div>
+  </div>
+  
   <div class="grid">
-    <div class="card"><h2 data-i18n="h_breakeven">📈 نقطة التعادل</h2><div class="chart-box" style="height:250px;"><canvas id="beChart"></canvas></div></div>
     <div class="card">
-      <h2 data-i18n="h_sensitivity">⚖️ تحليل الحساسية</h2>
+      <h2 data-i18n="h_breakeven">📈 نقطة التعادل</h2>
+      <div class="chart-box" style="height:250px;"><canvas id="beChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="h_sensitivity">⚖️ الحساسية</h2>
       <div class="grid3" style="margin-bottom:10px;">
-        <div><label data-i18n="sens_sales">تغير المبيعات (%)</label><input type="number" id="sensSales" value="0"></div>
-        <div><label data-i18n="sens_var">تغير التكلفة المتغيرة (%)</label><input type="number" id="sensVar" value="0"></div>
-        <div><label data-i18n="sens_fix">تغير التكاليف الثابتة (%)</label><input type="number" id="sensFix" value="0"></div>
+        <div><label data-i18n="sens_sales">المبيعات (%)</label><input type="number" id="sensSales" value="0"></div>
+        <div><label data-i18n="sens_var">المتغيرة (%)</label><input type="number" id="sensVar" value="0"></div>
+        <div><label data-i18n="sens_fix">الثابتة (%)</label><input type="number" id="sensFix" value="0"></div>
       </div>
       <button class="btn btn-primary" onclick="calculateSensitivity()" style="width:100%;" data-i18n="btn_sens">احسب</button>
-      <div id="sensResult" class="result" style="display:none;margin-top:15px;font-size:13px;"></div>
+      <div id="sensResult" class="result" style="display:none; margin-top:15px; font-size:13px;"></div>
     </div>
   </div>
+  
   <div class="card"><h2 data-i18n="h_charts">📊 تطور الأرباح</h2><div class="chart-box"><canvas id="mainChart"></canvas></div></div>
 </section>
 
+<!-- TAB 5: LOAN -->
 <section class="tab-content" id="tab10">
   <div class="card">
     <h2 data-i18n="h_loan">🏦 محاكي القروض</h2>
@@ -415,127 +317,143 @@ footer p{margin:4px 0;}
       <div><label data-i18n="loan_rate">الفائدة (%)</label><input type="number" id="loanRate" value="5" step="0.1"></div>
       <div><label data-i18n="loan_years">المدة (سنوات)</label><input type="number" id="loanYears" value="5"></div>
     </div>
-    <button class="btn-calc" onclick="calculateLoan()" data-i18n="btn_calc_loan" style="margin-top:20px;">🧮 احسب القسط و DSCR</button>
-    <div id="loanResult" class="result" style="display:none;margin-top:20px;font-size:15px;"></div>
+    <button class="btn-calc" onclick="calculateLoan()" data-i18n="btn_calc_loan" style="margin-top:20px;">🧮 احسب DSCR</button>
+    <div id="loanResult" class="result" style="display:none; margin-top:20px; font-size:15px;"></div>
   </div>
 </section>
 
+<!-- TAB 6: COMPETITORS -->
 <section class="tab-content" id="tab4">
   <div class="card">
-    <h2 data-i18n="h_comp">⚔️ تحليل المنافسين</h2>
-    <button class="btn btn-ai" onclick="aiAnalyzeCompetitors(event)" data-i18n="btn_ai_comp">🤖 بحث</button>
+    <h2 data-i18n="h_comp">⚔️ المنافسون</h2>
+    <button class="btn btn-ai" onclick="aiAnalyzeCompetitors()" data-i18n="btn_ai_comp">🤖 بحث</button>
     <div id="compResult" class="table-responsive" style="margin-top:15px;"></div>
   </div>
 </section>
 
+<!-- TAB 7: BMC -->
 <section class="tab-content" id="tab5">
   <div class="card">
     <h2 data-i18n="h_bmc">🧩 BMC</h2>
-    <button class="btn btn-ai" onclick="aiGenerateBMC(event)" data-i18n="btn_ai_bmc">🤖 توليد BMC</button>
+    <button class="btn btn-ai" onclick="aiGenerateBMC()" data-i18n="btn_ai_bmc">🤖 توليد</button>
     <div class="bmc-container">
-      <div class="bmc-box bmc-partners"><h4 data-i18n="b1">🤝 الشركاء</h4><textarea id="bmc1" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-activities"><h4 data-i18n="b2">⚙️ الأنشطة</h4><textarea id="bmc2" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-value"><h4 data-i18n="b3">💎 القيمة</h4><textarea id="bmc3" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-relations"><h4 data-i18n="b6">❤️ العلاقات</h4><textarea id="bmc6" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-segments"><h4 data-i18n="b4">👥 العملاء</h4><textarea id="bmc4" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-resources"><h4 data-i18n="b7">🔑 الموارد</h4><textarea id="bmc7" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-channels"><h4 data-i18n="b5">📢 القنوات</h4><textarea id="bmc5" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-costs"><h4 data-i18n="b9">💸 التكاليف</h4><textarea id="bmc9" oninput="onInputChange()"></textarea></div>
-      <div class="bmc-box bmc-revenues"><h4 data-i18n="b8">💰 الإيرادات</h4><textarea id="bmc8" oninput="onInputChange()"></textarea></div>
+      <div class="bmc-box bmc-partners"><h4 data-i18n="b1">🤝 الشركاء</h4><textarea id="bmc1"></textarea></div>
+      <div class="bmc-box bmc-activities"><h4 data-i18n="b2">⚙️ الأنشطة</h4><textarea id="bmc2"></textarea></div>
+      <div class="bmc-box bmc-value"><h4 data-i18n="b3">💎 القيمة</h4><textarea id="bmc3"></textarea></div>
+      <div class="bmc-box bmc-relations"><h4 data-i18n="b6">❤️ العلاقات</h4><textarea id="bmc6"></textarea></div>
+      <div class="bmc-box bmc-segments"><h4 data-i18n="b4">👥 العملاء</h4><textarea id="bmc4"></textarea></div>
+      <div class="bmc-box bmc-resources"><h4 data-i18n="b7">🔑 الموارد</h4><textarea id="bmc7"></textarea></div>
+      <div class="bmc-box bmc-channels"><h4 data-i18n="b5">📢 القنوات</h4><textarea id="bmc5"></textarea></div>
+      <div class="bmc-box bmc-costs"><h4 data-i18n="b9">💸 التكاليف</h4><textarea id="bmc9"></textarea></div>
+      <div class="bmc-box bmc-revenues"><h4 data-i18n="b8">💰 الإيرادات</h4><textarea id="bmc8"></textarea></div>
     </div>
   </div>
 </section>
 
+<!-- TAB 8: SWOT -->
 <section class="tab-content" id="tab9">
   <div class="card">
-    <h2 data-i18n="h_swot">🧠 تحليل SWOT</h2>
-    <button class="btn btn-ai" onclick="aiGenerateSWOT(event)" data-i18n="btn_ai_swot">🚀 توليد</button>
-    <div id="swotResult" style="margin-top:20px;display:none;">
+    <h2 data-i18n="h_swot">🧠 SWOT</h2>
+    <button class="btn btn-ai" onclick="aiGenerateSWOT()" data-i18n="btn_ai_swot">🚀 توليد</button>
+    <div id="swotResult" style="margin-top:20px; display:none;">
       <div class="grid" style="gap:15px;">
-        <div class="result swot-s"><h3>💪 <span data-i18n="swot_s">القوة</span></h3><ul id="swotS"></ul></div>
-        <div class="result swot-w"><h3>⚠️ <span data-i18n="swot_w">الضعف</span></h3><ul id="swotW"></ul></div>
-        <div class="result swot-o"><h3>🚀 <span data-i18n="swot_o">الفرص</span></h3><ul id="swotO"></ul></div>
-        <div class="result swot-t"><h3>🛑 <span data-i18n="swot_t">التهديدات</span></h3><ul id="swotT"></ul></div>
+        <div class="result" style="background:#f0fff4; border-color:#38a169; color:#1a202c;">
+          <h3 style="color:#22543d; margin-top:0;">💪 <span data-i18n="swot_s">القوة</span></h3><ul id="swotS" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+        <div class="result" style="background:#fff5f5; border-color:#c53030; color:#1a202c;">
+          <h3 style="color:#742a2a; margin-top:0;">⚠️ <span data-i18n="swot_w">الضعف</span></h3><ul id="swotW" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+        <div class="result" style="background:#ebf8ff; border-color:#3182ce; color:#1a202c;">
+          <h3 style="color:#2a4365; margin-top:0;">🚀 <span data-i18n="swot_o">الفرص</span></h3><ul id="swotO" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
+        <div class="result" style="background:#fffaf0; border-color:#dd6b20; color:#1a202c;">
+          <h3 style="color:#7b341e; margin-top:0;">🛑 <span data-i18n="swot_t">التهديدات</span></h3><ul id="swotT" style="padding-right:20px; font-size:13px;"></ul>
+        </div>
       </div>
-      <div class="result swot-rec" style="margin-top:15px;"><h3>🎯 <span data-i18n="swot_rec">التوصية</span></h3><p id="swotRec"></p></div>
+      <div class="result" style="background:#faf5ff; border-color:#805ad5; margin-top:15px; color:#1a202c;">
+        <h3 style="color:#44337a; margin-top:0;">🎯 <span data-i18n="swot_rec">التوصية</span></h3><p id="swotRec" style="font-size:14px; font-weight:bold;"></p>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- TAB 9: AI -->
 <section class="tab-content" id="tab6">
   <div class="card">
     <h2 data-i18n="h_ai">🧠 المساعد المالي</h2>
     <div class="grid">
       <div><label data-i18n="ai_q">سؤالك</label><input type="text" id="aiQuestion" placeholder="..."></div>
-      <div style="display:flex;align-items:flex-end;"><button class="btn btn-primary" onclick="askAI(event)" style="width:100%;" data-i18n="btn_ask">🚀 اسأل</button></div>
+      <div style="display:flex; align-items:flex-end;"><button class="btn btn-primary" onclick="askAI()" style="width:100%;" data-i18n="btn_ask">🚀 اسأل</button></div>
     </div>
-    <div id="aiResponse" style="background:var(--table-hover);padding:15px;border-radius:8px;margin-top:15px;display:none;white-space:pre-wrap;"></div>
+    <div id="aiResponse" style="background:var(--table-hover); padding:15px; border-radius:8px; margin-top:15px; display:none; white-space:pre-wrap;"></div>
   </div>
 </section>
 
+<!-- TAB 11: SMART ACCOUNTANT -->
 <section class="tab-content" id="tab11">
   <div class="card">
     <h2 data-i18n="h_acc">🧾 المحاسب الذكي</h2>
-    <button class="btn btn-ai" onclick="aiSmartAccountant(event)" data-i18n="btn_ai_acc" style="width:100%;">🔍 مراجعة</button>
-    <div id="accResult" style="background:var(--table-hover);padding:20px;border-radius:8px;margin-top:15px;display:none;font-size:14px;"></div>
+    <button class="btn btn-ai" onclick="aiSmartAccountant()" data-i18n="btn_ai_acc" style="width:100%;">🔍 مراجعة</button>
+    <div id="accResult" style="background:var(--table-hover); padding:20px; border-radius:8px; margin-top:15px; display:none; font-size:14px;"></div>
   </div>
 </section>
 
+<!-- TAB 12: NPV / IRR -->
 <section class="tab-content" id="tab12">
   <div class="card">
     <h2 data-i18n="h_npv">📈 مؤشرات الاستثمار</h2>
-    <div class="grid" style="margin-bottom:15px;">
+    <div class="grid" style="margin-bottom: 15px;">
       <div><label data-i18n="lbl_discount">الخصم (%)</label><input type="number" id="discountRate" value="10" onchange="calculateNPV_IRR()"></div>
-      <div style="display:flex;align-items:flex-end;"><button class="btn btn-primary" onclick="calculateNPV_IRR()" style="width:100%;" data-i18n="btn_calc_npv">احسب</button></div>
+      <div style="display:flex; align-items:flex-end;"><button class="btn btn-primary" onclick="calculateNPV_IRR()" style="width:100%;" data-i18n="btn_calc_npv">احسب</button></div>
     </div>
     <div id="npvResult" class="grid3" style="display:none;"></div>
   </div>
 </section>
 
+<!-- TAB 13: PATH PARTNER -->
 <section class="tab-content" id="tab13">
-  <div class="card"><h2 data-i18n="h_path">🛣️ شريك المسار</h2><div id="checklistContainer" style="margin-top:15px;"></div></div>
+  <div class="card">
+    <h2 data-i18n="h_path">🛣️ شريك المسار</h2>
+    <div id="checklistContainer" style="margin-top: 15px;"></div>
+  </div>
 </section>
 
+<!-- TAB 14: MARKET -->
 <section class="tab-content" id="tab14">
   <div class="card">
     <h2 data-i18n="h_market">🏪 سوق المشاريع</h2>
-    <div style="text-align:center;margin-bottom:20px;"><button class="btn btn-success" onclick="publishToMarket()" data-i18n="btn_publish">🚀 نشر المشروع</button></div>
+    <div style="text-align: center; margin-bottom: 20px;">
+      <button class="btn btn-success" onclick="publishToMarket()" data-i18n="btn_publish">🚀 نشر</button>
+    </div>
     <div id="marketGrid"></div>
   </div>
 </section>
 
+<!-- TAB 15: PITCH DECK GENERATOR -->
 <section class="tab-content" id="tab15">
   <div class="card">
     <h2 data-i18n="h_pitch_deck">🎤 مولّد العرض التقديمي</h2>
     <div class="pitch-controls">
-      <button class="btn btn-ai" onclick="aiGeneratePitchDeck(event)" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض</button>
-      <button class="btn btn-success" id="btn_pptx" onclick="exportPitchToPPTX()" style="display:none;" data-i18n="btn_download_pptx">📥 تحميل PowerPoint</button>
-      <button class="btn btn-primary" id="btn_canva" onclick="openInCanva()" style="display:none;" data-i18n="btn_open_canva">🎨 نسخ لـ Canva</button>
+      <button class="btn btn-ai" onclick="aiGeneratePitchDeck()" data-i18n="btn_ai_pitch_deck">🤖 توليد العرض</button>
+      <button class="btn btn-success" id="btn_pptx" onclick="exportPitchToPPTX()" style="display:none;" data-i18n="btn_download_pptx">📥 تحميل PPTX</button>
+      <button class="btn btn-primary" id="btn_canva" onclick="openInCanva()" style="display:none;" data-i18n="btn_open_canva">🎨 Canva</button>
     </div>
-    <div id="pitchDeckPreview" style="margin-top:20px;display:none;"></div>
+    <div id="pitchDeckPreview" style="margin-top:20px; display:none;"></div>
   </div>
 </section>
 
-<div class="toolbar toolbar-main">
-  <button class="btn btn-success" onclick="saveCurrentProject()" data-i18n="btn_save">💾 حفظ</button>
+<div class="toolbar">
+  <button class="btn btn-success" onclick="saveCurrentProject()">💾 حفظ</button>
   <button class="btn btn-success" onclick="exportExcel()" data-i18n="btn_excel">📊 Excel</button>
   <button class="btn btn-primary" onclick="exportPDF()" data-i18n="btn_pdf">📄 PDF</button>
   <button class="btn btn-danger" onclick="resetData()" data-i18n="btn_reset">🗑️ مسح</button>
 </div>
 </div>
-
-<footer>
-  <p>FinStart DZ v32.0 — <strong>PRO Edition</strong> ✨</p>
-  <p style="font-size:11px;opacity:0.7;">بالذكاء الاصطناعي · حفظ تلقائي · تصدير احترافي</p>
-</footer>
+<footer style="text-align:center; padding:20px; color:var(--muted); font-size:12px;">FinStart DZ v30.0 - App Edition</footer>
 
 <script>
-  /* ═══════════════════════════════════════════════════════════════
-   FinStart DZ v32.0 PRO — PART 2/3
-   Translations + State + Utilities + UI + Autosave
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ══════════════ 1. TRANSLATIONS ══════════════ */
+/* JS_PART_2_HERE */
+  /* ============ TRANSLATIONS ============ */
 const T = {
   ar:{ t1:"1. معلومات", t2:"2. التكاليف", t8:"3. الرواتب", t3:"4. التحليل المالي", t10:"5. القروض", t4:"6. المنافسون", t5:"7. BMC", t9:"8. SWOT", t6:"9. المساعد", t11:"10. المحاسب", t12:"11. الاستثمار", t13:"12. المسار", t14:"13. السوق", t15:"14. العرض",
     info_title:"📋 معلومات المشروع", p_name:"اسم المشروع", p_type:"نوع المشروع", type_hybrid:"جهاز + منصة", type_hw:"جهاز فقط", type_sw:"منصة فقط",
@@ -553,7 +471,8 @@ const T = {
     h_swot:"🧠 تحليل SWOT", swot_desc:"تحليل ذكي للمشروع", btn_ai_swot:"🚀 توليد", swot_s:"القوة", swot_w:"الضعف", swot_o:"الفرص", swot_t:"التهديدات", swot_rec:"التوصية",
     h_ai:"🧠 المساعد المالي", ai_q:"سؤالك", btn_ask:"🚀 اسأل", btn_save:"💾 حفظ", btn_pdf:"📄 PDF", btn_reset:"🗑️ مسح", btn_excel:"📊 Excel",
     h_acc:"🧾 المحاسب الذكي", acc_desc:"مراجعة الأرقام بالذكاء الاصطناعي", btn_ai_acc:"🔍 مراجعة",
-    h_npv:"📈 مؤشرات الاستثمار", npv_desc:"بناءً على التدفقات النقدية.", lbl_discount:"الخصم (%)", btn_calc_npv:"احسب", res_npv:"NPV", res_irr:"IRR", res_payback:"الاسترداد", npv_good:"مجدي", npv_bad:"غير مجدي",
+    h_npv:"📈 مؤشرات الاستثمار", npv_desc:"بناءً على التدفقات النقدية.", lbl_discount:"الخصم (%)", btn_calc_npv:"احسب", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"الاسترداد", npv_good:"مجدي", npv_bad:"غير مجدي",
     h_path:"🛣️ شريك المسار", path_desc:"تتبع إنجاز المشروع", step1:"البيانات الأساسية", step2:"الجداول المالية", step3:"BMC", step4:"SWOT", step5:"النشر في السوق",
     h_market:"🏪 سوق المشاريع", market_desc:"تصفح أو انشر مشروعك", btn_publish:"🚀 نشر المشروع", pub_success:"✅ تم النشر!", btn_view:"عرض", profit_margin:"الهامش",
     h_pitch_deck:"🎤 مولّد العرض التقديمي", pitch_deck_desc:"توليد عرض تقديمي احترافي من 11 قسماً.", btn_ai_pitch_deck:"🤖 توليد العرض", btn_download_pptx:"📥 تحميل PowerPoint", btn_open_canva:"🎨 نسخ لـ Canva",
@@ -561,10 +480,12 @@ const T = {
     row_opflow:"تدفق التشغيل", row_invflow:"تدفق الاستثمار", row_cash:"تغير الخزينة",
     col_year:"السنة", col_total:"المجموع", tcr_title:"جدول النتائج", tft_title:"جدول التدفقات", amort_title:"الاهتلاك", loan_title:"القروض",
     report_title:"تقرير الدراسة المالية", bmc_title:"نموذج BMC", swot_title:"تحليل SWOT",
-    val_err_price:"⚠️ سعر البيع أقل من التكلفة!", val_err_opex:"⚠️ التكاليف التشغيلية صفر!", val_ok:"" },
+    val_err_price:"⚠️ سعر البيع أقل من التكلفة!", val_err_opex:"⚠️ التكاليف التشغيلية صفر!", val_ok:""
+  },
   fr:{ t1:"1. Infos", t2:"2. Coûts", t8:"3. RH", t3:"4. Financier", t10:"5. Prêts", t4:"6. Concurrents", t5:"7. BMC", t9:"8. SWOT", t6:"9. Assistant", t11:"10. Comptable", t12:"11. Investissement", t13:"12. Parcours", t14:"13. Marché", t15:"14. Pitch Deck",
     info_title:"📋 Infos", p_name:"Nom", p_type:"Type", type_hybrid:"Matériel + Logiciel", type_hw:"Matériel", type_sw:"Logiciel",
-    p_sector:"Secteur", p_target:"Cible", p_idea:"Idée", p_logo:"Logo (PDF)", h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Ventes (An 1)", p_price:"Prix (DA)", btn_next:"➡️ Suivant",
+    p_sector:"Secteur", p_target:"Cible", p_idea:"Idée", p_logo:"Logo (PDF)",
+    h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Ventes (An 1)", p_price:"Prix (DA)", btn_next:"➡️ Suivant",
     h_invest:"🏗️ CapEx", c_item:"Désignation", c_cost:"Coût", c_qty:"Qté", c_dep:"Amort.", btn_add:"+ Ajouter",
     h_bom:"🛠️ Coût Unitaire", h_fixed:"💸 Charges Mensuelles", h_inflation:"📈 Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculer",
     h_hr:"👥 Salaires", hr_role:"Poste", hr_count:"Nb", hr_basic:"Base", hr_cnas_emp:"Employé 9%", hr_net:"Net", hr_cnas_er:"Employeur 26%", hr_total:"Total",
@@ -577,17 +498,21 @@ const T = {
     h_swot:"🧠 SWOT", swot_desc:"Analyse IA", btn_ai_swot:"🚀 Générer", swot_s:"Forces", swot_w:"Faiblesses", swot_o:"Opportunités", swot_t:"Menaces", swot_rec:"Recommandation",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Demander", btn_save:"💾 Sauver", btn_pdf:"📄 PDF", btn_reset:"🗑️ Effacer", btn_excel:"📊 Excel",
     h_acc:"🧾 Comptable IA", acc_desc:"Analysez vos chiffres", btn_ai_acc:"🔍 Analyser",
-    h_npv:"📈 Investissement", npv_desc:"Basé sur les flux.", lbl_discount:"Taux (%)", btn_calc_npv:"Calculer", res_npv:"NPV", res_irr:"IRR", res_payback:"Récupération", npv_good:"Rentable", npv_bad:"Non rentable",
+    h_npv:"📈 Investissement", npv_desc:"Basé sur les flux.", lbl_discount:"Taux (%)", btn_calc_npv:"Calculer", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"Récupération", npv_good:"Rentable", npv_bad:"Non rentable",
     h_path:"🛣️ Parcours", path_desc:"Suivi", step1:"Infos", step2:"Finances", step3:"BMC", step4:"SWOT", step5:"Publication",
     h_market:"🏪 Marché", market_desc:"Projets étudiants", btn_publish:"🚀 Publier", pub_success:"✅ Publié!", btn_view:"Voir", profit_margin:"Marge",
     h_pitch_deck:"🎤 Pitch Deck", pitch_deck_desc:"Générer 11 slides pro.", btn_ai_pitch_deck:"🤖 Générer", btn_download_pptx:"📥 Télécharger PPTX", btn_open_canva:"🎨 Copier Canva",
     row_rev:"Revenus", row_cogs:"Coût Ventes", row_va:"Valeur Ajoutée", row_opex:"Charges", row_ebe:"EBE", row_dep:"Amort.", row_net:"Résultat Net",
-    row_opflow:"Flux Op.", row_invflow:"Flux Inv.", row_cash:"Trésorerie", col_year:"Année", col_total:"Total", tcr_title:"Résultat", tft_title:"Trésorerie", amort_title:"Amortissement", loan_title:"Prêt",
+    row_opflow:"Flux Op.", row_invflow:"Flux Inv.", row_cash:"Trésorerie",
+    col_year:"Année", col_total:"Total", tcr_title:"Résultat", tft_title:"Trésorerie", amort_title:"Amortissement", loan_title:"Prêt",
     report_title:"Rapport Financier", bmc_title:"BMC", swot_title:"SWOT",
-    val_err_price:"⚠️ Prix < Coût!", val_err_opex:"⚠️ Charges = 0!", val_ok:"" },
+    val_err_price:"⚠️ Prix < Coût!", val_err_opex:"⚠️ Charges = 0!", val_ok:""
+  },
   en:{ t1:"1. Info", t2:"2. Costs", t8:"3. HR", t3:"4. Financials", t10:"5. Loan", t4:"6. Competitors", t5:"7. BMC", t9:"8. SWOT", t6:"9. Assistant", t11:"10. Accountant", t12:"11. Investment", t13:"12. Journey", t14:"13. Market", t15:"14. Pitch Deck",
     info_title:"📋 Info", p_name:"Name", p_type:"Type", type_hybrid:"Hardware + Software", type_hw:"Hardware", type_sw:"Software",
-    p_sector:"Sector", p_target:"Target", p_idea:"Idea", p_logo:"Logo (PDF)", h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Sales (Y1)", p_price:"Price (DA)", btn_next:"➡️ Next",
+    p_sector:"Sector", p_target:"Target", p_idea:"Idea", p_logo:"Logo (PDF)",
+    h_cap:"💰 Capital", p_capital:"Capital (DA)", p_units:"Sales (Y1)", p_price:"Price (DA)", btn_next:"➡️ Next",
     h_invest:"🏗️ CapEx", c_item:"Item", c_cost:"Cost", c_qty:"Qty", c_dep:"Depr.", btn_add:"+ Add",
     h_bom:"🛠️ Unit Cost", h_fixed:"💸 Monthly Expenses", h_inflation:"📈 Inflation", lbl_inflation:"Inflation (%)", btn_calc:"🧮 Calculate",
     h_hr:"👥 Salaries", hr_role:"Role", hr_count:"Count", hr_basic:"Base", hr_cnas_emp:"Employee 9%", hr_net:"Net", hr_cnas_er:"Employer 26%", hr_total:"Total",
@@ -600,19 +525,21 @@ const T = {
     h_swot:"🧠 SWOT", swot_desc:"AI Analysis", btn_ai_swot:"🚀 Generate", swot_s:"Strengths", swot_w:"Weaknesses", swot_o:"Opportunities", swot_t:"Threats", swot_rec:"Recommendation",
     h_ai:"🧠 Assistant", ai_q:"Question", btn_ask:"🚀 Ask", btn_save:"💾 Save", btn_pdf:"📄 PDF", btn_reset:"🗑️ Clear", btn_excel:"📊 Excel",
     h_acc:"🧾 Smart Accountant", acc_desc:"AI review", btn_ai_acc:"🔍 Review",
-    h_npv:"📈 Investment", npv_desc:"Based on cash flows.", lbl_discount:"Rate (%)", btn_calc_npv:"Calculate", res_npv:"NPV", res_irr:"IRR", res_payback:"Payback", npv_good:"Profitable", npv_bad:"Not profitable",
+    h_npv:"📈 Investment", npv_desc:"Based on cash flows.", lbl_discount:"Rate (%)", btn_calc_npv:"Calculate", 
+    res_npv:"NPV", res_irr:"IRR", res_payback:"Payback", npv_good:"Profitable", npv_bad:"Not profitable",
     h_path:"🛣️ Journey", path_desc:"Track progress", step1:"Basic Info", step2:"Financials", step3:"BMC", step4:"SWOT", step5:"Published",
     h_market:"🏪 Market", market_desc:"Student projects", btn_publish:"🚀 Publish", pub_success:"✅ Published!", btn_view:"View", profit_margin:"Margin",
     h_pitch_deck:"🎤 Pitch Deck", pitch_deck_desc:"Generate 11 pro slides.", btn_ai_pitch_deck:"🤖 Generate", btn_download_pptx:"📥 Download PPTX", btn_open_canva:"🎨 Copy Canva",
     row_rev:"Revenue", row_cogs:"COGS", row_va:"Value Added", row_opex:"OpEx", row_ebe:"EBITDA", row_dep:"Depreciation", row_net:"Net Profit",
-    row_opflow:"Op. Cash Flow", row_invflow:"Inv. Cash Flow", row_cash:"Cash Flow", col_year:"Year", col_total:"Total", tcr_title:"Income", tft_title:"Cash Flow", amort_title:"Depreciation", loan_title:"Loan",
+    row_opflow:"Op. Cash Flow", row_invflow:"Inv. Cash Flow", row_cash:"Cash Flow",
+    col_year:"Year", col_total:"Total", tcr_title:"Income", tft_title:"Cash Flow", amort_title:"Depreciation", loan_title:"Loan",
     report_title:"Financial Report", bmc_title:"BMC", swot_title:"SWOT",
-    val_err_price:"⚠️ Price < Cost!", val_err_opex:"⚠️ OpEx = 0!", val_ok:"" }
+    val_err_price:"⚠️ Price < Cost!", val_err_opex:"⚠️ OpEx = 0!", val_ok:""
+  }
 };
-let L = 'ar';
-const t = k => T[L][k] || k;
+let L = 'ar'; const t = k => T[L][k] || k;
 
-/* ══════════════ 2. STATE ══════════════ */
+/* ============ STATE ============ */
 let logoBase64 = null;
 let investItems = [];
 let bomItems = [];
@@ -622,802 +549,431 @@ let myChart = null;
 let beChart = null;
 let tftCashFlows = [];
 let pitchDeckData = null;
-let autosaveTimer = null;
-let pendingAutoSave = false;
-let confirmCallback = null;
-let currentProjectId = localStorage.getItem('finstart_current_id') || null;
 
-const STORAGE_KEY = 'finstart_current_project';
-const PROJECTS_KEY = 'finstart_projects';
-const THEME_KEY = 'finstart_theme';
-const LOGO_KEY = 'finstart_logo';
-const MARKET_KEY = 'finstart_market';
-const CURRENT_ID_KEY = 'finstart_current_id';
+/* ============ INIT & UI ============ */
+if(localStorage.getItem('finstart_theme') === 'dark') document.body.classList.add('dark-mode');
 
-/* ══════════════ 3. UTILITIES ══════════════ */
-function fmt(n) { return Math.round(n || 0).toLocaleString('fr-FR'); }
-
-function toast(message, type, duration) {
-  type = type || 'info'; duration = duration || 3000;
-  const container = document.getElementById('toast-container');
-  if (!container) return;
-  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-  const el = document.createElement('div');
-  el.className = 'toast ' + type;
-  el.innerHTML = '<span class="toast-icon">' + (icons[type] || 'ℹ️') + '</span><span>' + message + '</span>';
-  container.appendChild(el);
-  setTimeout(() => { el.classList.add('hide'); setTimeout(() => el.remove(), 300); }, duration);
-}
-
-function showLoading(text) {
-  const ov = document.getElementById('loading-overlay');
-  const txt = document.getElementById('loading-text');
-  if (txt) txt.textContent = text || 'جاري المعالجة...';
-  if (ov) ov.classList.add('show');
-}
-function hideLoading() {
-  const ov = document.getElementById('loading-overlay');
-  if (ov) ov.classList.remove('show');
-}
-function showConfirm(title, message, callback) {
-  document.getElementById('confirm-title').textContent = title;
-  document.getElementById('confirm-message').textContent = message;
-  document.getElementById('confirm-modal').classList.add('show');
-  confirmCallback = callback;
-}
-function confirmAction(result) {
-  document.getElementById('confirm-modal').classList.remove('show');
-  const cb = confirmCallback;
-  confirmCallback = null;
-  if (cb) cb(result);
-}
-function setButtonLoading(btn, loadingText) {
-  if (!btn) return function(){};
-  const original = btn.innerHTML;
-  btn.classList.add('loading');
-  btn.disabled = true;
-  btn.innerHTML = loadingText || '⏳ جاري...';
-  return function() {
-    btn.classList.remove('loading');
-    btn.disabled = false;
-    btn.innerHTML = original;
-  };
-}
-
-/* ══════════════ 4. INIT CHECK ══════════════ */
-if (localStorage.getItem(THEME_KEY) === 'dark') document.body.classList.add('dark-mode');
-if (localStorage.getItem(LOGO_KEY)) {
-  logoBase64 = localStorage.getItem(LOGO_KEY);
-  setTimeout(function() {
-    const prev = document.getElementById('logoPreview');
-    const img = document.getElementById('logoImg');
-    if (prev && img) { prev.style.display = 'block'; img.src = logoBase64; }
-  }, 200);
-}
-
-/* ══════════════ 5. THEME & PRESENTATION ══════════════ */
 function toggleTheme() {
   document.body.classList.toggle('dark-mode');
-  localStorage.setItem(THEME_KEY, document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-  if (window.calcData) { renderChart(); renderBreakEvenChart(); }
-}
-function togglePresentation() {
-  document.body.classList.toggle('presentation-mode');
-  toast(document.body.classList.contains('presentation-mode') ? 'تم تفعيل وضع العرض' : 'تم الخروج من وضع العرض', 'success');
+  localStorage.setItem('finstart_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  if(window.calcData) { renderChart(); renderBreakEvenChart(); }
 }
 
-/* ══════════════ 6. LOGO ══════════════ */
+function togglePresentation() {
+  document.body.classList.toggle('presentation-mode');
+  if(document.body.classList.contains('presentation-mode')) alert("تم تفعيل وضع العرض التقديمي. اضغط على الزر مرة أخرى للعودة.");
+}
+
 function handleLogoUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
+  let file = event.target.files[0]; if(!file) return;
+  let reader = new FileReader();
   reader.onload = function(e) {
     logoBase64 = e.target.result;
     document.getElementById('logoPreview').style.display = 'block';
     document.getElementById('logoImg').src = logoBase64;
-    localStorage.setItem(LOGO_KEY, logoBase64);
-    toast('تم رفع الشعار', 'success');
-    triggerAutoSave();
+    localStorage.setItem('finstart_logo', logoBase64);
   };
   reader.readAsDataURL(file);
 }
+if(localStorage.getItem('finstart_logo')) {
+  logoBase64 = localStorage.getItem('finstart_logo');
+  setTimeout(() => { if(document.getElementById('logoPreview')) { document.getElementById('logoPreview').style.display = 'block'; document.getElementById('logoImg').src = logoBase64; } }, 200);
+}
 
-/* ══════════════ 7. LANGUAGE ══════════════ */
 function applyLang(lang) {
-  L = lang;
-  document.documentElement.lang = lang;
-  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(function(el) {
-    const k = el.getAttribute('data-i18n');
-    if (T[lang][k]) el.textContent = T[lang][k];
-  });
-  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.lang === lang); });
-  if (window.calcData) {
-    if (typeof renderAmort === 'function') renderAmort();
-    if (typeof renderTCR === 'function') renderTCR();
-    if (typeof renderTFT === 'function') renderTFT();
-    if (typeof renderChart === 'function') renderChart();
-    if (typeof renderBreakEvenChart === 'function') renderBreakEvenChart();
-    if (typeof updateReadiness === 'function') updateReadiness();
-    if (typeof checkValidation === 'function') checkValidation();
-    if (typeof updateChecklist === 'function') updateChecklist();
-    if (typeof renderMarket === 'function') renderMarket();
-    if (pitchDeckData && typeof renderPitchPreview === 'function') renderPitchPreview();
-  }
+  L = lang; document.documentElement.lang = lang; document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el => { let k = el.getAttribute('data-i18n'); if (T[lang][k]) el.textContent = T[lang][k]; });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  if(window.calcData) { renderAmort(); renderTCR(); renderTFT(); renderChart(); renderBreakEvenChart(); updateReadiness(); checkValidation(); updateChecklist(); renderMarket(); renderPitchPreview(); }
 }
 
-/* ══════════════ 8. TABS ══════════════ */
-function showTab(id) {
-  document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.tab === id); });
-  const tab = document.getElementById(id);
-  if (tab) tab.classList.add('active');
-  if (id === 'tab3') setTimeout(function() { if (typeof renderChart === 'function') renderChart(); if (typeof renderBreakEvenChart === 'function') renderBreakEvenChart(); }, 100);
-  if (id === 'tab13' && typeof updateChecklist === 'function') updateChecklist();
-  if (id === 'tab14' && typeof renderMarket === 'function') renderMarket();
-  if (id === 'tab15' && typeof renderPitchPreview === 'function') renderPitchPreview();
+function showTab(id) { 
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===id)); 
+  document.getElementById(id).classList.add('active'); 
+  if(id==='tab3') { renderChart(); renderBreakEvenChart(); }
+  if(id==='tab13') updateChecklist();
+  if(id==='tab14') renderMarket();
+  if(id==='tab15') renderPitchPreview();
 }
-function goToTab(id) { showTab(id); }
-function onTypeChange() { /* reserved */ }
 
-/* ══════════════ 9. DYNAMIC LISTS ══════════════ */
+function onTypeChange() { /* Kept for compatibility, logic moved to dynamic entry */ }
+
+function fmt(n) { return Math.round(n || 0).toLocaleString('fr-FR'); }
+
+/* ============ RENDER DYNAMIC LISTS ============ */
 function renderInvest() {
   let h = '';
-  investItems.forEach(function(item, i) {
-    h += '<div class="row-item">' +
-      '<input type="text" value="' + (item.name || '') + '" placeholder="البيان" onchange="investItems[' + i + '].name=this.value;triggerAutoSave()">' +
-      '<input type="number" value="' + (item.cost || 0) + '" placeholder="القيمة" onchange="investItems[' + i + '].cost=+this.value;triggerAutoSave()">' +
-      '<input type="number" value="' + (item.qty || 0) + '" placeholder="الكمية" onchange="investItems[' + i + '].qty=+this.value;triggerAutoSave()">' +
-      '<input type="number" value="' + (item.dep || 0) + '" placeholder="سنوات الاهتلاك" onchange="investItems[' + i + '].dep=+this.value;triggerAutoSave()">' +
-      '<button onclick="removeInvest(' + i + ')">×</button>' +
-    '</div>';
+  investItems.forEach((item, i) => {
+    h += `<div class="row-item">
+      <input type="text" value="${item.name}" placeholder="البيان" onchange="investItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="القيمة" onchange="investItems[${i}].cost=+this.value">
+      <input type="number" value="${item.qty}" placeholder="الكمية" onchange="investItems[${i}].qty=+this.value">
+      <input type="number" value="${item.dep}" placeholder="سنوات الاهتلاك" onchange="investItems[${i}].dep=+this.value">
+      <button onclick="removeInvest(${i})">×</button>
+    </div>`;
   });
-  const el = document.getElementById('investList');
-  if (el) el.innerHTML = h;
+  document.getElementById('investList').innerHTML = h;
 }
 function renderBOM() {
   let h = '';
-  bomItems.forEach(function(item, i) {
-    h += '<div class="row-item" style="grid-template-columns:2fr 1fr 1fr 40px;">' +
-      '<input type="text" value="' + (item.name || '') + '" placeholder="المكون" onchange="bomItems[' + i + '].name=this.value;triggerAutoSave()">' +
-      '<input type="number" value="' + (item.cost || 0) + '" placeholder="السعر" onchange="bomItems[' + i + '].cost=+this.value;triggerAutoSave()">' +
-      '<input type="number" value="' + (item.qty || 0) + '" placeholder="الكمية" onchange="bomItems[' + i + '].qty=+this.value;triggerAutoSave()">' +
-      '<button onclick="removeBOM(' + i + ')">×</button>' +
-    '</div>';
+  bomItems.forEach((item, i) => {
+    h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 1fr 40px;">
+      <input type="text" value="${item.name}" placeholder="المكون" onchange="bomItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="السعر" onchange="bomItems[${i}].cost=+this.value">
+      <input type="number" value="${item.qty}" placeholder="الكمية" onchange="bomItems[${i}].qty=+this.value">
+      <button onclick="removeBOM(${i})">×</button>
+    </div>`;
   });
-  const el = document.getElementById('bomList');
-  if (el) el.innerHTML = h;
+  document.getElementById('bomList').innerHTML = h;
 }
 function renderFixed() {
   let h = '';
-  fixedItems.forEach(function(item, i) {
-    h += '<div class="row-item" style="grid-template-columns:2fr 1fr 40px;">' +
-      '<input type="text" value="' + (item.name || '') + '" placeholder="المصروف" onchange="fixedItems[' + i + '].name=this.value;triggerAutoSave()">' +
-      '<input type="number" value="' + (item.cost || 0) + '" placeholder="القيمة الشهرية" onchange="fixedItems[' + i + '].cost=+this.value;triggerAutoSave()">' +
-      '<button onclick="removeFixed(' + i + ')">×</button>' +
-    '</div>';
+  fixedItems.forEach((item, i) => {
+    h += `<div class="row-item" style="grid-template-columns: 2fr 1fr 40px;">
+      <input type="text" value="${item.name}" placeholder="المصروف" onchange="fixedItems[${i}].name=this.value">
+      <input type="number" value="${item.cost}" placeholder="القيمة الشهرية" onchange="fixedItems[${i}].cost=+this.value">
+      <button onclick="removeFixed(${i})">×</button>
+    </div>`;
   });
-  const el = document.getElementById('fixedList');
-  if (el) el.innerHTML = h;
+  document.getElementById('fixedList').innerHTML = h;
 }
 function renderEmps() {
   let h = '';
-  emps.forEach(function(emp, i) {
-    const cnase = (emp.salary || 0) * 0.09;
-    const net = (emp.salary || 0) - cnase;
-    const cnase_er = (emp.salary || 0) * 0.26;
-    const total = (emp.salary || 0) + cnase_er;
-    h += '<tr>' +
-      '<td><input type="text" value="' + (emp.role || '') + '" placeholder="المنصب" onchange="emps[' + i + '].role=this.value;triggerAutoSave()" style="border:1px solid var(--b);padding:4px;text-align:center;background:transparent;color:var(--text);"></td>' +
-      '<td><input type="number" value="' + (emp.count || 0) + '" placeholder="العدد" onchange="emps[' + i + '].count=+this.value;renderEmps();triggerAutoSave()" style="border:1px solid var(--b);padding:4px;width:60px;text-align:center;background:transparent;color:var(--text);"></td>' +
-      '<td><input type="number" value="' + (emp.salary || 0) + '" placeholder="الراتب" onchange="emps[' + i + '].salary=+this.value;renderEmps();triggerAutoSave()" style="border:1px solid var(--b);padding:4px;width:90px;text-align:center;background:transparent;color:var(--text);"></td>' +
-      '<td>' + fmt(cnase) + '</td><td>' + fmt(net) + '</td><td>' + fmt(cnase_er) + '</td>' +
-      '<td><strong>' + fmt(total * (emp.count || 0)) + '</strong></td>' +
-      '<td><button onclick="removeEmp(' + i + ')" style="background:var(--d);color:#fff;border:none;border-radius:4px;cursor:pointer;padding:4px 8px;">×</button></td>' +
-    '</tr>';
+  emps.forEach((emp, i) => {
+    let cnase = emp.salary * 0.09, net = emp.salary - cnase, cnase_er = emp.salary * 0.26, total = emp.salary + cnase_er;
+    h += `<tr>
+      <td><input type="text" value="${emp.role}" placeholder="المنصب" onchange="emps[${i}].role=this.value" style="border:1px solid var(--b);padding:4px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="number" value="${emp.count}" placeholder="العدد" onchange="emps[${i}].count=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:60px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td><input type="number" value="${emp.salary}" placeholder="الراتب" onchange="emps[${i}].salary=+this.value;renderEmps()" style="border:1px solid var(--b);padding:4px;width:90px;text-align:center; background:transparent; color:var(--text);"></td>
+      <td>${fmt(cnase)}</td><td>${fmt(net)}</td><td>${fmt(cnase_er)}</td><td><strong>${fmt(total * emp.count)}</strong></td>
+      <td><button onclick="removeEmp(${i})" style="background:var(--d);color:#fff;border:none;border-radius:4px;cursor:pointer;padding:4px 8px;">×</button></td>
+    </tr>`;
   });
-  const el = document.getElementById('hrBody');
-  if (el) el.innerHTML = h;
+  document.getElementById('hrBody').innerHTML = h;
 }
-function addInvest() { investItems.push({ name: "", cost: 0, qty: 1, dep: 5 }); renderInvest(); triggerAutoSave(); }
-function addBOM() { bomItems.push({ name: "", cost: 0, qty: 1 }); renderBOM(); triggerAutoSave(); }
-function addFixed() { fixedItems.push({ name: "", cost: 0 }); renderFixed(); triggerAutoSave(); }
-function addEmp() { emps.push({ role: "", count: 1, salary: 0 }); renderEmps(); triggerAutoSave(); }
-function removeInvest(i) { investItems.splice(i, 1); renderInvest(); triggerAutoSave(); }
-function removeBOM(i) { bomItems.splice(i, 1); renderBOM(); triggerAutoSave(); }
-function removeFixed(i) { fixedItems.splice(i, 1); renderFixed(); triggerAutoSave(); }
-function removeEmp(i) { emps.splice(i, 1); renderEmps(); triggerAutoSave(); }
+function addInvest() { investItems.push({name:"", cost:0, qty:1, dep:5}); renderInvest(); }
+function addBOM() { bomItems.push({name:"", cost:0, qty:1}); renderBOM(); }
+function addFixed() { fixedItems.push({name:"", cost:0}); renderFixed(); }
+function addEmp() { emps.push({role:"", count:1, salary:0}); renderEmps(); }
+function removeInvest(i) { investItems.splice(i,1); renderInvest(); }
+function removeBOM(i) { bomItems.splice(i,1); renderBOM(); }
+function removeFixed(i) { fixedItems.splice(i,1); renderFixed(); }
+function removeEmp(i) { emps.splice(i,1); renderEmps(); }
 
-/* ══════════════ 10. AUTOSAVE SYSTEM ══════════════ */
-function triggerAutoSave() {
-  pendingAutoSave = true;
-  clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(function() {
-    if (pendingAutoSave) {
-      saveToLocalStorage(true);
-      pendingAutoSave = false;
-    }
-  }, 2000);
-}
-function onInputChange() {
-  if (typeof updateReadiness === 'function') updateReadiness();
-  triggerAutoSave();
-}
-function showAutosaveBadge() {
-  const badge = document.getElementById('autosave-badge');
-  const txt = document.getElementById('autosave-text');
-  if (txt) txt.textContent = 'تم الحفظ';
-  if (badge) {
-    badge.classList.add('show');
-    setTimeout(function() { badge.classList.remove('show'); }, 2000);
-  }
-}
-function collectState() {
-  const swotEl = document.getElementById('swotResult');
-  return {
-    projName: (document.getElementById('projName') || {}).value || '',
-    projType: (document.getElementById('projType') || {}).value || 'hybrid',
-    projSector: (document.getElementById('projSector') || {}).value || '',
-    projTarget: (document.getElementById('projTarget') || {}).value || '',
-    projIdea: (document.getElementById('projIdea') || {}).value || '',
-    projCapital: (document.getElementById('projCapital') || {}).value || '',
-    projUnits: (document.getElementById('projUnits') || {}).value || '',
-    projPrice: (document.getElementById('projPrice') || {}).value || '',
-    inflationRate: (document.getElementById('inflationRate') || {}).value || '5',
-    discountRate: (document.getElementById('discountRate') || {}).value || '10',
-    loanAmount: (document.getElementById('loanAmount') || {}).value || '3000000',
-    loanRate: (document.getElementById('loanRate') || {}).value || '5',
-    loanYears: (document.getElementById('loanYears') || {}).value || '5',
-    investItems: investItems,
-    bomItems: bomItems,
-    fixedItems: fixedItems,
-    emps: emps,
-    bmc1: (document.getElementById('bmc1') || {}).value || '',
-    bmc2: (document.getElementById('bmc2') || {}).value || '',
-    bmc3: (document.getElementById('bmc3') || {}).value || '',
-    bmc4: (document.getElementById('bmc4') || {}).value || '',
-    bmc5: (document.getElementById('bmc5') || {}).value || '',
-    bmc6: (document.getElementById('bmc6') || {}).value || '',
-    bmc7: (document.getElementById('bmc7') || {}).value || '',
-    bmc8: (document.getElementById('bmc8') || {}).value || '',
-    bmc9: (document.getElementById('bmc9') || {}).value || '',
-    logoBase64: logoBase64,
-    swotVisible: swotEl && swotEl.style.display !== 'none',
-    swotS: (document.getElementById('swotS') || {}).innerHTML || '',
-    swotW: (document.getElementById('swotW') || {}).innerHTML || '',
-    swotO: (document.getElementById('swotO') || {}).innerHTML || '',
-    swotT: (document.getElementById('swotT') || {}).innerHTML || '',
-    swotRec: (document.getElementById('swotRec') || {}).innerText || '',
-    pitchDeckData: pitchDeckData,
-    savedAt: Date.now()
-  };
-}
-function restoreState(data) {
-  if (!data) return;
-  const setVal = function(id, val) { const el = document.getElementById(id); if (el && val !== undefined && val !== null) el.value = val; };
-  ['projName','projType','projSector','projTarget','projIdea','projCapital','projUnits','projPrice','inflationRate','discountRate','loanAmount','loanRate','loanYears','bmc1','bmc2','bmc3','bmc4','bmc5','bmc6','bmc7','bmc8','bmc9'].forEach(function(id) { setVal(id, data[id]); });
-  if (Array.isArray(data.investItems)) investItems = data.investItems;
-  if (Array.isArray(data.bomItems)) bomItems = data.bomItems;
-  if (Array.isArray(data.fixedItems)) fixedItems = data.fixedItems;
-  if (Array.isArray(data.emps)) emps = data.emps;
-  if (data.logoBase64) {
-    logoBase64 = data.logoBase64;
-    const prev = document.getElementById('logoPreview');
-    const img = document.getElementById('logoImg');
-    if (prev && img) { prev.style.display = 'block'; img.src = logoBase64; }
-  }
-  if (data.swotVisible) {
-    const sr = document.getElementById('swotResult');
-    if (sr) {
-      sr.style.display = 'block';
-      if (data.swotS) document.getElementById('swotS').innerHTML = data.swotS;
-      if (data.swotW) document.getElementById('swotW').innerHTML = data.swotW;
-      if (data.swotO) document.getElementById('swotO').innerHTML = data.swotO;
-      if (data.swotT) document.getElementById('swotT').innerHTML = data.swotT;
-      if (data.swotRec) document.getElementById('swotRec').innerText = data.swotRec;
-    }
-  }
-  if (data.pitchDeckData) pitchDeckData = data.pitchDeckData;
-  renderInvest(); renderBOM(); renderFixed(); renderEmps();
-  if (typeof updateReadiness === 'function') updateReadiness();
-  if (data.projUnits && data.projPrice && !window.calcData) {
-    try { if (typeof calculateAll === 'function') calculateAll(); } catch(e) {}
-  }
-  if (pitchDeckData && typeof renderPitchPreview === 'function') {
-    renderPitchPreview();
-    const pp = document.getElementById('btn_pptx'); if (pp) pp.style.display = 'inline-block';
-    const cv = document.getElementById('btn_canva'); if (cv) cv.style.display = 'inline-block';
-  }
-}
-function saveToLocalStorage(showBadge) {
-  try {
-    const data = collectState();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    if (showBadge) showAutosaveBadge();
-  } catch(e) { console.error('Save error:', e); }
-}
-
-/* ══════════════ END OF PART 2 ══════════════ */
-  /* ═══════════════════════════════════════════════════════════════
-   FinStart DZ v32.0 PRO — PART 3/3 (FINAL)
-   Financials + AI + Exports + Projects + Chat + Init
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ══════════════ 1. PROJECTS MANAGEMENT ══════════════ */
-function saveCurrentProject() {
-  const data = collectState();
-  const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}');
-  if (!currentProjectId) currentProjectId = 'proj_' + Date.now();
-  projects[currentProjectId] = Object.assign({}, data, { _id: currentProjectId });
-  localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
-  localStorage.setItem(CURRENT_ID_KEY, currentProjectId);
-  saveToLocalStorage(false);
-  toast('تم حفظ المشروع بنجاح ✅', 'success');
-}
-function openProjectsModal() { renderProjectsList(); document.getElementById('projectsModal').classList.add('show'); }
-function closeProjectsModal() { document.getElementById('projectsModal').classList.remove('show'); }
-function renderProjectsList() {
-  const container = document.getElementById('projectsList');
-  if (!container) return;
-  const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}');
-  const entries = Object.entries(projects).sort(function(a, b) { return (b[1].savedAt || 0) - (a[1].savedAt || 0); });
-  if (entries.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:20px;">لا توجد مشاريع محفوظة بعد</p>'; return; }
-  let html = '';
-  entries.forEach(function(pair) {
-    const id = pair[0], p = pair[1];
-    const date = p.savedAt ? new Date(p.savedAt).toLocaleDateString('ar-DZ') : '';
-    html += '<div class="project-item"><div><h4>' + (p.projName || 'بدون اسم') + '</h4><p>' + (p.projSector || 'قطاع غير محدد') + ' • ' + date + '</p></div>' +
-      '<div class="project-actions"><button class="project-load" onclick="loadProject(\'' + id + '\')" title="تحميل">📂</button>' +
-      '<button class="project-del" onclick="deleteProject(\'' + id + '\')" title="حذف">🗑️</button></div></div>';
-  });
-  container.innerHTML = html;
-}
-function loadProject(id) {
-  const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}');
-  const data = projects[id];
-  if (!data) return;
-  currentProjectId = id;
-  localStorage.setItem(CURRENT_ID_KEY, id);
-  restoreState(data);
-  closeProjectsModal();
-  toast('تم تحميل المشروع', 'success');
-}
-function deleteProject(id) {
-  showConfirm('حذف المشروع', 'هل تريد حذف هذا المشروع نهائياً؟', function(yes) {
-    if (!yes) return;
-    const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}');
-    delete projects[id];
-    localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
-    if (currentProjectId === id) { currentProjectId = null; localStorage.removeItem(CURRENT_ID_KEY); }
-    renderProjectsList();
-    toast('تم حذف المشروع', 'success');
-  });
-}
-function newProject() {
-  showConfirm('مشروع جديد', 'هل تريد بدء مشروع جديد؟ سيتم فقدان التغييرات غير المحفوظة.', function(yes) {
-    if (!yes) return;
-    currentProjectId = null;
-    localStorage.removeItem(CURRENT_ID_KEY);
-    clearAllData();
-    closeProjectsModal();
-    toast('مشروع جديد جاهز', 'success');
-  });
-}
-function clearAllData() {
-  ['projName','projSector','projTarget','projIdea','projCapital','projUnits','projPrice','bmc1','bmc2','bmc3','bmc4','bmc5','bmc6','bmc7','bmc8','bmc9'].forEach(function(id) {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  investItems = []; bomItems = []; fixedItems = []; emps = [];
-  window.calcData = null; pitchDeckData = null; tftCashFlows = [];
-  const sr = document.getElementById('swotResult'); if (sr) sr.style.display = 'none';
-  const pp = document.getElementById('pitchDeckPreview'); if (pp) pp.style.display = 'none';
-  const pbtn = document.getElementById('btn_pptx'); if (pbtn) pbtn.style.display = 'none';
-  const cbtn = document.getElementById('btn_canva'); if (cbtn) cbtn.style.display = 'none';
-  renderInvest(); renderBOM(); renderFixed(); renderEmps();
-  updateReadiness();
-  showTab('tab1');
-}
-
-/* ══════════════ 2. FINANCIAL ENGINE ══════════════ */
+/* ============ FINANCIAL ENGINE ============ */
 function calculateAll() {
-  const baseUnits = +((document.getElementById('projUnits') || {}).value) || 0;
-  const price = +((document.getElementById('projPrice') || {}).value) || 0;
-  let totalCapEx = 0, annualDep = 0;
-  const depData = [];
-  investItems.forEach(function(item) {
-    const tc = (item.cost || 0) * (item.qty || 0);
-    totalCapEx += tc;
-    const d = item.dep > 0 ? tc / item.dep : 0;
-    annualDep += d;
-    depData.push({ name: item.name, total: tc, years: item.dep, annual: d });
+  let baseUnits = +document.getElementById('projUnits').value || 0;
+  let price = +document.getElementById('projPrice').value || 0;
+  
+  let totalCapEx = 0, annualDep = 0, depData = [];
+  investItems.forEach(item => {
+    let tc = (item.cost || 0) * (item.qty || 0); totalCapEx += tc;
+    let d = item.dep > 0 ? tc / item.dep : 0; annualDep += d;
+    depData.push({name: item.name, total: tc, years: item.dep, annual: d});
   });
+
   let unitCost = 0;
-  bomItems.forEach(function(item) { unitCost += ((item.cost || 0) * (item.qty || 0)); });
+  bomItems.forEach(item => { unitCost += ((item.cost || 0) * (item.qty || 0)); });
+
   let monthlyOpex = 0;
-  fixedItems.forEach(function(item) { monthlyOpex += (item.cost || 0); });
-  emps.forEach(function(e) { monthlyOpex += ((e.salary || 0) * 1.26 * (e.count || 0)); });
-  const annualOpex = monthlyOpex * 12;
-  window.calcData = { baseUnits: baseUnits, price: price, totalCapEx: totalCapEx, annualDep: annualDep, depData: depData, unitCost: unitCost, annualOpex: annualOpex, monthlyOpex: monthlyOpex };
+  fixedItems.forEach(item => { monthlyOpex += (item.cost || 0); });
+  emps.forEach(e => { monthlyOpex += ((e.salary || 0) * 1.26 * (e.count || 0)); });
+  let annualOpex = monthlyOpex * 12;
+
+  window.calcData = { baseUnits, price, totalCapEx, annualDep, depData, unitCost, annualOpex, monthlyOpex };
+  
   renderAmort(); renderTCR(); renderTFT(); renderChart(); renderBreakEvenChart();
-  updateReadiness(); checkValidation();
+  updateReadiness();
+  checkValidation();
   showTab('tab3');
   triggerAutoSave();
-  toast('تم حساب الجداول بنجاح', 'success');
-}
-function renderAmort() {
-  if (!window.calcData) return;
-  const d = window.calcData;
-  let html = '<tr><th>' + t('c_item') + '</th><th>' + t('c_cost') + '</th><th>' + t('c_dep') + '</th><th>' + t('col_year') + '</th></tr>';
-  d.depData.forEach(function(item) { html += '<tr><td>' + item.name + '</td><td>' + fmt(item.total) + '</td><td>' + item.years + '</td><td>' + fmt(item.annual) + '</td></tr>'; });
-  html += '<tr style="font-weight:bold;"><td>' + t('col_total') + '</td><td>' + fmt(d.totalCapEx) + '</td><td>-</td><td>' + fmt(d.annualDep) + '</td></tr>';
-  const el = document.getElementById('amortTable'); if (el) el.innerHTML = html;
-}
-function renderTCR() {
-  if (!window.calcData) return;
-  const d = window.calcData;
-  const infRate = (parseFloat((document.getElementById('inflationRate') || {}).value) || 0) / 100;
-  let html = '<tr><th>' + t('c_item') + '</th>';
-  for (let i = 1; i <= 5; i++) html += '<th>' + t('col_year') + ' ' + i + '</th>';
-  html += '</tr>';
-  let revRow = '<tr><td>' + t('row_rev') + '</td>', cogsRow = '<tr><td>' + t('row_cogs') + '</td>', vaRow = '<tr><td>' + t('row_va') + '</td>';
-  let opexRow = '<tr><td>' + t('row_opex') + '</td>', ebeRow = '<tr><td>' + t('row_ebe') + '</td>', depRow = '<tr><td>' + t('row_dep') + '</td>';
-  let netRow = '<tr style="font-weight:bold;"><td>' + t('row_net') + '</td>';
-  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
-  for (let i = 1; i <= 5; i++) {
-    if (i > 1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
-    const rev = u * p, cogs = u * cogsUnit, va = rev - cogs, ebe = va - opex, dep = i <= 5 ? d.annualDep : 0, net = ebe - dep;
-    revRow += '<td>' + fmt(rev) + '</td>'; cogsRow += '<td>' + fmt(cogs) + '</td>'; vaRow += '<td>' + fmt(va) + '</td>';
-    opexRow += '<td>' + fmt(opex) + '</td>'; ebeRow += '<td>' + fmt(ebe) + '</td>'; depRow += '<td>' + fmt(dep) + '</td>';
-    netRow += '<td class="' + (net >= 0 ? 'ok-num' : 'big-num') + '">' + fmt(net) + '</td>';
-  }
-  html += revRow + '</tr>' + cogsRow + '</tr>' + vaRow + '</tr>' + opexRow + '</tr>' + ebeRow + '</tr>' + depRow + '</tr>' + netRow + '</tr>';
-  const el = document.getElementById('tcrTable'); if (el) el.innerHTML = html;
-}
-function renderTFT() {
-  if (!window.calcData) return;
-  const d = window.calcData;
-  const infRate = (parseFloat((document.getElementById('inflationRate') || {}).value) || 0) / 100;
-  let html = '<tr><th>' + t('c_item') + '</th>';
-  for (let i = 1; i <= 5; i++) html += '<th>' + t('col_year') + ' ' + i + '</th>';
-  html += '</tr>';
-  let opRow = '<tr><td>' + t('row_opflow') + '</td>', invRow = '<tr><td>' + t('row_invflow') + '</td>';
-  let cashRow = '<tr style="font-weight:bold;"><td>' + t('row_cash') + '</td>';
-  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
-  tftCashFlows = [-d.totalCapEx];
-  for (let i = 1; i <= 5; i++) {
-    if (i > 1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
-    const rev = u * p, cogs = u * cogsUnit, ebe = rev - cogs - opex, net = ebe - (i <= 5 ? d.annualDep : 0);
-    const opFlow = net + (i <= 5 ? d.annualDep : 0);
-    const invFlow = i === 1 ? -d.totalCapEx : 0;
-    const cashFlow = opFlow + invFlow;
-    tftCashFlows.push(cashFlow);
-    opRow += '<td>' + fmt(opFlow) + '</td>'; invRow += '<td>' + fmt(invFlow) + '</td>';
-    cashRow += '<td class="' + (cashFlow >= 0 ? 'ok-num' : 'big-num') + '">' + fmt(cashFlow) + '</td>';
-  }
-  html += opRow + '</tr>' + invRow + '</tr>' + cashRow + '</tr>';
-  const el = document.getElementById('tftTable'); if (el) el.innerHTML = html;
-}
-function checkValidation() {
-  const banner = document.getElementById('validation-banner');
-  if (!banner) return;
-  let msg = "";
-  if (window.calcData) {
-    if (window.calcData.price > 0 && window.calcData.price <= window.calcData.unitCost) msg = t('val_err_price');
-    else if (window.calcData.annualOpex <= 0 && window.calcData.totalCapEx > 0) msg = t('val_err_opex');
-  }
-  if (msg !== "") { banner.innerText = msg; banner.style.display = 'block'; }
-  else banner.style.display = 'none';
 }
 
-/* ══════════════ 3. CHARTS ══════════════ */
+function renderAmort() {
+  if(!window.calcData) return;
+  let d = window.calcData;
+  let html = `<tr><th>${t('c_item')}</th><th>${t('c_cost')}</th><th>${t('c_dep')}</th><th>${t('col_year')}</th></tr>`;
+  d.depData.forEach(item => { html += `<tr><td>${item.name}</td><td>${fmt(item.total)}</td><td>${item.years}</td><td>${fmt(item.annual)}</td></tr>`; });
+  html += `<tr style="font-weight:bold;"><td>${t('col_total')}</td><td>${fmt(d.totalCapEx)}</td><td>-</td><td>${fmt(d.annualDep)}</td></tr>`;
+  document.getElementById('amortTable').innerHTML = html;
+}
+
+function renderTCR() {
+  if(!window.calcData) return;
+  let d = window.calcData;
+  let infRate = (parseFloat(document.getElementById('inflationRate').value) || 0) / 100;
+  
+  let html = `<tr><th>${t('c_item')}</th>`;
+  for(let i=1; i<=5; i++) html += `<th>${t('col_year')} ${i}</th>`;
+  html += `</tr>`;
+  
+  let revRow = `<tr><td>${t('row_rev')}</td>`, cogsRow = `<tr><td>${t('row_cogs')}</td>`, vaRow = `<tr><td>${t('row_va')}</td>`;
+  let opexRow = `<tr><td>${t('row_opex')}</td>`, ebeRow = `<tr><td>${t('row_ebe')}</td>`, depRow = `<tr><td>${t('row_dep')}</td>`;
+  let netRow = `<tr style="font-weight:bold;"><td>${t('row_net')}</td>`;
+  
+  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
+  
+  for(let i=1; i<=5; i++) {
+    if(i>1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
+    let rev = u * p, cogs = u * cogsUnit, va = rev - cogs, ebe = va - opex, dep = i <= 5 ? d.annualDep : 0, net = ebe - dep;
+
+    revRow += `<td>${fmt(rev)}</td>`; cogsRow += `<td>${fmt(cogs)}</td>`; vaRow += `<td>${fmt(va)}</td>`;
+    opexRow += `<td>${fmt(opex)}</td>`; ebeRow += `<td>${fmt(ebe)}</td>`; depRow += `<td>${fmt(dep)}</td>`;
+    netRow += `<td class="${net>=0?'ok-num':'big-num'}">${fmt(net)}</td>`;
+  }
+  html += revRow+`</tr>`+cogsRow+`</tr>`+vaRow+`</tr>`+opexRow+`</tr>`+ebeRow+`</tr>`+depRow+`</tr>`+netRow+`</tr>`;
+  document.getElementById('tcrTable').innerHTML = html;
+}
+
+function renderTFT() {
+  if(!window.calcData) return;
+  let d = window.calcData;
+  let infRate = (parseFloat(document.getElementById('inflationRate').value) || 0) / 100;
+  
+  let html = `<tr><th>${t('c_item')}</th>`;
+  for(let i=1; i<=5; i++) html += `<th>${t('col_year')} ${i}</th>`;
+  html += `</tr>`;
+  
+  let opRow = `<tr><td>${t('row_opflow')}</td>`, invRow = `<tr><td>${t('row_invflow')}</td>`, cashRow = `<tr style="font-weight:bold;"><td>${t('row_cash')}</td>`;
+  let u = d.baseUnits, p = d.price, cogsUnit = d.unitCost, opex = d.annualOpex;
+  tftCashFlows = [-d.totalCapEx]; 
+  
+  for(let i=1; i<=5; i++) {
+    if(i>1) { u *= 1.20; p *= (1 + infRate); cogsUnit *= (1 + infRate); opex *= (1 + infRate); }
+    let rev = u * p, cogs = u * cogsUnit, ebe = rev - cogs - opex, net = ebe - (i<=5?d.annualDep:0);
+    let opFlow = net + (i<=5?d.annualDep:0), invFlow = i === 1 ? -d.totalCapEx : 0, cashFlow = opFlow + invFlow;
+    
+    tftCashFlows.push(cashFlow);
+    opRow += `<td>${fmt(opFlow)}</td>`; invRow += `<td>${fmt(invFlow)}</td>`; cashRow += `<td class="${cashFlow>=0?'ok-num':'big-num'}">${fmt(cashFlow)}</td>`;
+  }
+  html += opRow+`</tr>`+invRow+`</tr>`+cashRow+`</tr>`;
+  document.getElementById('tftTable').innerHTML = html;
+}
+
+function checkValidation() {
+  let banner = document.getElementById('validation-banner');
+  let msg = "";
+  if (window.calcData) {
+      if (window.calcData.price > 0 && window.calcData.price <= window.calcData.unitCost) msg = t('val_err_price');
+      else if (window.calcData.annualOpex <= 0 && window.calcData.totalCapEx > 0) msg = t('val_err_opex');
+  }
+  if (msg !== "") { banner.innerText = msg; banner.style.display = 'block'; } else { banner.style.display = 'none'; }
+}
+
+/* ============ CHARTS ============ */
 function renderChart() {
-  if (!window.calcData) return;
-  const canvas = document.getElementById('mainChart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  if (myChart) myChart.destroy();
-  const d = window.calcData;
-  const rev = d.baseUnits * d.price, cogs = d.baseUnits * d.unitCost, opex = d.annualOpex, profit = rev - cogs - opex;
-  const isDark = document.body.classList.contains('dark-mode');
-  const textColor = isDark ? '#e2e8f0' : '#4a5568';
-  const gridColor = isDark ? '#4a5568' : '#e2e8f0';
+  if(!window.calcData) return;
+  let ctx = document.getElementById('mainChart').getContext('2d');
+  if(myChart) myChart.destroy();
+  let d = window.calcData;
+  let rev = d.baseUnits * d.price, cogs = d.baseUnits * d.unitCost, opex = d.annualOpex, profit = rev - cogs - opex;
+  const textColor = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#4a5568';
+  const gridColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0';
+
   myChart = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: [t('row_rev'), t('row_cogs'), t('row_opex'), t('row_ebe')], datasets: [{ data: [rev, cogs, opex, profit], backgroundColor: ['#3182ce', '#c53030', '#dd6b20', '#38a169'], borderRadius: 8 }] },
+    type: 'bar', data: { labels: [t('row_rev'), t('row_cogs'), t('row_opex'), t('row_ebe')], datasets: [{ data: [rev, cogs, opex, profit], backgroundColor: ['#3182ce', '#c53030', '#dd6b20', '#38a169'] }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { color: gridColor } } } }
   });
 }
+
 function renderBreakEvenChart() {
-  if (!window.calcData || window.calcData.price <= window.calcData.unitCost) return;
-  const canvas = document.getElementById('beChart');
-  if (!canvas) return;
-  const d = window.calcData;
-  const ctx = canvas.getContext('2d');
-  if (beChart) beChart.destroy();
-  const bepUnits = d.annualOpex / (d.price - d.unitCost);
-  const maxUnits = Math.max(bepUnits * 2, d.baseUnits, 10);
-  const labels = [], revenueData = [], totalCostData = [];
-  for (let i = 0; i <= 5; i++) {
-    const units = (maxUnits / 5) * i;
-    labels.push(fmt(units));
-    revenueData.push(units * d.price);
-    totalCostData.push(d.annualOpex + (units * d.unitCost));
+  if(!window.calcData || window.calcData.price <= window.calcData.unitCost) return;
+  let d = window.calcData;
+  let ctx = document.getElementById('beChart').getContext('2d');
+  if(beChart) beChart.destroy();
+  
+  let bepUnits = d.annualOpex / (d.price - d.unitCost);
+  let maxUnits = Math.max(bepUnits * 2, d.baseUnits, 10);
+  let labels = [], revenueData = [], totalCostData = [];
+  
+  for(let i=0; i<=5; i++) {
+      let units = (maxUnits / 5) * i;
+      labels.push(fmt(units)); revenueData.push(units * d.price); totalCostData.push(d.annualOpex + (units * d.unitCost));
   }
-  const isDark = document.body.classList.contains('dark-mode');
-  const textColor = isDark ? '#e2e8f0' : '#4a5568';
-  const gridColor = isDark ? '#4a5568' : '#e2e8f0';
+  const textColor = document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#4a5568';
+  const gridColor = document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0';
+
   beChart = new Chart(ctx, {
-    type: 'line',
-    data: { labels: labels, datasets: [
-      { label: t('row_rev'), data: revenueData, borderColor: '#3182ce', fill: false, tension: 0.1 },
-      { label: t('row_opex'), data: totalCostData, borderColor: '#c53030', fill: false, tension: 0.1 }
+    type: 'line', data: { labels: labels, datasets: [
+        { label: t('row_rev'), data: revenueData, borderColor: '#3182ce', fill: false, tension: 0.1 },
+        { label: t('row_opex'), data: totalCostData, borderColor: '#c53030', fill: false, tension: 0.1 }
     ]},
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor } } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { color: gridColor } } } }
   });
 }
 
-/* ══════════════ 4. SENSITIVITY ══════════════ */
+/* ============ SENSITIVITY ============ */
 function calculateSensitivity() {
-  if (!window.calcData) return toast('يرجى حساب الجداول أولاً', 'warning');
-  const salesChange = parseFloat(document.getElementById('sensSales').value) / 100 || 0;
-  const varChange = parseFloat(document.getElementById('sensVar').value) / 100 || 0;
-  const fixChange = parseFloat(document.getElementById('sensFix').value) / 100 || 0;
-  const d = window.calcData;
-  const origRev = d.baseUnits * d.price, origVar = d.baseUnits * d.unitCost, origFix = d.annualOpex;
-  const origProfit = origRev - origVar - origFix;
-  const newRev = origRev * (1 + salesChange), newVar = origVar * (1 + varChange), newFix = origFix * (1 + fixChange);
-  const newProfit = newRev - newVar - newFix, diff = newProfit - origProfit;
-  const color = diff >= 0 ? 'ok-num' : 'big-num', sign = diff >= 0 ? '+' : '';
-  const el = document.getElementById('sensResult');
-  if (el) {
-    el.style.display = 'block';
-    el.innerHTML = '<p><strong>الربح الأصلي:</strong> ' + fmt(origProfit) + ' دج</p>' +
-      '<p><strong>السيناريو الجديد:</strong> <span class="' + color + '">' + fmt(newProfit) + ' دج</span></p>' +
-      '<hr style="border:0;border-top:1px solid var(--b);margin:10px 0;">' +
-      '<p><strong>التأثير:</strong> <span class="' + color + '">' + sign + fmt(diff) + ' دج</span></p>';
-  }
+  if(!window.calcData) return alert("يرجى حساب الجداول أولاً");
+  let salesChange = parseFloat(document.getElementById('sensSales').value) / 100 || 0;
+  let varChange = parseFloat(document.getElementById('sensVar').value) / 100 || 0;
+  let fixChange = parseFloat(document.getElementById('sensFix').value) / 100 || 0;
+  let d = window.calcData;
+  
+  let origRev = d.baseUnits * d.price, origVar = d.baseUnits * d.unitCost, origFix = d.annualOpex, origProfit = origRev - origVar - origFix;
+  let newRev = origRev * (1 + salesChange), newVar = origVar * (1 + varChange), newFix = origFix * (1 + fixChange);
+  let newProfit = newRev - newVar - newFix, diff = newProfit - origProfit;
+  let color = diff >= 0 ? 'ok-num' : 'big-num', sign = diff >= 0 ? '+' : '';
+  
+  document.getElementById('sensResult').style.display = 'block'; 
+  document.getElementById('sensResult').innerHTML = `<p><strong>الربح الأصلي:</strong> ${fmt(origProfit)} دج</p><p><strong>السيناريو الجديد:</strong> <span class="${color}">${fmt(newProfit)} دج</span></p><hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>التأثير:</strong> <span class="${color}">${sign}${fmt(diff)} دج</span></p>`;
 }
 
-/* ══════════════ 5. LOAN & DSCR ══════════════ */
+/* ============ LOAN & DSCR ============ */
 function calculateLoan() {
-  const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
-  const rate = parseFloat(document.getElementById('loanRate').value) / 100 || 0;
-  const years = parseFloat(document.getElementById('loanYears').value) || 1;
-  const months = years * 12, monthlyRate = rate / 12;
-  let monthlyPayment = 0;
-  if (amount > 0 && months > 0) {
-    if (monthlyRate > 0) monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-    else monthlyPayment = amount / months;
-  }
-  const totalPayment = monthlyPayment * months, totalInterest = totalPayment - amount;
-  let dscrHtml = "";
-  if (window.calcData && monthlyPayment > 0) {
-    const d = window.calcData;
-    const noi = (d.baseUnits * d.price) - (d.baseUnits * d.unitCost) - d.annualOpex;
-    const ads = monthlyPayment * 12;
-    const dscr = ads > 0 ? (noi / ads) : 0;
-    const dscrColor = dscr >= 1.2 ? 'var(--s)' : 'var(--d)';
-    dscrHtml = '<hr style="border:0;border-top:1px solid var(--b);margin:10px 0;">' +
-      '<p><strong>' + t('res_dscr') + '</strong> <span style="color:' + dscrColor + ';font-size:20px;font-weight:bold;">' + dscr.toFixed(2) + '</span></p>' +
-      '<p style="font-size:12px;color:' + dscrColor + ';">' + (dscr >= 1.2 ? t('dscr_good') : t('dscr_risky')) + '</p>';
-  }
-  const el = document.getElementById('loanResult');
-  if (el) {
-    el.style.display = 'block';
-    el.innerHTML = '<p><strong>' + t('res_monthly') + '</strong> <span class="big-num">' + fmt(monthlyPayment) + ' دج</span></p>' +
-      '<p><strong>' + t('res_total_interest') + '</strong> ' + fmt(totalInterest) + ' دج</p>' +
-      '<p><strong>' + t('res_total_payment') + '</strong> ' + fmt(totalPayment) + ' دج</p>' + dscrHtml;
-  }
+    let amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+    let rate = parseFloat(document.getElementById('loanRate').value) / 100 || 0;
+    let years = parseFloat(document.getElementById('loanYears').value) || 1;
+    let months = years * 12, monthlyRate = rate / 12, monthlyPayment = 0;
+    if (amount > 0 && months > 0) {
+        if (monthlyRate > 0) monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+        else monthlyPayment = amount / months;
+    }
+    let totalPayment = monthlyPayment * months, totalInterest = totalPayment - amount, dscrHtml = "";
+    if (window.calcData && monthlyPayment > 0) {
+        let d = window.calcData;
+        let noi = (d.baseUnits * d.price) - (d.baseUnits * d.unitCost) - d.annualOpex;
+        let ads = monthlyPayment * 12;
+        let dscr = ads > 0 ? (noi / ads) : 0;
+        let dscrColor = dscr >= 1.2 ? 'var(--s)' : 'var(--d)';
+        dscrHtml = `<hr style="border:0; border-top:1px solid var(--b); margin:10px 0;"><p><strong>${t('res_dscr')}</strong> <span style="color:${dscrColor}; font-size:20px; font-weight:bold;">${dscr.toFixed(2)}</span></p><p style="font-size:12px; color:${dscrColor};">${dscr >= 1.2 ? t('dscr_good') : t('dscr_risky')}</p>`;
+    }
+    document.getElementById('loanResult').style.display = 'block';
+    document.getElementById('loanResult').innerHTML = `<p><strong>${t('res_monthly')}</strong> <span class="big-num">${fmt(monthlyPayment)} دج</span></p><p><strong>${t('res_total_interest')}</strong> ${fmt(totalInterest)} دج</p><p><strong>${t('res_total_payment')}</strong> ${fmt(totalPayment)} دج</p>${dscrHtml}`;
 }
 
-/* ══════════════ 6. NPV & IRR ══════════════ */
+/* ============ NPV & IRR ============ */
 function calculateIRR(cashFlows) {
-  let guess = 0.1;
-  for (let i = 0; i < 100; i++) {
-    let npv = 0;
-    for (let j = 0; j < cashFlows.length; j++) npv += cashFlows[j] / Math.pow(1 + guess, j);
-    if (Math.abs(npv) < 0.01) return guess * 100;
-    let d_npv = 0;
-    for (let j = 1; j < cashFlows.length; j++) d_npv -= j * cashFlows[j] / Math.pow(1 + guess, j + 1);
-    const newGuess = guess - npv / d_npv;
-    if (Math.abs(newGuess - guess) < 0.0001) return newGuess * 100;
-    guess = newGuess;
-  }
-  return null;
+    let guess = 0.1;
+    for(let i=0; i<100; i++) {
+        let npv = 0;
+        for(let j=0; j<cashFlows.length; j++) npv += cashFlows[j] / Math.pow(1 + guess, j);
+        if(Math.abs(npv) < 0.01) return guess * 100;
+        let d_npv = 0;
+        for(let j=1; j<cashFlows.length; j++) d_npv -= j * cashFlows[j] / Math.pow(1 + guess, j + 1);
+        let newGuess = guess - npv / d_npv;
+        if(Math.abs(newGuess - guess) < 0.0001) return newGuess * 100;
+        guess = newGuess;
+    }
+    return null;
 }
 function calculateNPV_IRR() {
-  if (!window.calcData || tftCashFlows.length === 0) return toast('يرجى حساب الجداول المالية أولاً', 'warning');
-  const rate = parseFloat(document.getElementById('discountRate').value) / 100 || 0;
-  let npv = 0;
-  for (let i = 0; i < tftCashFlows.length; i++) npv += tftCashFlows[i] / Math.pow(1 + rate, i);
-  const irr = calculateIRR(tftCashFlows);
-  let payback = 0, cumulative = tftCashFlows[0];
-  for (let i = 1; i < tftCashFlows.length; i++) { cumulative += tftCashFlows[i]; if (cumulative >= 0) { payback = i; break; } }
-  const resDiv = document.getElementById('npvResult');
-  if (!resDiv) return;
-  resDiv.style.display = 'grid';
-  const npvColor = npv > 0 ? 'ok-num' : 'big-num';
-  resDiv.innerHTML = '<div class="result"><p><strong>' + t('res_npv') + '</strong></p><p class="' + npvColor + '" style="font-size:20px;">' + fmt(npv) + ' دج</p></div>' +
-    '<div class="result"><p><strong>' + t('res_irr') + '</strong></p><p class="' + (irr && irr > rate * 100 ? 'ok-num' : 'big-num') + '" style="font-size:20px;">' + (irr ? irr.toFixed(1) + '%' : 'N/A') + '</p></div>' +
-    '<div class="result"><p><strong>' + t('res_payback') + '</strong></p><p style="font-size:20px;">' + (payback > 0 ? payback : '> 5') + ' ' + (L === 'ar' ? 'سنوات' : 'ans') + '</p></div>';
+    if (!window.calcData || tftCashFlows.length === 0) { alert("يرجى حساب الجداول المالية أولاً."); return; }
+    let rate = parseFloat(document.getElementById('discountRate').value) / 100 || 0;
+    let npv = 0;
+    for(let i=0; i<tftCashFlows.length; i++) npv += tftCashFlows[i] / Math.pow(1 + rate, i);
+    let irr = calculateIRR(tftCashFlows), payback = 0, cumulative = tftCashFlows[0];
+    for(let i=1; i<tftCashFlows.length; i++) { cumulative += tftCashFlows[i]; if(cumulative >= 0) { payback = i; break; } }
+
+    let resDiv = document.getElementById('npvResult'); resDiv.style.display = 'grid';
+    let npvColor = npv > 0 ? 'ok-num' : 'big-num';
+    resDiv.innerHTML = `<div class="result"><p><strong>${t('res_npv')}</strong></p><p class="${npvColor}" style="font-size:20px;">${fmt(npv)} دج</p></div><div class="result"><p><strong>${t('res_irr')}</strong></p><p class="${irr && irr > rate*100 ? 'ok-num' : 'big-num'}" style="font-size:20px;">${irr ? irr.toFixed(1) + '%' : 'N/A'}</p></div><div class="result"><p><strong>${t('res_payback')}</strong></p><p style="font-size:20px;">${payback > 0 ? payback : '> 5'} ${L==='ar'?'سنوات':'ans'}</p></div>`;
 }
 
-/* ══════════════ 7. READINESS & CHECKLIST ══════════════ */
+/* ============ SMART ACCOUNTANT ============ */
+async function aiSmartAccountant() {
+    if(!window.calcData) return alert('يرجى حساب الجداول أولاً');
+    let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري المراجعة...";
+    let d = window.calcData;
+    let prompt = `أنت محاسب خبير. راجع هذه البيانات المالية لمشروع: رأس المال: ${d.totalCapEx} دج. تكلفة الوحدة: ${d.unitCost} دج. سعر البيع: ${d.price} دج. المصاريف الشهرية: ${d.monthlyOpex} دج. المبيعات: ${d.baseUnits} وحدة/سنة. قم بإعطاء 3 نصائح مالية دقيقة جداً لتحسين الأرباح، وحذرني من الأخطاء. اكتب باللغة: ${L}.`;
+    let result = await callAI(prompt);
+    document.getElementById('accResult').style.display = 'block';
+    document.getElementById('accResult').innerText = result;
+    btn.innerText = originalText; updateChecklist();
+}
+
+/* ============ READINESS & PATH ============ */
 function updateReadiness() {
-  let score = 0;
-  const name = (document.getElementById('projName') || {}).value || '';
-  const idea = (document.getElementById('projIdea') || {}).value || '';
-  const sector = (document.getElementById('projSector') || {}).value || '';
-  if (name.length > 2 && idea.length > 5 && sector.length > 2) score += 20;
-  if (window.calcData && window.calcData.baseUnits > 0 && window.calcData.price > 0) score += 20;
-  if (window.calcData && (window.calcData.baseUnits * window.calcData.price) - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex > 0) score += 20;
-  const bmc3 = (document.getElementById('bmc3') || {}).value || '';
-  if (bmc3.length > 5) score += 20;
-  const sr = document.getElementById('swotResult');
-  if (sr && sr.style.display !== 'none') score += 20;
-  const scoreText = document.getElementById('readinessScoreText');
-  const bar = document.getElementById('readinessBar');
-  const msg = document.getElementById('readinessMsg');
-  if (scoreText) scoreText.innerText = score + '%';
-  if (bar) bar.style.width = score + '%';
-  if (msg) msg.innerText = score <= 20 ? t('msg_r0') : score <= 60 ? t('msg_r50') : score <= 80 ? t('msg_r80') : t('msg_r100');
-}
-function updateChecklist() {
-  const container = document.getElementById('checklistContainer');
-  if (!container) return;
-  const projName = (document.getElementById('projName') || {}).value || '';
-  const bmc3 = (document.getElementById('bmc3') || {}).value || '';
-  const sr = document.getElementById('swotResult');
-  const items = [
-    { text: t('step1'), checked: projName.length > 2 },
-    { text: t('step2'), checked: window.calcData != null },
-    { text: t('step3'), checked: bmc3.length > 5 },
-    { text: t('step4'), checked: sr && sr.style.display !== 'none' },
-    { text: t('step5'), checked: localStorage.getItem('finstart_published_' + projName) === 'true' }
-  ];
-  let html = '';
-  items.forEach(function(item) {
-    html += '<div class="checklist-item"><input type="checkbox" ' + (item.checked ? 'checked' : '') + ' disabled><span style="' + (item.checked ? 'color:var(--s);font-weight:bold;' : '') + '">' + item.text + '</span></div>';
-  });
-  container.innerHTML = html;
+    let score = 0;
+    let name = document.getElementById('projName').value, idea = document.getElementById('projIdea').value, sector = document.getElementById('projSector').value;
+    if(name.length > 2 && idea.length > 5 && sector.length > 2) score += 20;
+    if(window.calcData && window.calcData.baseUnits > 0 && window.calcData.price > 0) score += 20;
+    if(window.calcData && (window.calcData.baseUnits * window.calcData.price) - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex > 0) score += 20;
+    if(document.getElementById('bmc3').value.length > 5) score += 20;
+    if(document.getElementById('swotResult').style.display !== 'none') score += 20;
+    
+    document.getElementById('readinessScoreText').innerText = score + '%';
+    document.getElementById('readinessBar').style.width = score + '%';
+    document.getElementById('readinessMsg').innerText = score <= 20 ? t('msg_r0') : score <= 60 ? t('msg_r50') : score <= 80 ? t('msg_r80') : t('msg_r100');
 }
 
-/* ══════════════ 8. MARKETPLACE ══════════════ */
-const demoProjects = [{ name: "EcoDeliver", sector: "لوجستيك", idea: "توصيل بالدراجات الكهربائية.", capital: 2000000, margin: "25%" }];
+function updateChecklist() {
+    if(!document.getElementById('checklistContainer')) return;
+    let items = [{ text: t('step1'), checked: document.getElementById('projName').value.length > 2 },{ text: t('step2'), checked: window.calcData != null },{ text: t('step3'), checked: document.getElementById('bmc3').value.length > 5 },{ text: t('step4'), checked: document.getElementById('swotResult').style.display !== 'none' },{ text: t('step5'), checked: localStorage.getItem('finstart_published_' + document.getElementById('projName').value) === 'true' }];
+    let html = '';
+    items.forEach(item => { html += `<div class="checklist-item"><input type="checkbox" ${item.checked ? 'checked' : ''} disabled><span style="${item.checked ? 'color:var(--s); font-weight:bold;' : ''}">${item.text}</span></div>`; });
+    document.getElementById('checklistContainer').innerHTML = html;
+}
+  /* ============ MARKETPLACE ============ */
+const demoProjects = [{ name: "EcoDeliver", sector: "لوجستيك", idea: "توصيل بالدراجات.", capital: 2000000, margin: "25%" }];
 function renderMarket() {
-  const grid = document.getElementById('marketGrid');
-  if (!grid) return;
-  const userProjects = JSON.parse(localStorage.getItem(MARKET_KEY) || "[]");
-  let html = '';
-  [...userProjects, ...demoProjects].forEach(function(p) {
-    html += '<div class="market-card"><div><h3>' + p.name + '</h3>' +
-      '<p><strong>القطاع:</strong> ' + p.sector + ' | <strong>رأس المال:</strong> ' + fmt(p.capital) + ' دج</p>' +
-      '<p>' + p.idea + '</p></div>' +
-      '<div><span style="background:var(--s);color:white;padding:5px 10px;border-radius:10px;font-size:12px;">' + t('profit_margin') + ': ' + p.margin + '</span></div></div>';
-  });
-  grid.innerHTML = html;
+    let grid = document.getElementById('marketGrid'); if(!grid) return;
+    let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
+    let html = '';
+    [...userProjects, ...demoProjects].forEach(p => { html += `<div class="market-card"><div><h3>${p.name}</h3><p><strong>القطاع:</strong> ${p.sector} | <strong>رأس المال:</strong> ${fmt(p.capital)} دج</p><p>${p.idea}</p></div><div><span style="background:var(--s); color:white; padding:5px 10px; border-radius:10px; font-size:12px;">${t('profit_margin')}: ${p.margin}</span></div></div>`; });
+    grid.innerHTML = html;
 }
 function publishToMarket() {
-  if (!window.calcData) return toast('يرجى حساب الجداول أولاً', 'warning');
-  const name = (document.getElementById('projName') || {}).value || "مشروعي";
-  const sector = (document.getElementById('projSector') || {}).value || "غير محدد";
-  const idea = (document.getElementById('projIdea') || {}).value || "";
-  const capital = window.calcData.totalCapEx;
-  const rev = window.calcData.baseUnits * window.calcData.price;
-  const profit = rev - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
-  const margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) + "%" : "0%";
-  let userProjects = JSON.parse(localStorage.getItem(MARKET_KEY) || "[]");
-  userProjects = userProjects.filter(function(up) { return up.name !== name; });
-  userProjects.push({ name: name, sector: sector, idea: idea, capital: capital, margin: margin });
-  localStorage.setItem(MARKET_KEY, JSON.stringify(userProjects));
-  localStorage.setItem('finstart_published_' + name, 'true');
-  toast(t('pub_success'), 'success');
-  renderMarket();
-  updateChecklist();
+    if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
+    let name = document.getElementById('projName').value || "مشروعي", sector = document.getElementById('projSector').value, idea = document.getElementById('projIdea').value, capital = window.calcData.totalCapEx;
+    let rev = window.calcData.baseUnits * window.calcData.price, profit = rev - (window.calcData.baseUnits * window.calcData.unitCost) - window.calcData.annualOpex;
+    let margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) + "%" : "0%";
+    let userProjects = JSON.parse(localStorage.getItem('finstart_market') || "[]");
+    userProjects = userProjects.filter(up => up.name !== name); userProjects.push({ name, sector, idea, capital, margin });
+    localStorage.setItem('finstart_market', JSON.stringify(userProjects)); localStorage.setItem('finstart_published_' + name, 'true');
+    alert(t('pub_success')); renderMarket(); updateChecklist();
 }
 
-/* ══════════════ 9. AI FUNCTIONS ══════════════ */
-async function callAI(prompt, type, sector) {
-  type = type || 'general'; sector = sector || '';
+/* ============ AI ============ */
+async function callAI(prompt, type='general', sector='') {
   try {
-    const response = await fetch('/api/ai', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: prompt, type: type, sector: sector, lang: L })
-    });
+    const response = await fetch('/api/ai', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, type, sector, lang: L }) });
     const data = await response.json();
     if (!response.ok || data.error) throw new Error(data.error || 'API Error');
     return data.result;
-  } catch (e) { return "❌ خطأ في الاتصال بالذكاء الاصطناعي: " + e.message; }
-}
-async function askAI(event) {
-  const q = (document.getElementById('aiQuestion') || {}).value;
-  if (!q) return toast('اكتب سؤالك أولاً', 'warning');
-  const res = document.getElementById('aiResponse');
-  const btn = event ? event.target : null;
-  const restore = setButtonLoading(btn, '⏳');
-  if (res) { res.style.display = 'block'; res.innerText = "⏳ جاري التفكير..."; }
-  const result = await callAI(q);
-  if (res) res.innerText = result;
-  restore();
-}
-async function aiSmartAccountant(event) {
-  if (!window.calcData) return toast('يرجى حساب الجداول أولاً', 'warning');
-  const btn = event ? event.target : null;
-  const restore = setButtonLoading(btn, '⏳ جاري المراجعة...');
-  const d = window.calcData;
-  const prompt = 'أنت محاسب خبير. راجع هذه البيانات: رأس المال: ' + d.totalCapEx + ' دج، تكلفة الوحدة: ' + d.unitCost + ' دج، سعر البيع: ' + d.price + ' دج، المصاريف الشهرية: ' + d.monthlyOpex + ' دج، المبيعات: ' + d.baseUnits + ' وحدة/سنة. أعط 3 نصائح مالية دقيقة وحذرني من الأخطاء. اكتب باللغة: ' + L;
-  const result = await callAI(prompt);
-  const el = document.getElementById('accResult');
-  if (el) { el.style.display = 'block'; el.innerText = result; }
-  restore();
-  updateChecklist();
-}
-async function aiGenerateBMC(event) {
-  const idea = (document.getElementById('projIdea') || {}).value;
-  if (!idea) return toast('اكتب الفكرة أولاً', 'warning');
-  const btn = event ? event.target : null;
-  const restore = setButtonLoading(btn, '⏳ جاري التوليد...');
-  const result = await callAI(idea, 'bmc');
-  try {
-    const parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    const keys = ['partners','activities','value','segments','channels','relations','resources','revenues','costs'];
-    ['bmc1','bmc2','bmc3','bmc4','bmc5','bmc6','bmc7','bmc8','bmc9'].forEach(function(id, idx) {
-      const el = document.getElementById(id);
-      if (el) el.value = parsed[keys[idx]] || '';
-    });
-    updateReadiness(); triggerAutoSave();
-    toast('تم توليد BMC بنجاح', 'success');
-  } catch (e) { toast("خطأ في التنسيق، حاول مجدداً", 'error'); }
-  restore();
-}
-async function aiAnalyzeCompetitors(event) {
-  const sector = (document.getElementById('projSector') || {}).value;
-  if (!sector) return toast('اكتب القطاع أولاً', 'warning');
-  const btn = event ? event.target : null;
-  const restore = setButtonLoading(btn, '⏳ جاري البحث...');
-  const result = await callAI("", 'competitors', sector);
-  try {
-    const parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    let html = '<table class="data"><tr><th>' + t('p_name') + '</th><th>الموظفون</th><th>التمويل</th><th>السعر</th><th>الميزات</th><th>المصدر</th></tr>';
-    parsed.forEach(function(c) {
-      html += '<tr><td><strong>' + c.name + '</strong></td><td>' + c.employees + '</td><td>' + c.funding + '</td><td>' + c.pricing + '</td><td>' + c.features + '</td><td><a href="' + c.source_url + '" target="_blank">رابط</a></td></tr>';
-    });
-    const el = document.getElementById('compResult');
-    if (el) el.innerHTML = html + '</table>';
-  } catch (e) {
-    const el = document.getElementById('compResult');
-    if (el) el.innerHTML = '<p class="big-num">فشل البحث</p>';
-  }
-  restore();
-}
-async function aiGenerateSWOT(event) {
-  const idea = (document.getElementById('projIdea') || {}).value;
-  if (!idea) return toast('اكتب الفكرة أولاً', 'warning');
-  const btn = event ? event.target : null;
-  const restore = setButtonLoading(btn, '⏳ جاري التحليل...');
-  const result = await callAI(idea, 'swot');
-  try {
-    const parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
-    const fillList = function(id, arr) {
-      let html = '';
-      if (Array.isArray(arr)) arr.forEach(function(item) { html += '<li>' + item + '</li>'; });
-      else html = '<li>' + (arr || 'لا يوجد') + '</li>';
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = html;
-    };
-    fillList('swotS', parsed.strengths); fillList('swotW', parsed.weaknesses);
-    fillList('swotO', parsed.opportunities); fillList('swotT', parsed.threats);
-    const rec = document.getElementById('swotRec');
-    if (rec) rec.innerText = parsed.recommendation || '';
-    const sr = document.getElementById('swotResult');
-    if (sr) sr.style.display = 'block';
-    updateReadiness(); triggerAutoSave();
-    toast('تم توليد SWOT', 'success');
-  } catch (e) { toast("حدث خطأ، حاول مجدداً", 'error'); }
-  restore();
+  } catch(e) { return "❌ خطأ: " + e.message; }
 }
 
-/* ══════════════ 10. PITCH DECK ══════════════ */
+async function askAI() { let q = document.getElementById('aiQuestion').value; if(!q) return; let res = document.getElementById('aiResponse'); res.style.display = 'block'; res.innerText = "⏳ جاري التفكير..."; res.innerText = await callAI(q); }
+
+async function aiGenerateBMC() {
+  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التوليد...";
+  let result = await callAI(idea, 'bmc');
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    document.getElementById('bmc1').value = parsed.partners || ''; document.getElementById('bmc2').value = parsed.activities || ''; document.getElementById('bmc3').value = parsed.value || ''; document.getElementById('bmc4').value = parsed.segments || ''; document.getElementById('bmc5').value = parsed.channels || ''; document.getElementById('bmc6').value = parsed.relations || ''; document.getElementById('bmc7').value = parsed.resources || ''; document.getElementById('bmc8').value = parsed.revenues || ''; document.getElementById('bmc9').value = parsed.costs || ''; updateReadiness();
+  } catch(e) { alert("خطأ في التنسيق"); }
+  btn.innerText = originalText;
+}
+
+async function aiAnalyzeCompetitors() {
+  let sector = document.getElementById('projSector').value; let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري البحث...";
+  let result = await callAI("", 'competitors', sector);
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    let html = `<table class="data"><tr><th>${t('p_name')}</th><th>الموظفون</th><th>التمويل</th><th>السعر</th><th>الميزات</th><th>المصدر</th></tr>`;
+    parsed.forEach(c => { html += `<tr><td><strong>${c.name}</strong></td><td>${c.employees}</td><td>${c.funding}</td><td>${c.pricing}</td><td>${c.features}</td><td><a href="${c.source_url}" target="_blank">رابط</a></td></tr>`; });
+    document.getElementById('compResult').innerHTML = html + `</table>`;
+  } catch(e) { document.getElementById('compResult').innerHTML = `<p class="big-num">فشل البحث</p>`; }
+  btn.innerText = originalText;
+}
+
+async function aiGenerateSWOT() {
+  let idea = document.getElementById('projIdea').value; if(!idea) return alert('اكتب الفكرة أولاً');
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري التحليل...";
+  let result = await callAI(idea, 'swot');
+  try {
+    let parsed = JSON.parse(result.replace(/```json/gi, '').replace(/```/gi, '').trim());
+    let fillList = (id, arr) => { let html = ''; if(Array.isArray(arr)) { arr.forEach(item => html += `<li>${item}</li>`); } else { html = `<li>${arr || 'لا يوجد'}</li>`; } document.getElementById(id).innerHTML = html; };
+    fillList('swotS', parsed.strengths); fillList('swotW', parsed.weaknesses); fillList('swotO', parsed.opportunities); fillList('swotT', parsed.threats);
+    document.getElementById('swotRec').innerText = parsed.recommendation || ''; document.getElementById('swotResult').style.display = 'block'; updateReadiness();
+  } catch(e) { alert("حدث خطأ، حاول مجدداً."); }
+  btn.innerText = originalText;
+}
+
+/* ============ PITCH DECK ============ */
 const defaultPitchDeck = [
   { title: "1. General Presentation", content: ["Project Title: Smart Attendance System", "Tagline: Trust the process, track the progress", "Presented by: Attatfa Halima, Ait Ziane Fatmazohra", "Supervised by: Dr. Bouchouareb Rachida, Dr. Mellal Nassima"] },
   { title: "2. Project Summary", content: ["Raspberry Pi + Facial Recognition + RFID Card.", "Database: Comparing facial features and UID with stored data.", "Real-Time Update: Attendance is automatically recorded once a match is confirmed.", "Accuracy and Efficiency: Precise tracking and protection against tampering."] },
@@ -1431,261 +987,117 @@ const defaultPitchDeck = [
   { title: "10. Target Market Analysis", content: ["Education Sector (Current Phase): Universities, Technical Institutes, Schools.", "Corporate Sector: Companies needing reliable employee attendance.", "Ministry of Education: Building accurate digital databases."] },
   { title: "11. Project Roadmap", content: ["1-6 Months: Prototype building and testing.", "6-12 Months: Field testing in a real environment.", "1-3 Years: Expansion, improving user experience, sustainability."] }
 ];
-async function aiGeneratePitchDeck(event) {
-  const idea = (document.getElementById('projIdea') || {}).value;
-  if (!idea) return toast('اكتب فكرة المشروع أولاً في الصفحة الأولى', 'warning');
-  const btn = event ? event.target : null;
-  const restore = setButtonLoading(btn, '⏳ جاري بناء العرض...');
-  const bmc = { partners: document.getElementById('bmc1').value, activities: document.getElementById('bmc2').value, value: document.getElementById('bmc3').value, segments: document.getElementById('bmc4').value, channels: document.getElementById('bmc5').value, relations: document.getElementById('bmc6').value, resources: document.getElementById('bmc7').value, revenues: document.getElementById('bmc8').value, costs: document.getElementById('bmc9').value };
-  const swot = { s: document.getElementById('swotS').innerText, w: document.getElementById('swotW').innerText, o: document.getElementById('swotO').innerText, t: document.getElementById('swotT').innerText };
-  const prompt = 'أنت خبير في عرض المشاريع. أنشئ Pitch Deck لمشروع فكرته: "' + idea + '". BMC: ' + JSON.stringify(bmc) + '. SWOT: ' + JSON.stringify(swot) + '. أرجع JSON نقي فقط (مصفوفة من 11 كائناً) كل كائن: "title" و"content" (مصفوفة نقاط). العناوين: 1. General Presentation, 2. Project Summary, 3. The Team, 4. Targeted Problem, 5. Proposed Solution, 6. Prototype Presentation, 7. Added Value, 8. Competitive Analysis, 9. Business Model, 10. Target Market Analysis, 11. Project Roadmap. اللغة: ' + L;
-  const result = await callAI(prompt);
-  if (result.startsWith("❌") || result.startsWith("⚠️")) { toast('تم استخدام العرض الافتراضي', 'warning'); pitchDeckData = defaultPitchDeck; }
-  else {
-    try {
-      let clean = result;
-      const start = clean.indexOf('['), end = clean.lastIndexOf(']');
-      if (start !== -1 && end !== -1) clean = clean.substring(start, end + 1);
-      const parsed = JSON.parse(clean);
-      if (Array.isArray(parsed) && parsed.length >= 10) pitchDeckData = parsed;
-      else throw new Error("Not enough slides");
-    } catch (e) { pitchDeckData = defaultPitchDeck; }
+
+async function aiGeneratePitchDeck() {
+  let idea = document.getElementById('projIdea').value;
+  if(!idea) return alert('اكتب فكرة المشروع أولاً في الصفحة الأولى');
+  let btn = event.target; let originalText = btn.innerText; btn.innerText = "⏳ جاري بناء العرض...";
+  let bmc = { partners: document.getElementById('bmc1').value, activities: document.getElementById('bmc2').value, value: document.getElementById('bmc3').value, segments: document.getElementById('bmc4').value, channels: document.getElementById('bmc5').value, relations: document.getElementById('bmc6').value, resources: document.getElementById('bmc7').value, revenues: document.getElementById('bmc8').value, costs: document.getElementById('bmc9').value };
+  let swot = { s: document.getElementById('swotS').innerText, w: document.getElementById('swotW').innerText, o: document.getElementById('swotO').innerText, t: document.getElementById('swotT').innerText };
+  let prompt = `أنت خبير في عرض المشاريع. قم بإنشاء Pitch Deck لمشروع فكرته: "${idea}". BMC: ${JSON.stringify(bmc)}. SWOT: ${JSON.stringify(swot)}. أرجع النتيجة بصيغة JSON نقية فقط (مصفوفة من 11 كائناً). كل كائن يحتوي على: "title" (عنوان الشريحة) و "content" (مصفوفة نقاط). العناوين بالضبط: 1. General Presentation, 2. Project Summary, 3. The Team, 4. Targeted Problem, 5. Proposed Solution, 6. Prototype Presentation, 7. Added Value, 8. Competitive Analysis, 9. Business Model, 10. Target Market Analysis, 11. Project Roadmap. اكتب باللغة: ${L}.`;
+  let result = await callAI(prompt);
+  if (result.startsWith("❌") || result.startsWith("⚠️")) {
+      alert(result); pitchDeckData = defaultPitchDeck; renderPitchPreview(); document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; btn.innerText = originalText; return;
   }
-  renderPitchPreview();
-  document.getElementById('btn_pptx').style.display = 'inline-block';
-  document.getElementById('btn_canva').style.display = 'inline-block';
-  triggerAutoSave();
-  restore();
-  toast('تم توليد العرض التقديمي', 'success');
+  try {
+    let cleanResult = result; let startIdx = cleanResult.indexOf('['); let endIdx = cleanResult.lastIndexOf(']');
+    if(startIdx !== -1 && endIdx !== -1) cleanResult = cleanResult.substring(startIdx, endIdx + 1);
+    let parsed = JSON.parse(cleanResult);
+    if(Array.isArray(parsed) && parsed.length >= 10) { pitchDeckData = parsed; } else { throw new Error("Not enough slides"); }
+  } catch(e) { pitchDeckData = defaultPitchDeck; }
+  renderPitchPreview(); document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; btn.innerText = originalText;
 }
+
 function renderPitchPreview() {
-  const container = document.getElementById('pitchDeckPreview');
-  if (!container) return;
-  if (!pitchDeckData) {
-    pitchDeckData = defaultPitchDeck;
-    document.getElementById('btn_pptx').style.display = 'inline-block';
-    document.getElementById('btn_canva').style.display = 'inline-block';
-  }
+  let container = document.getElementById('pitchDeckPreview');
+  if(!container) return;
+  if(!pitchDeckData) { pitchDeckData = defaultPitchDeck; document.getElementById('btn_pptx').style.display = 'inline-block'; document.getElementById('btn_canva').style.display = 'inline-block'; }
   let html = '';
-  pitchDeckData.forEach(function(slide, index) {
-    html += '<div class="pitch-slide-preview"><h3>Slide ' + (index + 1) + ': ' + slide.title + '</h3><ul>';
-    slide.content.forEach(function(c) { html += '<li>' + c + '</li>'; });
-    html += '</ul></div>';
-  });
-  container.innerHTML = html;
-  container.style.display = 'block';
+  pitchDeckData.forEach((slide, index) => { html += `<div class="pitch-slide-preview"><h3>Slide ${index + 1}: ${slide.title}</h3><ul>${slide.content.map(c => `<li>${c}</li>`).join('')}</ul></div>`; });
+  container.innerHTML = html; container.style.display = 'block';
 }
+
 function exportPitchToPPTX() {
-  if (!pitchDeckData) return toast('يرجى توليد العرض أولاً', 'warning');
-  const pptx = new PptxGenJS();
-  pptx.layout = 'LAYOUT_16x9';
-  const slide1 = pptx.addSlide();
-  slide1.background = { color: "1e3a5f" };
+  if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
+  let pptx = new PptxGenJS(); pptx.layout = 'LAYOUT_16x9';
+  let slide1 = pptx.addSlide(); slide1.background = { color: "1e3a5f" };
   slide1.addText(pitchDeckData[0].title, { x: 1, y: 2, w: '80%', h: 1, fontSize: 36, color: "FFFFFF", bold: true, align: 'center' });
   slide1.addText(pitchDeckData[0].content.join('\n'), { x: 1, y: 3.5, w: '80%', h: 2, fontSize: 18, color: "E2E8F0", align: 'center' });
-  for (let i = 1; i < pitchDeckData.length; i++) {
-    const slide = pptx.addSlide();
-    slide.background = { color: "FFFFFF" };
+  for(let i = 1; i < pitchDeckData.length; i++) {
+    let slide = pptx.addSlide(); slide.background = { color: "FFFFFF" };
     slide.addText(pitchDeckData[i].title, { x: 0.5, y: 0.5, w: '90%', h: 1, fontSize: 28, color: "1e3a5f", bold: true, border: { pt: 2, color: "3182ce" }, fill: "f0f4f8" });
-    const rows = pitchDeckData[i].content.map(function(text) { return { text: text, options: { bullet: true, fontSize: 20, color: "1a202c", breakLine: true } }; });
-    slide.addText(rows, { x: 0.5, y: 1.8, w: '90%', h: 4, valign: 'top' });
+    let textRows = pitchDeckData[i].content.map(text => ({ text: text, options: { bullet: true, fontSize: 20, color: "1a202c", breakLine: true } }));
+    slide.addText(textRows, { x: 0.5, y: 1.8, w: '90%', h: 4, valign: 'top' });
   }
-  pptx.writeFile({ fileName: (document.getElementById('projName').value || 'Project') + '_PitchDeck.pptx' });
-  toast('تم تصدير العرض', 'success');
-}
-function openInCanva() {
-  if (!pitchDeckData) return toast('يرجى توليد العرض أولاً', 'warning');
-  let text = "";
-  pitchDeckData.forEach(function(slide, index) {
-    text += '[Slide ' + (index + 1) + ': ' + slide.title + ']\n';
-    slide.content.forEach(function(c) { text += '- ' + c + '\n'; });
-    text += "\n";
-  });
-  navigator.clipboard.writeText(text).then(function() {
-    toast('تم نسخ محتوى العرض! افتح Canva والصق النص.', 'success');
-    window.open('https://www.canva.com/create/pitch-decks/', '_blank');
-  }).catch(function(err) { toast('خطأ في النسخ: ' + err.message, 'error'); });
+  pptx.writeFile({ fileName: `${document.getElementById('projName').value || 'Project'}_PitchDeck.pptx` });
 }
 
-/* ══════════════ 11. EXPORTS ══════════════ */
-function exportExcel() {
-  if (!window.calcData) return toast('يرجى حساب الجداول أولاً', 'warning');
-  let tCapEx = '<table><tr><th>البيان</th><th>القيمة</th><th>الكمية</th><th>الاهتلاك</th><th>المجموع</th></tr>';
-  investItems.forEach(function(i) { tCapEx += '<tr><td>' + i.name + '</td><td>' + i.cost + '</td><td>' + i.qty + '</td><td>' + i.dep + '</td><td>' + (i.cost * i.qty) + '</td></tr>'; });
-  tCapEx += '</table>';
-  let tBOM = '<table><tr><th>المكون</th><th>السعر</th><th>الكمية</th><th>المجموع</th></tr>';
-  bomItems.forEach(function(i) { tBOM += '<tr><td>' + i.name + '</td><td>' + i.cost + '</td><td>' + i.qty + '</td><td>' + (i.cost * i.qty) + '</td></tr>'; });
-  tBOM += '</table>';
-  let tFixed = '<table><tr><th>المصروف</th><th>القيمة</th></tr>';
-  fixedItems.forEach(function(i) { tFixed += '<tr><td>' + i.name + '</td><td>' + i.cost + '</td></tr>'; });
-  tFixed += '</table>';
-  const tHR = document.getElementById('hrTable').outerHTML;
-  const tAmort = document.getElementById('amortTable').outerHTML;
-  const tTCR = document.getElementById('tcrTable').outerHTML;
-  const tTFT = document.getElementById('tftTable').outerHTML;
-  const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>table{border-collapse:collapse;width:100%;font-family:Segoe UI;text-align:center;margin-bottom:20px;}th,td{border:1px solid #000;padding:5px;}th{background-color:#f2f2f2;font-weight:bold;color:#1e3a5f;}h2{text-align:right;color:#1e3a5f;margin-top:30px;margin-bottom:10px;}</style></head><body><h2>1. CapEx</h2>' + tCapEx + '<h2>2. BOM</h2>' + tBOM + '<h2>3. Charges</h2>' + tFixed + '<h2>4. Salaires</h2>' + tHR + '<h2>5. Amortissement</h2>' + tAmort + '<h2>6. TCR</h2>' + tTCR + '<h2>7. TFT</h2>' + tTFT + '</body></html>';
-  const blob = new Blob([template], { type: 'application/vnd.ms-excel' });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "FinStart_Financials.xls";
-  document.body.appendChild(link); link.click(); document.body.removeChild(link);
-  toast('تم تصدير Excel', 'success');
+function openInCanva() {
+  if (!pitchDeckData) return alert("يرجى توليد العرض أولاً.");
+  let textToCopy = "";
+  pitchDeckData.forEach((slide, index) => { textToCopy += `[Slide ${index + 1}: ${slide.title}]\n`; slide.content.forEach(c => { textToCopy += `- ${c}\n`; }); textToCopy += "\n"; });
+  navigator.clipboard.writeText(textToCopy).then(() => { alert("✅ تم نسخ محتوى العرض!\n\nاذهبي إلى Canva، وافتحي قالب Pitch Deck، ثم الصقي النص."); window.open('https://www.canva.com/create/pitch-decks/', '_blank'); }).catch(err => alert("حدث خطأ أثناء النسخ: " + err));
 }
+
+/* ============ EXPORT EXCEL & PDF ============ */
+function exportExcel() {
+  if (!window.calcData) return alert("يرجى حساب الجداول أولاً.");
+  let tCapEx = `<table><tr><th>البيان</th><th>القيمة</th><th>الكمية</th><th>الاهتلاك</th><th>المجموع</th></tr>`; investItems.forEach(i => { tCapEx += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.dep}</td><td>${i.cost*i.qty}</td></tr>`; }); tCapEx += `</table>`;
+  let tBOM = `<table><tr><th>المكون</th><th>السعر</th><th>الكمية</th><th>المجموع</th></tr>`; bomItems.forEach(i => { tBOM += `<tr><td>${i.name}</td><td>${i.cost}</td><td>${i.qty}</td><td>${i.cost*i.qty}</td></tr>`; }); tBOM += `</table>`;
+  let tFixed = `<table><tr><th>المصروف</th><th>القيمة</th></tr>`; fixedItems.forEach(i => { tFixed += `<tr><td>${i.name}</td><td>${i.cost}</td></tr>`; }); tFixed += `</table>`;
+  let tHR = document.getElementById('hrTable').outerHTML, tAmort = document.getElementById('amortTable').outerHTML, tTCR = document.getElementById('tcrTable').outerHTML, tTFT = document.getElementById('tftTable').outerHTML;
+  let template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI'; text-align: center; margin-bottom: 20px; } th, td { border: 1px solid #000; padding: 5px; } th { background-color: #f2f2f2; font-weight: bold; color: #1e3a5f; } h2 { text-align: right; color: #1e3a5f; margin-top: 30px; margin-bottom: 10px;}</style></head><body><h2>1. CapEx</h2>${tCapEx}<h2>2. BOM</h2>${tBOM}<h2>3. Charges</h2>${tFixed}<h2>4. Salaires</h2>${tHR}<h2>5. Amortissement</h2>${tAmort}<h2>6. TCR</h2>${tTCR}<h2>7. TFT</h2>${tTFT}</body></html>`;
+  let blob = new Blob([template], { type: 'application/vnd.ms-excel' }); let link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "FinStart_Financials.xls"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+}
+
 async function exportPDF() {
   if (!window.calcData) calculateAll();
-  showLoading('جاري إنشاء PDF...');
-  try {
-    const projName = document.getElementById('projName').value || "مشروعي";
-    const dateStr = new Date().toLocaleDateString('fr-FR');
-    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 15;
-    let currentY = margin;
-    async function addSection(htmlContent) {
-      const tempDiv = document.createElement('div');
-      tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.style.top = '0';
-      tempDiv.style.width = '800px'; tempDiv.style.backgroundColor = '#ffffff'; tempDiv.style.padding = '10px';
-      tempDiv.style.fontFamily = 'Segoe UI'; tempDiv.style.color = '#000000';
-      tempDiv.style.direction = L === 'ar' ? 'rtl' : 'ltr';
-      tempDiv.innerHTML = htmlContent;
-      document.body.appendChild(tempDiv);
-      const canvas = await html2canvas(tempDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-      const imgData = canvas.toDataURL('image/jpeg', 1.0);
-      const imgWidth = pageWidth - (margin * 2);
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      if (currentY + imgHeight > pageHeight - margin) { pdf.addPage(); currentY = margin; }
-      pdf.addImage(imgData, 'JPEG', margin, currentY, imgWidth, imgHeight);
-      currentY += imgHeight + 10;
-      document.body.removeChild(tempDiv);
-    }
-    const logoHtml = logoBase64 ? '<img src="' + logoBase64 + '" style="max-height:80px;margin-bottom:20px;">' : '';
-    await addSection('<div style="text-align:center;padding:30px 0;">' + logoHtml + '<h1 style="color:#1e3a5f;font-size:40px;margin:0;">📊 FinStart DZ</h1><h2 style="color:#4a5568;font-size:24px;margin-top:20px;">' + t('report_title') + '</h2><p style="color:#718096;font-size:16px;margin-top:40px;">' + projName + '</p><p style="color:#718096;font-size:14px;">' + dateStr + '</p></div>');
-    await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">1. ' + t('info_title') + '</h3><table style="width:100%;font-size:14px;margin-top:15px;"><tr><td style="padding:8px;font-weight:bold;width:150px;">' + t('p_name') + ':</td><td style="padding:8px;">' + projName + '</td></tr><tr><td style="padding:8px;font-weight:bold;">' + t('p_idea') + ':</td><td style="padding:8px;">' + document.getElementById('projIdea').value + '</td></tr><tr><td style="padding:8px;font-weight:bold;">' + t('p_sector') + ':</td><td style="padding:8px;">' + document.getElementById('projSector').value + '</td></tr><tr><td style="padding:8px;font-weight:bold;">' + t('p_capital') + ':</td><td style="padding:8px;">' + fmt(document.getElementById('projCapital').value) + '</td></tr></table>');
-    await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">2. ' + t('h_readiness') + '</h3><div style="font-size:16px;margin-top:15px;"><strong>' + t('lbl_readiness') + ' <span style="color:#38a169;font-size:24px;">' + document.getElementById('readinessScoreText').innerText + '</span></strong></div>');
-    await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">3. ' + t('h_invest') + '</h3><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;margin-top:15px;"><tr style="background:#edf2f7;"><th style="border:1px solid #ccc;padding:8px;">' + t('c_item') + '</th><th style="border:1px solid #ccc;padding:8px;">' + t('c_cost') + '</th><th style="border:1px solid #ccc;padding:8px;">' + t('c_qty') + '</th><th style="border:1px solid #ccc;padding:8px;">' + t('col_total') + '</th></tr>' + investItems.map(function(i) { return '<tr><td style="border:1px solid #ccc;padding:8px;">' + i.name + '</td><td style="border:1px solid #ccc;padding:8px;">' + fmt(i.cost) + '</td><td style="border:1px solid #ccc;padding:8px;">' + i.qty + '</td><td style="border:1px solid #ccc;padding:8px;">' + fmt(i.cost * i.qty) + '</td></tr>'; }).join('') + '</table>');
-    await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">4. ' + t('h_hr') + '</h3><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;margin-top:15px;"><tr style="background:#edf2f7;"><th style="border:1px solid #ccc;padding:8px;">' + t('hr_role') + '</th><th style="border:1px solid #ccc;padding:8px;">' + t('hr_count') + '</th><th style="border:1px solid #ccc;padding:8px;">' + t('hr_basic') + '</th><th style="border:1px solid #ccc;padding:8px;">' + t('hr_total') + '</th></tr>' + emps.map(function(e) { return '<tr><td style="border:1px solid #ccc;padding:8px;">' + e.role + '</td><td style="border:1px solid #ccc;padding:8px;">' + e.count + '</td><td style="border:1px solid #ccc;padding:8px;">' + fmt(e.salary) + '</td><td style="border:1px solid #ccc;padding:8px;">' + fmt(e.salary * 1.26 * e.count) + '</td></tr>'; }).join('') + '</table>');
-    if (document.getElementById('amortTable').innerHTML) await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">5. ' + t('amort_title') + '</h3><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;margin-top:15px;">' + document.getElementById('amortTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border:1px solid #ccc;"').replace(/<td/g, '<td style="border:1px solid #ccc;padding:8px;"').replace(/<th/g, '<th style="border:1px solid #ccc;padding:8px;"') + '</table>');
-    if (document.getElementById('tcrTable').innerHTML) await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">6. ' + t('tcr_title') + '</h3><table style="width:100%;border-collapse:collapse;font-size:11px;text-align:center;margin-top:15px;">' + document.getElementById('tcrTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border:1px solid #ccc;"').replace(/<td/g, '<td style="border:1px solid #ccc;padding:6px;"').replace(/<th/g, '<th style="border:1px solid #ccc;padding:6px;"') + '</table>');
-    if (document.getElementById('tftTable').innerHTML) await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">7. ' + t('tft_title') + '</h3><table style="width:100%;border-collapse:collapse;font-size:11px;text-align:center;margin-top:15px;">' + document.getElementById('tftTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border:1px solid #ccc;"').replace(/<td/g, '<td style="border:1px solid #ccc;padding:6px;"').replace(/<th/g, '<th style="border:1px solid #ccc;padding:6px;"') + '</table>');
-    if (document.getElementById('loanResult').style.display !== 'none') await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">8. ' + t('loan_title') + '</h3><div style="font-size:14px;margin-top:15px;">' + document.getElementById('loanResult').innerHTML + '</div>');
-    if (myChart) { const chartImage = myChart.toBase64Image(); await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">9. ' + t('h_charts') + '</h3><div style="text-align:center;margin-top:15px;"><img src="' + chartImage + '" style="width:100%;max-width:600px;border:1px solid #ccc;padding:10px;"></div>'); }
-    if (beChart) { const beImage = beChart.toBase64Image(); await addSection('<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">10. ' + t('h_breakeven') + '</h3><div style="text-align:center;margin-top:15px;"><img src="' + beImage + '" style="width:100%;max-width:600px;border:1px solid #ccc;padding:10px;"></div>'); }
-    const bmc3val = document.getElementById('bmc3').value;
-    if (bmc3val) {
-      let bmcHTML = '<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">11. ' + t('bmc_title') + '</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-top:15px;">';
-      const bmcFields = [{ title: t('b1'), id: "bmc1" }, { title: t('b2'), id: "bmc2" }, { title: t('b3'), id: "bmc3" }, { title: t('b4'), id: "bmc4" }, { title: t('b5'), id: "bmc5" }, { title: t('b6'), id: "bmc6" }, { title: t('b7'), id: "bmc7" }, { title: t('b8'), id: "bmc8" }, { title: t('b9'), id: "bmc9" }];
-      bmcFields.forEach(function(f) { const val = document.getElementById(f.id).value; if (val) bmcHTML += '<div style="border:1px solid #ccc;padding:10px;background:#f9f9f9;"><strong style="display:block;margin-bottom:5px;color:#1e3a5f;">' + f.title + '</strong><p style="margin:0;white-space:pre-wrap;">' + val + '</p></div>'; });
-      bmcHTML += '</div>';
-      await addSection(bmcHTML);
-    }
-    if (document.getElementById('swotResult').style.display !== 'none') {
-      let swotHTML = '<h3 style="color:#1e3a5f;border-bottom:2px solid #e2e8f0;padding-bottom:10px;">12. ' + t('swot_title') + '</h3><div style="font-size:12px;margin-top:15px;">';
-      swotHTML += '<div style="background:#f0fff4;padding:10px;margin-bottom:10px;border-right:4px solid #38a169;"><strong>' + t('swot_s') + ':</strong> ' + document.getElementById('swotS').innerText + '</div>';
-      swotHTML += '<div style="background:#fff5f5;padding:10px;margin-bottom:10px;border-right:4px solid #c53030;"><strong>' + t('swot_w') + ':</strong> ' + document.getElementById('swotW').innerText + '</div>';
-      swotHTML += '<div style="background:#ebf8ff;padding:10px;margin-bottom:10px;border-right:4px solid #3182ce;"><strong>' + t('swot_o') + ':</strong> ' + document.getElementById('swotO').innerText + '</div>';
-      swotHTML += '<div style="background:#fffaf0;padding:10px;margin-bottom:10px;border-right:4px solid #dd6b20;"><strong>' + t('swot_t') + ':</strong> ' + document.getElementById('swotT').innerText + '</div>';
-      swotHTML += '<div style="background:#faf5ff;padding:15px;font-weight:bold;border-radius:5px;"><strong>' + t('swot_rec') + ':</strong> ' + document.getElementById('swotRec').innerText + '</div></div>';
-      await addSection(swotHTML);
-    }
-    pdf.save('Rapport_' + projName.replace(/\s+/g, '_') + '.pdf');
-    toast('تم تصدير PDF بنجاح', 'success');
-  } catch (err) {
-    console.error('PDF error:', err);
-    toast('خطأ في تصدير PDF: ' + err.message, 'error');
-  } finally { hideLoading(); }
+  let projName = document.getElementById('projName').value || "مشروعي", dateStr = new Date().toLocaleDateString('fr-FR');
+  let pdf = new jspdf.jsPDF('p', 'mm', 'a4'), pageWidth = pdf.internal.pageSize.getWidth(), pageHeight = pdf.internal.pageSize.getHeight(), margin = 15, currentY = margin;
+  async function addSection(htmlContent) {
+    let tempDiv = document.createElement('div'); tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.style.top = '0'; tempDiv.style.width = '800px'; tempDiv.style.backgroundColor = '#ffffff'; tempDiv.style.padding = '10px'; tempDiv.style.fontFamily = 'Segoe UI'; tempDiv.style.color = '#000000'; tempDiv.style.direction = L === 'ar' ? 'rtl' : 'ltr'; tempDiv.innerHTML = htmlContent; document.body.appendChild(tempDiv);
+    let canvas = await html2canvas(tempDiv, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }); let imgData = canvas.toDataURL('image/jpeg', 1.0); let imgWidth = pageWidth - (margin * 2); let imgHeight = (canvas.height * imgWidth) / canvas.width;
+    if (currentY + imgHeight > pageHeight - margin) { pdf.addPage(); currentY = margin; }
+    pdf.addImage(imgData, 'JPEG', margin, currentY, imgWidth, imgHeight); currentY += imgHeight + 10; document.body.removeChild(tempDiv);
+  }
+  let logoHtml = logoBase64 ? `<img src="${logoBase64}" style="max-height: 80px; margin-bottom: 20px;">` : '';
+  await addSection(`<div style="text-align: center; padding: 30px 0;">${logoHtml}<h1 style="color: #1e3a5f; font-size: 40px; margin: 0;">📊 FinStart DZ</h1><h2 style="color: #4a5568; font-size: 24px; margin-top: 20px;">${t('report_title')}</h2><p style="color: #718096; font-size: 16px; margin-top: 40px;">${projName}</p><p style="color: #718096; font-size: 14px;">${dateStr}</p></div>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">1. ${t('info_title')}</h3><table style="width: 100%; font-size: 14px; margin-top: 15px;"><tr><td style="padding: 8px; font-weight: bold; width: 150px;">${t('p_name')}:</td><td style="padding: 8px;">${projName}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_idea')}:</td><td style="padding: 8px;">${document.getElementById('projIdea').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_sector')}:</td><td style="padding: 8px;">${document.getElementById('projSector').value}</td></tr><tr><td style="padding: 8px; font-weight: bold;">${t('p_capital')}:</td><td style="padding: 8px;">${fmt(document.getElementById('projCapital').value)}</td></tr></table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">2. ${t('h_readiness')}</h3><div style="font-size: 16px; margin-top: 15px;"><strong>${t('lbl_readiness')} <span style="color: #38a169; font-size: 24px;">${document.getElementById('readinessScoreText').innerText}</span></strong></div>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">3. ${t('h_invest')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('c_item')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_cost')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('c_qty')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('col_total')}</th></tr>${investItems.map(i => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${i.name}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost)}</td><td style="border: 1px solid #ccc; padding: 8px;">${i.qty}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(i.cost*i.qty)}</td></tr>`).join('')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">4. ${t('h_hr')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;"><tr style="background: #edf2f7;"><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_role')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_count')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_basic')}</th><th style="border: 1px solid #ccc; padding: 8px;">${t('hr_total')}</th></tr>${emps.map(e => `<tr><td style="border: 1px solid #ccc; padding: 8px;">${e.role}</td><td style="border: 1px solid #ccc; padding: 8px;">${e.count}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary)}</td><td style="border: 1px solid #ccc; padding: 8px;">${fmt(e.salary*1.26*e.count)}</td></tr>`).join('')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">5. ${t('amort_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-top: 15px;">${document.getElementById('amortTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 8px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 8px;"')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">6. ${t('tcr_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center; margin-top: 15px;">${document.getElementById('tcrTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 6px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 6px;"')}</table>`);
+  await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">7. ${t('tft_title')}</h3><table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center; margin-top: 15px;">${document.getElementById('tftTable').innerHTML.replace(/<table[^>]*>|<\/table>/g, '').replace(/<tr/g, '<tr style="border: 1px solid #ccc;"').replace(/<td/g, '<td style="border: 1px solid #ccc; padding: 6px;"').replace(/<th/g, '<th style="border: 1px solid #ccc; padding: 6px;"')}</table>`);
+  if(document.getElementById('loanResult').style.display !== 'none') { await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">8. ${t('loan_title')}</h3><div style="font-size: 14px; margin-top: 15px;">${document.getElementById('loanResult').innerHTML}</div>`); }
+  if (myChart) { let chartImage = myChart.toBase64Image(); await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">9. ${t('h_charts')}</h3><div style="text-align:center; margin-top: 15px;"><img src="${chartImage}" style="width: 100%; max-width: 600px; border: 1px solid #ccc; padding: 10px;"></div>`); }
+  if (beChart) { let beImage = beChart.toBase64Image(); await addSection(`<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">10. ${t('h_breakeven')}</h3><div style="text-align:center; margin-top: 15px;"><img src="${beImage}" style="width: 100%; max-width: 600px; border: 1px solid #ccc; padding: 10px;"></div>`); }
+  let bmc3 = document.getElementById('bmc3').value; if (bmc3) { let bmcHTML = `<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">11. ${t('bmc_title')}</h3><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-top: 15px;">`; const bmcFields = [{ title: t('b1'), id: "bmc1" }, { title: t('b2'), id: "bmc2" }, { title: t('b3'), id: "bmc3" }, { title: t('b4'), id: "bmc4" }, { title: t('b5'), id: "bmc5" }, { title: t('b6'), id: "bmc6" }, { title: t('b7'), id: "bmc7" }, { title: t('b8'), id: "bmc8" }, { title: t('b9'), id: "bmc9" }]; bmcFields.forEach(f => { let val = document.getElementById(f.id).value; if (val) bmcHTML += `<div style="border: 1px solid #ccc; padding: 10px; background: #f9f9f9;"><strong style="display: block; margin-bottom: 5px; color: #1e3a5f;">${f.title}</strong><p style="margin: 0; white-space: pre-wrap;">${val}</p></div>`; }); bmcHTML += `</div>`; await addSection(bmcHTML); }
+  if (document.getElementById('swotResult').style.display !== 'none') { let swotHTML = `<h3 style="color: #1e3a5f; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">12. ${t('swot_title')}</h3><div style="font-size: 12px; margin-top: 15px;">`; swotHTML += `<div style="background: #f0fff4; padding: 10px; margin-bottom: 10px; border-right: 4px solid #38a169;"><strong>${t('swot_s')}:</strong> ${document.getElementById('swotS').innerText}</div><div style="background: #fff5f5; padding: 10px; margin-bottom: 10px; border-right: 4px solid #c53030;"><strong>${t('swot_w')}:</strong> ${document.getElementById('swotW').innerText}</div><div style="background: #ebf8ff; padding: 10px; margin-bottom: 10px; border-right: 4px solid #3182ce;"><strong>${t('swot_o')}:</strong> ${document.getElementById('swotO').innerText}</div><div style="background: #fffaf0; padding: 10px; margin-bottom: 10px; border-right: 4px solid #dd6b20;"><strong>${t('swot_t')}:</strong> ${document.getElementById('swotT').innerText}</div><div style="background: #faf5ff; padding: 15px; font-weight: bold; border-radius: 5px;"><strong>${t('swot_rec')}:</strong> ${document.getElementById('swotRec').innerText}</div></div>`; await addSection(swotHTML); }
+  pdf.save(`Rapport_${projName.replace(/\s+/g, '_')}.pdf`);
 }
 
-/* ══════════════ 12. RESET ══════════════ */
-function resetData() {
-  showConfirm('مسح كل البيانات', 'هل أنت متأكد؟ سيتم فقدان كل البيانات الحالية!', function(yes) {
-    if (!yes) return;
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(CURRENT_ID_KEY);
-    location.reload();
-  });
-}
-
-/* ══════════════ 13. CHAT SYSTEM ══════════════ */
-let chatHistory = [];
-function toggleChat() { const win = document.getElementById('chat-window'); if (win) win.classList.toggle('show'); }
-function startNewChat() {
-  const container = document.getElementById('chat-messages');
-  if (container) container.innerHTML = '<div class="chat-msg ai">مرحباً! محادثة جديدة. كيف أساعدك؟</div>';
-  chatHistory = [];
-  toast('محادثة جديدة', 'info');
+/* ============ CHAT & AUTO SAVE ============ */
+function toggleChat() {
+  let chatWin = document.getElementById('chat-window');
+  if (chatWin.style.display === 'flex' || chatWin.style.display === 'block') { chatWin.style.display = 'none'; } else { chatWin.style.display = 'flex'; }
 }
 function handleChatEnter(event) { if (event.key === 'Enter') sendChatMessage(); }
 async function sendChatMessage() {
-  const input = document.getElementById('chat-input');
-  const msg = input.value.trim();
-  if (!msg) return;
-  const container = document.getElementById('chat-messages');
-  const userMsg = document.createElement('div');
-  userMsg.className = 'chat-msg user';
-  userMsg.textContent = msg;
-  container.appendChild(userMsg);
-  input.value = '';
-  container.scrollTop = container.scrollHeight;
-  chatHistory.push({ role: 'user', content: msg });
-  const aiMsg = document.createElement('div');
-  aiMsg.className = 'chat-msg ai';
-  aiMsg.textContent = '⏳ يفكر...';
-  container.appendChild(aiMsg);
-  container.scrollTop = container.scrollHeight;
-  const context = 'أنت مساعد مالي ذكي لمنصة FinStart DZ. سياق المشروع: ' + JSON.stringify({
-    name: (document.getElementById('projName') || {}).value || '',
-    idea: (document.getElementById('projIdea') || {}).value || '',
-    sector: (document.getElementById('projSector') || {}).value || ''
-  }) + '. أجب باللغة: ' + L + '.';
-  const response = await callAI(context + '\n\nسؤال المستخدم: ' + msg);
-  aiMsg.textContent = response;
-  chatHistory.push({ role: 'ai', content: response });
-  container.scrollTop = container.scrollHeight;
+  let input = document.getElementById('chat-input'); let msg = input.value.trim(); if (!msg) return;
+  let chatMessages = document.getElementById('chat-messages'); chatMessages.innerHTML += `<div class="chat-msg user">${msg}</div>`; input.value = ''; chatMessages.scrollTop = chatMessages.scrollHeight;
+  let loadingDiv = document.createElement('div'); loadingDiv.className = 'chat-msg ai'; loadingDiv.innerText = "⏳ جاري التفكير..."; chatMessages.appendChild(loadingDiv); chatMessages.scrollTop = chatMessages.scrollHeight;
+  let result = await callAI(msg); loadingDiv.innerText = result; chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+function startNewChat() { document.getElementById('chat-messages').innerHTML = `<div class="chat-msg ai">مرحباً! أنا مساعدك المالي. كيف يمكنني مساعدتك في مشروعك اليوم؟</div>`; }
 
-/* ══════════════ 14. EVENT LISTENERS & INIT ══════════════ */
-document.querySelectorAll('.tab-btn').forEach(function(b) { b.addEventListener('click', function() { showTab(b.dataset.tab); }); });
-document.querySelectorAll('.lang-btn').forEach(function(b) { b.addEventListener('click', function() { applyLang(b.dataset.lang); }); });
-document.addEventListener('input', function(e) {
-  if (e.target.matches('input, textarea, select')) {
-    if (!e.target.hasAttribute('data-no-autosave')) triggerAutoSave();
-  }
-});
-document.querySelectorAll('.modal-overlay').forEach(function(m) {
-  m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('show'); });
-});
-window.addEventListener('beforeunload', function(e) {
-  if (pendingAutoSave) saveToLocalStorage(false);
-});
+function triggerAutoSave() { let badge = document.getElementById('autosave-badge'); badge.style.opacity = '1'; setTimeout(() => { badge.style.opacity = '0'; }, 2000); }
+function resetData() { if(confirm("مسح الكل؟")) location.reload(); }
 
-(function init() {
-  applyLang('ar');
-  updateReadiness();
-  const lastProjectId = localStorage.getItem(CURRENT_ID_KEY);
-  if (lastProjectId) {
-    const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}');
-    if (projects[lastProjectId]) {
-      currentProjectId = lastProjectId;
-      setTimeout(function() {
-        restoreState(projects[lastProjectId]);
-        toast('تم استرجاع آخر مشروع تلقائياً', 'info');
-      }, 300);
-    }
-  } else {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const data = JSON.parse(saved);
-        setTimeout(function() { restoreState(data); toast('تم استرجاع آخر جلسة', 'info'); }, 300);
-      } catch(e) {}
-    }
-  }
-  setInterval(function() {
-    if (pendingAutoSave) { saveToLocalStorage(true); pendingAutoSave = false; }
-  }, 30000);
-  setTimeout(function() { try { calculateLoan(); } catch(e) {} }, 500);
-})();
+/* ============ INITIALIZATION ============ */
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+applyLang('ar'); updateReadiness(); calculateLoan(); renderPitchPreview();
 </script>
 </body>
 </html>
