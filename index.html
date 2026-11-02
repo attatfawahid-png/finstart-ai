@@ -1721,6 +1721,91 @@ window.addEventListener('beforeunload', function(e) {
   }, 30000);
   setTimeout(function() { try { calculateLoan(); } catch(e) {} }, 500);
 })();
+<style>
+#m-nav,#m-sheet,#m-sheet-bg{display:none;}
+@media (max-width:768px){
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px));}
+  .tabs{display:none !important;}
+  header{flex-direction:row;flex-wrap:nowrap;justify-content:space-between;align-items:center;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top,0px));gap:6px;border-radius:0 0 22px 22px;}
+  .header-brand h1{font-size:15px;white-space:nowrap;}
+  .badge-pro{display:none;}
+  .header-actions{width:auto;gap:5px;flex-wrap:nowrap;}
+  .theme-btn{width:32px;height:32px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .theme-btn[title="عرض"],.theme-btn[title="حفظ"]{display:none;}
+  .theme-btn:hover,.btn:hover{transform:none;}
+  .lang-btn{padding:4px 7px;font-size:10px;}
+  #actions-menu{position:fixed;top:calc(60px + env(safe-area-inset-top,0px));left:12px;right:12px;transform:none;min-width:0;border-radius:18px;padding:10px;}
+  #actions-menu.show{animation:m-pop .2s ease;}
+  @keyframes m-pop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+  .container{margin:12px auto 0;padding:0 12px;}
+  .card{border-radius:20px;padding:16px;border:none;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+  .card h2{font-size:16px;}
+  .btn,.add-btn,.btn-calc{min-height:48px;border-radius:14px;}
+  input,select,textarea{border-radius:12px;min-height:46px;}
+  .row-item{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px;border-radius:14px;}
+  .row-item input:first-child,.row-item button{grid-column:1/-1;}
+  #tab2 > .btn-calc{position:sticky;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:50;box-shadow:0 8px 24px rgba(214,158,46,.45);}
+  .tab-content.active{animation:m-slide .28s ease;}
+  @keyframes m-slide{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:none;}}
+  #chat-toggle{bottom:calc(94px + env(safe-area-inset-bottom,0px));right:14px;width:50px;height:50px;font-size:20px;}
+  #chat-window{bottom:calc(155px + env(safe-area-inset-bottom,0px));right:12px;width:calc(100% - 24px);height:min(480px,calc(100vh - 260px));}
+  #autosave-badge{bottom:calc(94px + env(safe-area-inset-bottom,0px));right:auto;left:14px;}
+  #m-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:1001;background:var(--c);border-top:1px solid var(--b);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px rgba(0,0,0,.08);}
+  #m-nav button{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:14px;color:var(--muted);font-size:10.5px;font-weight:600;cursor:pointer;transition:.2s;}
+  #m-nav .ic{font-size:22px;line-height:1;transition:transform .2s;}
+  #m-nav button.active{color:var(--a);background:rgba(49,130,206,.12);}
+  #m-nav button.active .ic{transform:translateY(-2px) scale(1.12);}
+  #m-sheet-bg{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1998;opacity:0;pointer-events:none;transition:opacity .25s;}
+  #m-sheet-bg.show{opacity:1;pointer-events:auto;}
+  #m-sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:1999;background:var(--c);border-radius:24px 24px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom,0px));max-height:80vh;overflow-y:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.4,0,.2,1);}
+  #m-sheet.show{transform:none;}
+  .m-grip{width:40px;height:4px;border-radius:2px;background:var(--b);margin:0 auto 14px;}
+  .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .m-tile{background:var(--bg);border:1px solid var(--b);border-radius:16px;padding:14px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text);font-size:12px;font-weight:600;cursor:pointer;}
+  .m-tile .ic{font-size:26px;}
+  .m-tile.active{border-color:var(--a);color:var(--a);background:rgba(49,130,206,.1);}
+}
+</style>
+<script>
+(function(){
+  var ICONS={tab1:'📋',tab2:'🏗️',tab8:'👥',tab3:'📊',tab10:'🏦',tab4:'⚔️',tab5:'🧩',tab9:'🧠',tab6:'🤖',tab11:'🧾',tab12:'📈',tab13:'🛣️',tab14:'🏪',tab15:'🎤'};
+  var MAIN=['tab1','tab2','tab3','tab6'];
+  var ALL=['tab1','tab2','tab8','tab3','tab10','tab4','tab5','tab9','tab6','tab11','tab12','tab13','tab14','tab15'];
+  var MORE={ar:'المزيد',fr:'Plus',en:'More'};
+  function label(id){return String(t('t'+id.slice(3))).replace(/^\d+\.\s*/,'');}
+  var nav=document.createElement('nav'); nav.id='m-nav';
+  var bg=document.createElement('div'); bg.id='m-sheet-bg';
+  var sheet=document.createElement('div'); sheet.id='m-sheet';
+  document.body.appendChild(nav); document.body.appendChild(bg); document.body.appendChild(sheet);
+  function openSheet(){sheet.classList.add('show');bg.classList.add('show');}
+  function closeSheet(){sheet.classList.remove('show');bg.classList.remove('show');}
+  bg.addEventListener('click',closeSheet);
+  function current(){var a=document.querySelector('.tab-content.active');return a?a.id:'tab1';}
+  function build(){
+    var cur=current(), h='';
+    MAIN.forEach(function(id){
+      h+='<button data-go="'+id+'" class="'+(cur===id?'active':'')+'"><span class="ic">'+ICONS[id]+'</span><span>'+label(id)+'</span></button>';
+    });
+    h+='<button data-more="1" class="'+(MAIN.indexOf(cur)<0?'active':'')+'"><span class="ic">☰</span><span>'+(MORE[L]||MORE.ar)+'</span></button>';
+    nav.innerHTML=h;
+    var s='<div class="m-grip"></div><div class="m-grid">';
+    ALL.forEach(function(id){
+      s+='<button class="m-tile '+(cur===id?'active':'')+'" data-go="'+id+'"><span class="ic">'+ICONS[id]+'</span><span>'+label(id)+'</span></button>';
+    });
+    sheet.innerHTML=s+'</div>';
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-go],[data-more]'); if(!b||!(nav.contains(b)||sheet.contains(b)))return;
+    if(b.dataset.more){openSheet();return;}
+    showTab(b.dataset.go);
+  });
+  var _showTab=showTab;
+  showTab=function(id){ _showTab(id); closeSheet(); window.scrollTo({top:0,behavior:'smooth'}); build(); };
+  var _applyLang=applyLang;
+  applyLang=function(l){ _applyLang(l); build(); };
+  build();
+})();
+</script>
 </script>
 </body>
 </html>
