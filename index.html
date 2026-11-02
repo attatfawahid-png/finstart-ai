@@ -1822,6 +1822,252 @@ window.addEventListener('load', function () {
   } catch (err) { console.error('Mobile app layout error:', err); }
 });
 </script>
+<!-- ═══════════ تصميم الهاتف فقط (لا يؤثر على الحاسوب) ═══════════ -->
+<style>
+#m-lang,#m-gear,#m-search,#m-home,#m-back,.m-tag{display:none;}
+
+@media (max-width:768px){
+  /* ألوان الوضع الفاتح */
+  :root{--m-hd:rgba(255,255,255,.16);--m-glass:rgba(255,255,255,.88);--m-edge:rgba(37,99,235,.38);
+    --m-tile:linear-gradient(160deg,#ffffff,#e6eeff);--m-txt:#12204a;--m-gold:#f59e0b;}
+  /* ألوان الوضع الليلي (الكحلي كما في الصورة) */
+  body.dark-mode{--p:#ffd45a;--a:#4f8cff;--bg:#050d34;--c:#0a1650;--b:rgba(110,150,255,.28);--text:#eef3ff;--muted:#a9bdf0;
+    --table-hover:rgba(80,130,255,.09);--input-bg:rgba(6,16,70,.75);--s:#34d399;--d:#fb7185;
+    --m-hd:rgba(8,20,80,.55);--m-glass:rgba(10,26,96,.55);--m-edge:rgba(100,150,255,.55);
+    --m-tile:linear-gradient(160deg,rgba(45,88,215,.42),rgba(8,18,72,.8));--m-txt:#ffffff;--m-gold:#ffc83d;
+    background:radial-gradient(900px 520px at 50% -8%,rgba(45,95,255,.50),transparent 62%),
+               radial-gradient(700px 520px at 100% 100%,rgba(25,65,210,.38),transparent 65%),
+               radial-gradient(600px 420px at 0% 70%,rgba(20,50,170,.30),transparent 65%),#030818;}
+
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));}
+  #m-nav,#m-sheet,#m-sheet-bg{display:none !important;}
+  body:not(.m-ready) .tabs{display:flex !important;}   /* احتياط: إن تعطل الكود يعود الشريط القديم */
+
+  /* ===== الشريط العلوي ===== */
+  header{position:relative;top:auto;z-index:900;display:grid;grid-template-columns:auto 1fr auto;align-items:center;
+    direction:ltr;gap:12px 10px;flex-wrap:unset;min-height:0;
+    padding:calc(14px + env(safe-area-inset-top,0px)) 14px 14px;border-radius:0 0 28px 28px;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);box-shadow:0 10px 30px rgba(37,99,235,.3);}
+  body.dark-mode header{background:transparent;box-shadow:none;}
+  html[dir=rtl] #actions-menu{direction:rtl;}
+  html[dir=ltr] #actions-menu{direction:ltr;}
+
+  .header-brand{grid-column:2;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;}
+  .header-brand h1{font-size:25px;margin:0;justify-content:center;color:#fff;white-space:nowrap;letter-spacing:.3px;text-shadow:0 0 18px rgba(120,170,255,.55);}
+  .badge-pro{display:none;}
+  body.m-home .m-tag{display:block;margin-top:4px;font-size:11px;color:#cfe0ff;white-space:nowrap;}
+
+  #m-lang{display:flex;align-items:center;gap:6px;grid-column:1;position:relative;height:46px;margin:0;padding:0 12px;
+    border-radius:24px;color:#fff;font-size:13px;font-weight:700;background:var(--m-hd);border:1.5px solid var(--m-edge);
+    box-shadow:0 0 18px rgba(80,130,255,.35);}
+  #m-lang::after{content:'⌄';color:var(--m-gold);font-size:16px;line-height:1;margin-top:-6px;pointer-events:none;}
+  #m-lang select{width:auto;min-height:0;height:auto;padding:0;border:0;border-radius:0;background:transparent;color:#fff;
+    font-size:13px;font-weight:700;box-shadow:none;transform:none;-webkit-appearance:none;appearance:none;}
+  #m-lang option{color:#000;}
+  #m-gear{display:grid;place-items:center;grid-column:3;width:50px;height:50px;padding:0;border-radius:50%;font-size:22px;
+    color:#fff;cursor:pointer;background:var(--m-hd);border:1.5px solid var(--m-edge);box-shadow:0 0 18px rgba(80,130,255,.4);}
+
+  /* شريط الأزرار الدائرية: EN FR AR ⚙️ 🌙 📺 💾 📁 */
+  .header-actions{grid-column:1/-1;width:100%;display:flex;flex-direction:row-reverse;align-items:center;
+    justify-content:space-between;gap:6px;flex-wrap:nowrap;padding:9px 10px;margin-top:2px;border-radius:30px;
+    background:var(--m-hd);border:1.5px solid var(--m-edge);
+    box-shadow:0 0 22px rgba(80,130,255,.28),inset 0 0 20px rgba(80,130,255,.08);}
+  .lang-switch{display:contents;}
+  .actions-wrap{flex:1 1 0;min-width:0;max-width:46px;}
+  .actions-wrap .theme-btn{width:100%;max-width:none;}
+  header .theme-btn,header .lang-btn{display:inline-grid !important;place-items:center;flex:1 1 0;min-width:0;max-width:46px;
+    min-height:34px;aspect-ratio:1/1;height:auto;padding:0;border-radius:50%;font-size:17px;color:#fff;transform:none;
+    background:rgba(8,18,70,.72);border:1px solid rgba(120,160,255,.42);box-shadow:0 0 12px rgba(80,130,255,.3);}
+  header .lang-btn{font-size:12px;font-weight:800;}
+  header .lang-btn.active{background:#0a1240;color:#fff;border-color:var(--m-gold);box-shadow:0 0 16px rgba(255,200,60,.7);}
+  header .theme-btn.active{box-shadow:0 0 16px rgba(255,200,60,.7);}
+
+  /* داخل الأقسام: رأس مضغوط، وقائمة ⚙️ تبقى تعمل */
+  body.m-tab header{padding-bottom:8px;row-gap:0;}
+  body.m-tab .header-actions{visibility:hidden;height:0;padding:0;margin:0;border:0;box-shadow:none;overflow:visible;}
+  body.m-tab #actions-menu{visibility:visible;}
+
+  #actions-menu{position:fixed;top:calc(80px + env(safe-area-inset-top,0px));left:14px;right:14px;transform:none;min-width:0;
+    padding:10px;border-radius:22px;background:var(--c);border:1.5px solid var(--m-edge);z-index:1600;
+    box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 28px rgba(70,120,255,.35);}
+  #actions-menu.show{animation:mPop .2s ease;}
+  @keyframes mPop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+
+  /* ===== البحث ===== */
+  body.m-home #m-search{display:flex;align-items:center;gap:12px;margin:2px 12px 0;padding:0 18px;height:58px;border-radius:30px;
+    background:var(--m-glass);border:1.5px solid var(--m-edge);
+    box-shadow:0 0 24px rgba(80,130,255,.35),0 5px 14px -6px rgba(255,200,60,.85);}
+  #m-search .si{font-size:22px;}
+  #m-search input{flex:1;width:auto;min-height:0;height:100%;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+    transform:none;color:var(--m-txt);font-size:16px;-webkit-appearance:none;appearance:none;}
+  #m-search input::placeholder{color:var(--muted);opacity:.85;}
+
+  /* ===== لوحة الأدوات ===== */
+  body.m-home #m-home{display:block;margin:16px 12px 0;}
+  .m-panel{padding:16px 14px 20px;border-radius:30px;background:var(--m-glass);border:1.5px solid var(--m-edge);
+    box-shadow:0 0 30px rgba(70,120,255,.3),inset 0 0 30px rgba(70,120,255,.08);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+  .m-ptitle{display:flex;align-items:center;gap:10px;margin:2px 4px 16px;color:var(--m-txt);font-size:19px;font-weight:800;}
+  .m-ptitle .pi{font-size:28px;}
+  .m-ptitle .sp{color:var(--m-gold);font-size:14px;}
+  .m-ptitle .gl{flex:1;height:2px;border-radius:2px;background:linear-gradient(to left,var(--m-gold),transparent);}
+  html[dir=ltr] .m-ptitle .gl{background:linear-gradient(to right,var(--m-gold),transparent);}
+
+  .m-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  .m-tile{grid-column:span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    min-height:104px;padding:12px 4px;border-radius:26px;border:1.5px solid var(--m-edge);background:var(--m-tile);
+    color:var(--m-txt);font-family:inherit;font-weight:800;font-size:12.5px;cursor:pointer;transition:transform .15s;
+    box-shadow:0 10px 22px rgba(0,0,0,.28),0 0 18px rgba(70,120,255,.25),inset 0 -3px 10px -4px var(--m-gold);}
+  .m-tile:active{transform:scale(.95);}
+  .m-tile .ic{font-size:40px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));}
+  .m-tile .lb{max-width:100%;text-align:center;line-height:1.2;padding:0 2px;}
+  .m-grid:not(.f) .m-tile:nth-child(13){grid-column:2/4;}
+  .m-grid:not(.f) .m-tile:nth-child(14){grid-column:4/6;}
+  .m-tile.h{display:none;}
+  .m-none{display:none;text-align:center;color:var(--muted);font-weight:700;margin:14px 0 0;}
+
+  /* ===== شريط الرجوع داخل الأقسام ===== */
+  body.m-home .container{display:none;}
+  body.m-tab #m-back{display:flex;align-items:center;gap:10px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:850;
+    margin:0 0 12px;padding:8px 10px;border-radius:22px;background:var(--m-glass);border:1.5px solid var(--m-edge);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 24px rgba(0,0,0,.28),0 0 20px rgba(70,120,255,.25);}
+  #m-back-btn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border:0;border-radius:20px;cursor:pointer;
+    background:linear-gradient(135deg,#ffd45a,#f59e0b);color:#2a1a00;font-family:inherit;font-weight:800;font-size:13px;
+    box-shadow:0 0 16px rgba(255,200,60,.5);}
+  #m-back-title{font-weight:800;font-size:15px;color:var(--m-txt);}
+
+  /* ===== البطاقات والعناصر العائمة ===== */
+  .container{margin:12px auto 0;padding:0 12px;}
+  body.dark-mode .card{background:linear-gradient(160deg,rgba(24,52,150,.5),rgba(6,14,62,.82));border:1.5px solid var(--m-edge);
+    border-radius:26px;box-shadow:0 0 24px rgba(70,120,255,.22),0 10px 26px rgba(0,0,0,.35);}
+  #tab2 > .btn-calc{bottom:calc(14px + env(safe-area-inset-bottom,0px));}
+  #chat-toggle{bottom:calc(18px + env(safe-area-inset-bottom,0px));right:14px;width:54px;height:54px;font-size:22px;}
+  #chat-window{bottom:calc(84px + env(safe-area-inset-bottom,0px));right:12px;width:calc(100% - 24px);
+    height:min(480px,calc(100vh - 150px));max-height:none;}
+  #autosave-badge{bottom:calc(24px + env(safe-area-inset-bottom,0px));left:14px;right:auto;}
+}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  try {
+    var MQ = window.matchMedia('(max-width:768px)');
+    try { if (MQ.matches && !localStorage.getItem('finstart_theme')) document.body.classList.add('dark-mode'); } catch (e) {}
+
+    var ORDER = ['tab1','tab2','tab8','tab3','tab10','tab4','tab5','tab9','tab6','tab11','tab12','tab13','tab14','tab15'];
+    var IC = {tab1:'📋',tab2:'🏗️',tab8:'👥',tab3:'📈',tab10:'🏛️',tab4:'⚔️',tab5:'🧩',tab9:'🧠',tab6:'🤖',tab11:'📄',tab12:'📊',tab13:'📽️',tab14:'🗓️',tab15:'🎤'};
+    var TXT = {
+      ar: {tag:'إدارة أذكى .. لمستقبل أفضل', tools:'أدوات التطبيق', search:'ابحث عن أي شيء...', home:'الرئيسية', none:'لا توجد نتائج'},
+      fr: {tag:'Gérez mieux .. pour un meilleur avenir', tools:'Outils de l’application', search:'Rechercher...', home:'Accueil', none:'Aucun résultat'},
+      en: {tag:'Smarter management .. for a better future', tools:'App Tools', search:'Search anything...', home:'Home', none:'No results'}
+    };
+    function lg() { try { return L; } catch (e) { return 'ar'; } }
+    function tx(k) { return (TXT[lg()] || TXT.ar)[k]; }
+    function label(id) { var s = id; try { s = String(t('t' + id.slice(3))); } catch (e) {} return s.replace(/^\d+\.\s*/, ''); }
+
+    var header = document.querySelector('header');
+    var brand = header.querySelector('.header-brand');
+    var container = document.querySelector('.container');
+
+    /* الشعار + العبارة */
+    var tag = document.createElement('small'); tag.className = 'm-tag'; brand.appendChild(tag);
+
+    /* قائمة اللغة (أعلى اليسار) */
+    var langBox = document.createElement('label'); langBox.id = 'm-lang';
+    langBox.innerHTML = '<span aria-hidden="true">🌐</span><select id="m-lang-sel" aria-label="Language">' +
+      '<option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option></select>';
+    header.insertBefore(langBox, brand);
+    var sel = langBox.querySelector('select');
+
+    /* زر الإعدادات (أعلى اليمين) */
+    var gear = document.createElement('button'); gear.id = 'm-gear'; gear.type = 'button';
+    gear.setAttribute('aria-label', 'Settings'); gear.textContent = '⚙️';
+    gear.addEventListener('click', function (e) { toggleActionsMenu(e); });
+    brand.after(gear);
+
+    /* البحث */
+    var search = document.createElement('div'); search.id = 'm-search';
+    search.innerHTML = '<span class="si">🔍</span><input id="m-search-in" type="search" autocomplete="off" data-no-autosave="1">';
+    var sIn = search.querySelector('input');
+
+    /* لوحة الأدوات */
+    var home = document.createElement('section'); home.id = 'm-home';
+    home.innerHTML = '<div class="m-panel"><div class="m-ptitle"><span class="pi">📋</span><span id="m-ptxt"></span>' +
+      '<span class="sp">✦✦</span><span class="gl"></span></div><div class="m-grid" id="m-grid"></div><p class="m-none" id="m-none"></p></div>';
+    container.parentNode.insertBefore(search, container);
+    container.parentNode.insertBefore(home, container);
+    var grid = home.querySelector('#m-grid'), none = home.querySelector('#m-none'), ptxt = home.querySelector('#m-ptxt');
+
+    /* شريط الرجوع */
+    var back = document.createElement('div'); back.id = 'm-back';
+    back.innerHTML = '<button type="button" id="m-back-btn"><span>🏠</span><span id="m-back-lb"></span></button><div id="m-back-title"></div>';
+    container.insertBefore(back, container.firstChild);
+    var backLb = back.querySelector('#m-back-lb'), backTitle = back.querySelector('#m-back-title');
+
+    function curId() { var a = document.querySelector('.tab-content.active'); return a ? a.id : 'tab1'; }
+    function setTitle() { var id = curId(); backTitle.textContent = (IC[id] || '') + ' ' + label(id); }
+    function setView(v) {
+      document.body.classList.toggle('m-home', v === 'home');
+      document.body.classList.toggle('m-tab', v === 'tab');
+    }
+    function filter() {
+      var q = (sIn.value || '').trim().toLowerCase(), shown = 0;
+      grid.querySelectorAll('.m-tile').forEach(function (b) {
+        var ok = !q || b.textContent.toLowerCase().indexOf(q) !== -1;
+        b.classList.toggle('h', !ok); if (ok) shown++;
+      });
+      grid.classList.toggle('f', q !== '');
+      none.style.display = (q && !shown) ? 'block' : 'none';
+    }
+    function build() {
+      var h = '';
+      ORDER.forEach(function (id) {
+        h += '<button type="button" class="m-tile" data-id="' + id + '"><span class="ic">' + IC[id] + '</span><span class="lb">' + label(id) + '</span></button>';
+      });
+      grid.innerHTML = h; filter();
+    }
+    function texts() {
+      tag.textContent = tx('tag'); ptxt.textContent = tx('tools'); sIn.placeholder = tx('search');
+      backLb.textContent = tx('home'); none.textContent = tx('none'); sel.value = lg(); setTitle();
+    }
+
+    /* التنقل */
+    var booted = false, force = false;
+    setTimeout(function () { booted = true; }, 1800);
+    var _st = window.showTab;
+    window.showTab = function (id) {
+      _st(id);
+      if (!booted && !force && document.body.classList.contains('m-home')) return;
+      if (MQ.matches && !document.body.classList.contains('m-tab')) { try { history.pushState({ m: 1 }, ''); } catch (e) {} }
+      setView('tab'); setTitle();
+      if (MQ.matches) window.scrollTo(0, 0);
+    };
+    function go(id) { force = true; try { window.showTab(id); } finally { force = false; } }
+    function goHome() {
+      try { closeActionsMenu(); } catch (e) {}
+      setView('home'); window.scrollTo(0, 0);
+    }
+
+    grid.addEventListener('click', function (e) { var b = e.target.closest('.m-tile'); if (b) go(b.dataset.id); });
+    sIn.addEventListener('input', filter);
+    sIn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { var f = grid.querySelector('.m-tile:not(.h)'); if (f) go(f.dataset.id); }
+    });
+    back.querySelector('#m-back-btn').addEventListener('click', function () {
+      if (history.state && history.state.m) history.back(); else goHome();
+    });
+    window.addEventListener('popstate', function () { if (document.body.classList.contains('m-tab')) goHome(); });
+    sel.addEventListener('change', function () { window.applyLang(sel.value); });
+
+    var _al = window.applyLang;
+    window.applyLang = function (l) { _al(l); build(); texts(); };
+
+    texts(); build(); setView('home');
+    document.body.classList.add('m-ready');
+  } catch (err) { console.error('Mobile app layout error:', err); }
+});
+</script>
 
 </body>
 </html>
