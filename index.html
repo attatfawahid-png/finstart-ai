@@ -2189,5 +2189,50 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
+  <!-- ═══════════ خلفية فاتحة: رمادي مائل إلى الأبيض (للهاتف فقط) ═══════════ -->
+<style>
+@media (max-width:768px){
+
+  /* 1) الخلفية: رمادي فاتح يتدرج إلى الأبيض */
+  body,
+  body.dark-mode{
+    background:linear-gradient(180deg,#e9ebef 0%,#f3f4f6 38%,#fbfbfc 72%,#ffffff 100%) !important;
+    background-color:#f3f4f6 !important;
+  }
+
+  /* 2) إضاءة الخلفية تصبح ناعمة تناسب الخلفية الفاتحة */
+  body::before,
+  body.dark-mode::before{
+    background:radial-gradient(circle,rgba(99,140,255,.30),rgba(99,140,255,0) 68%) !important;
+  }
+  body::after,
+  body.dark-mode::after{
+    background:radial-gradient(circle,rgba(255,196,70,.26),rgba(168,120,255,.16) 45%,rgba(168,120,255,0) 70%) !important;
+  }
+
+  /* 3) الشريط العلوي: كتلة كحلية متدرجة ليبقى النص الأبيض واضحاً */
+  body.dark-mode header{
+    background:linear-gradient(145deg,#0a1a63 0%,#1738b8 60%,#2563eb 100%) !important;
+    box-shadow:0 14px 36px rgba(37,99,235,.35) !important;
+  }
+
+  /* 4) لوحة البطاقات وشريط الرجوع والأقسام: كحلي ثابت ليحافظ على نفس الشكل */
+  body.dark-mode .m-panel{
+    background:linear-gradient(160deg,#112a85 0%,#07124a 100%) !important;
+    box-shadow:0 18px 40px rgba(20,50,170,.30),0 0 30px rgba(70,120,255,.28),inset 0 0 30px rgba(70,120,255,.10) !important;
+  }
+  body.dark-mode #m-back{
+    background:linear-gradient(160deg,#112a85 0%,#07124a 100%) !important;
+  }
+  body.dark-mode .card{
+    background:linear-gradient(160deg,#16308f 0%,#081250 100%) !important;
+    box-shadow:0 14px 30px rgba(20,50,170,.26),0 0 22px rgba(70,120,255,.20) !important;
+  }
+
+  /* 5) نصوص خارج البطاقات تبقى مقروءة على الخلفية الفاتحة */
+  footer{color:#6b7280 !important;border-top-color:rgba(0,0,0,.08) !important;}
+  .m-none{color:#6b7280 !important;}
+}
+</style>
 </body>
 </html>
