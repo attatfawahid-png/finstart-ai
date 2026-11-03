@@ -2069,5 +2069,67 @@ window.addEventListener('load', function () {
 });
 </script>
 
+ <!-- ═══════════ تعديل الواجهة: إزالة البحث والتكرار + تنظيم أزرار الأعلى (للهاتف فقط) ═══════════ -->
+<style>
+@media (max-width:768px){
+  /* 1) إزالة البحث */
+  #m-search,body.m-home #m-search{display:none !important;}
+
+  /* 2) إزالة أزرار اللغة الثلاثة وزر ⚙️ المكرر (تبقى قائمة اللغة وزر ⚙️ في الأعلى) */
+  header .lang-switch{display:none !important;}
+  header #actionsBtn{display:none !important;}
+  header .actions-wrap{display:contents !important;}
+
+  /* 3) الأزرار الأربعة: شبكة منظمة وراقية */
+  body.m-home header .header-actions{
+    display:grid !important;grid-template-columns:repeat(4,1fr);gap:10px;direction:rtl;
+    padding:12px;margin-top:4px;border-radius:30px;
+    background:linear-gradient(160deg,rgba(40,80,200,.30),rgba(6,14,62,.55));
+    border:1.5px solid var(--m-edge);
+    box-shadow:0 0 26px rgba(80,130,255,.30),inset 0 0 22px rgba(80,130,255,.10);
+  }
+  body.m-home header .header-actions > .theme-btn{
+    display:flex !important;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    width:auto;max-width:none;min-width:0;min-height:0;height:76px;aspect-ratio:auto;padding:0;
+    border-radius:22px;font-size:27px;line-height:1;color:#fff;transform:none;
+    background:linear-gradient(160deg,rgba(70,115,235,.42),rgba(8,18,72,.88));
+    border:1.5px solid rgba(130,170,255,.48);
+    box-shadow:0 10px 22px rgba(0,0,0,.35),0 0 16px rgba(80,130,255,.28),inset 0 -3px 10px -5px var(--ac,#ffc83d);
+    transition:transform .15s;
+  }
+  body.m-home header .header-actions > .theme-btn:active{transform:scale(.94);}
+  body.m-home header .header-actions > .theme-btn::after{
+    content:attr(data-lb);font-size:11px;font-weight:700;letter-spacing:.2px;color:#e8f0ff;font-family:inherit;
+  }
+  body.m-home header .header-actions > .theme-btn:nth-child(1){--ac:#ffc83d;}
+  body.m-home header .header-actions > .theme-btn:nth-child(2){--ac:#34d399;}
+  body.m-home header .header-actions > .theme-btn:nth-child(3){--ac:#22d3ee;}
+  body.m-home header .header-actions > .theme-btn:nth-child(4){--ac:#a78bfa;}
+}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  try {
+    var LB = {
+      ar: ['مشاريعي', 'حفظ', 'عرض', 'الوضع'],
+      fr: ['Projets', 'Sauver', 'Écran', 'Thème'],
+      en: ['Projects', 'Save', 'Present', 'Theme']
+    };
+    function setLabels() {
+      var l = 'ar'; try { l = L; } catch (e) {}
+      var a = LB[l] || LB.ar;
+      document.querySelectorAll('header .header-actions > .theme-btn').forEach(function (b, i) {
+        if (a[i]) b.setAttribute('data-lb', a[i]);
+      });
+    }
+    var _al = window.applyLang;
+    window.applyLang = function (x) { _al(x); setLabels(); };
+    setLabels();
+    var s = document.getElementById('m-search');
+    if (s) s.remove();
+  } catch (err) { console.error('Header refine error:', err); }
+});
+</script> 
 </body>
 </html>
