@@ -2234,5 +2234,72 @@ window.addEventListener('load', function () {
   .m-none{color:#6b7280 !important;}
 }
 </style>
+  <!-- ═══════════ خلفية فاتحة قوية (رمادي مائل إلى الأبيض) — للهاتف فقط ═══════════ -->
+<script>
+(function () {
+  try {
+    if (window.matchMedia('(max-width:768px)').matches) {
+      var m = document.createElement('meta');
+      m.name = 'color-scheme';
+      m.content = 'light only';
+      document.head.appendChild(m);
+    }
+  } catch (e) {}
+})();
+</script>
+<style>
+@media (max-width:768px){
+
+  /* إعلان الصفحة فاتحة: يمنع المتصفح من تغميقها تلقائياً */
+  :root{color-scheme:light only;}
+
+  /* الخلفية على html، وbody شفاف حتى تظهر الإضاءة خلف المحتوى */
+  html{
+    background:linear-gradient(180deg,#e6e8ec 0%,#f1f2f5 35%,#fafafb 70%,#ffffff 100%) fixed no-repeat !important;
+    background-color:#f1f2f5 !important;
+    min-height:100%;
+  }
+  html body,
+  html body.dark-mode{
+    background:transparent !important;
+    background-image:none !important;
+  }
+
+  /* الإضاءة الناعمة المناسبة للخلفية الفاتحة */
+  html body::before,
+  html body.dark-mode::before{
+    background:radial-gradient(circle,rgba(99,140,255,.28),rgba(99,140,255,0) 68%) !important;
+    opacity:1 !important;
+  }
+  html body::after,
+  html body.dark-mode::after{
+    background:radial-gradient(circle,rgba(255,196,70,.24),rgba(168,120,255,.15) 45%,rgba(168,120,255,0) 70%) !important;
+    opacity:1 !important;
+  }
+
+  /* الشريط العلوي كحلي ثابت */
+  html body header,
+  html body.dark-mode header{
+    background:linear-gradient(145deg,#0a1a63 0%,#1738b8 60%,#2563eb 100%) !important;
+    box-shadow:0 14px 36px rgba(37,99,235,.32) !important;
+  }
+
+  /* اللوحة والبطاقات وشريط الرجوع كحلية ثابتة */
+  html body .m-panel,
+  html body #m-back{
+    background:linear-gradient(160deg,#112a85 0%,#07124a 100%) !important;
+  }
+  html body .card{
+    background:linear-gradient(160deg,#16308f 0%,#081250 100%) !important;
+  }
+  html body .m-tile{
+    background:linear-gradient(160deg,#3560d6 0%,#0b1a66 100%) !important;
+  }
+
+  /* نصوص خارج البطاقات */
+  html body footer{color:#6b7280 !important;border-top-color:rgba(0,0,0,.08) !important;}
+  html body .m-none{color:#6b7280 !important;}
+}
+</style>
 </body>
 </html>
