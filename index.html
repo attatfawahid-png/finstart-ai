@@ -353,7 +353,7 @@ html.auth-pending{overflow:hidden;}
 
 <script type="module">
 const FIREBASE_CONFIG = {
-  apiKey: "AIza",
+  apiKey: "AIzaSyCBsR5ugq_rm49NPHZB7ZLFgKLlVltH8rI",
   authDomain: "finstart-dz.firebaseapp.com",
   projectId: "finstart-dz",
   appId: "1:685833288198:web:3d15d29957ac0c6dd52187"
@@ -424,7 +424,7 @@ function errText(e) {
   if (c === 'auth/invalid-email') return t('e_email');
   if (c === 'auth/too-many-requests') return t('e_many');
   if (c === 'auth/network-request-failed') return t('e_net');
-  return t('e_gen')return t('e_gen') + ' (' + (c || (e && e.message) || '') + ')';;
+return t('e_gen') + ' (' + (c || (e && e.message) || '') + ')';;
 }
 
 gate.querySelectorAll('.ag-tabs button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
