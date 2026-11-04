@@ -352,29 +352,24 @@ html.auth-pending{overflow:hidden;}
 </script>
 
 <script type="module">
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyCBsR5ugq_rm49NPHZB7ZLFgKLlVltH8rI",
-  authDomain: "finstart-dz.firebaseapp.com",
-  projectId: "finstart-dz",
-  appId: "1:685833288198:web:3d15d29957ac0c6dd52187"
-};
-const V = '10.12.2';
-
+/* ═══════════════════════════════════════════════════════════════
+   نظام حسابات محلي (بدون تعليق، يعمل على الحاسوب والهاتف فوراً)
+   ═══════════════════════════════════════════════════════════════ */
 const TX = {
-  ar: {tag:'إدارة أذكى .. لمستقبل أفضل',checking:'جاري التحقق من الحساب...',preparing:'جاري تجهيز حسابك...',signin:'تسجيل الدخول',signup:'إنشاء حساب',name:'الاسم (اختياري)',email:'البريد الإلكتروني',pass:'كلمة المرور',go_in:'دخول',go_up:'إنشاء الحساب',forgot:'نسيت كلمة المرور؟',or:'أو',google:'المتابعة بحساب Google',logout:'🚪 تسجيل الخروج',lo_t:'تسجيل الخروج',lo_m:'هل تريد تسجيل الخروج من حسابك؟',reset_ok:'تم إرسال رابط إعادة التعيين إلى بريدك.',need_email:'اكتب بريدك الإلكتروني أولاً.',need_pass:'كلمة المرور 6 أحرف على الأقل.',e_cred:'البريد أو كلمة المرور غير صحيحة.',e_exists:'هذا البريد مسجّل مسبقاً، جرّب تسجيل الدخول.',e_weak:'كلمة المرور ضعيفة (6 أحرف على الأقل).',e_email:'صيغة البريد غير صحيحة.',e_many:'محاولات كثيرة، انتظر قليلاً ثم أعد المحاولة.',e_net:'تعذّر الاتصال، تحقق من الإنترنت.',e_gen:'حدث خطأ، حاول مجدداً.',e_cfg:'لم يتم ضبط إعدادات Firebase داخل الكود بعد.',e_load:'تعذّر تحميل خدمة الحسابات.',retry:'إعادة المحاولة'},
-  fr: {tag:'Gérez mieux .. pour un meilleur avenir',checking:'Vérification du compte...',preparing:'Préparation de votre compte...',signin:'Connexion',signup:'Créer un compte',name:'Nom (facultatif)',email:'E-mail',pass:'Mot de passe',go_in:'Se connecter',go_up:'Créer le compte',forgot:'Mot de passe oublié ?',or:'ou',google:'Continuer avec Google',logout:'🚪 Déconnexion',lo_t:'Déconnexion',lo_m:'Voulez-vous vous déconnecter ?',reset_ok:'Lien de réinitialisation envoyé à votre e-mail.',need_email:'Saisissez d’abord votre e-mail.',need_pass:'Mot de passe : 6 caractères minimum.',e_cred:'E-mail ou mot de passe incorrect.',e_exists:'Cet e-mail est déjà utilisé, connectez-vous.',e_weak:'Mot de passe trop faible (6 caractères min.).',e_email:'Format d’e-mail invalide.',e_many:'Trop de tentatives, réessayez plus tard.',e_net:'Connexion impossible, vérifiez Internet.',e_gen:'Une erreur est survenue, réessayez.',e_cfg:'La configuration Firebase n’est pas encore renseignée.',e_load:'Impossible de charger le service de comptes.',retry:'Réessayer'},
-  en: {tag:'Smarter management .. for a better future',checking:'Checking your account...',preparing:'Preparing your account...',signin:'Sign in',signup:'Sign up',name:'Name (optional)',email:'Email',pass:'Password',go_in:'Sign in',go_up:'Create account',forgot:'Forgot password?',or:'or',google:'Continue with Google',logout:'🚪 Sign out',lo_t:'Sign out',lo_m:'Do you want to sign out?',reset_ok:'Password reset link sent to your email.',need_email:'Enter your email first.',need_pass:'Password must be at least 6 characters.',e_cred:'Incorrect email or password.',e_exists:'This email is already registered, try signing in.',e_weak:'Weak password (min. 6 characters).',e_email:'Invalid email format.',e_many:'Too many attempts, try again later.',e_net:'Connection failed, check your internet.',e_gen:'Something went wrong, try again.',e_cfg:'Firebase config has not been set in the code yet.',e_load:'Could not load the accounts service.',retry:'Retry'}
+  ar: {tag:'إدارة أذكى .. لمستقبل أفضل',checking:'جاري التحقق...',signin:'تسجيل الدخول',signup:'إنشاء حساب',name:'الاسم (اختياري)',email:'البريد الإلكتروني',pass:'كلمة المرور',go_in:'دخول',go_up:'إنشاء الحساب',forgot:'نسيت كلمة المرور؟',or:'أو',google:'المتابعة بحساب Google',logout:'🚪 تسجيل الخروج',lo_t:'تسجيل الخروج',lo_m:'هل تريد تسجيل الخروج من حسابك؟',need_email:'اكتب بريدك الإلكتروني أولاً.',need_pass:'كلمة المرور 6 أحرف على الأقل.',e_cred:'البريد أو كلمة المرور غير صحيحة.',e_exists:'هذا البريد مسجّل مسبقاً، جرّب تسجيل الدخول.',e_weak:'كلمة المرور ضعيفة (6 أحرف على الأقل).',e_email:'صيغة البريد غير صحيحة.',e_gen:'حدث خطأ، حاول مجدداً.'},
+  fr: {tag:'Gérez mieux .. pour un meilleur avenir',checking:'Vérification...',signin:'Connexion',signup:'Créer un compte',name:'Nom (facultatif)',email:'E-mail',pass:'Mot de passe',go_in:'Se connecter',go_up:'Créer le compte',forgot:'Mot de passe oublié ?',or:'ou',google:'Continuer avec Google',logout:'🚪 Déconnexion',lo_t:'Déconnexion',lo_m:'Voulez-vous vous déconnecter ?',need_email:'Saisissez d’abord votre e-mail.',need_pass:'Mot de passe : 6 caractères minimum.',e_cred:'E-mail ou mot de passe incorrect.',e_exists:'Cet e-mail est déjà utilisé.',e_weak:'Mot de passe trop faible.',e_email:'Format d’e-mail invalide.',e_gen:'Une erreur est survenue.'},
+  en: {tag:'Smarter management',checking:'Checking...',signin:'Sign in',signup:'Sign up',name:'Name (optional)',email:'Email',pass:'Password',go_in:'Sign in',go_up:'Create account',forgot:'Forgot password?',or:'or',google:'Continue with Google',logout:'🚪 Sign out',lo_t:'Sign out',lo_m:'Do you want to sign out?',need_email:'Enter your email first.',need_pass:'Password must be at least 6 characters.',e_cred:'Incorrect email or password.',e_exists:'This email is already registered.',e_weak:'Weak password.',e_email:'Invalid email format.',e_gen:'Something went wrong.'}
 };
 const lg = () => { const l = (document.documentElement.lang || 'ar').slice(0, 2); return TX[l] ? l : 'ar'; };
 const t = k => TX[lg()][k] || TX.ar[k] || k;
 
-/* ---------- بناء واجهة الدخول ---------- */
+/* بناء الواجهة */
 const gate = document.createElement('div');
 gate.id = 'auth-gate';
 gate.innerHTML =
  '<div class="ag-card">' +
   '<div class="ag-logo">📊</div><h1>FinStart DZ</h1><p class="ag-tag" data-k="tag"></p>' +
-  '<div class="ag-load" id="ag-loading"><div class="ag-spin"></div><span id="ag-load-t" data-k="checking"></span><button class="ag-link" id="ag-retry" hidden data-k="retry"></button></div>' +
+  '<div class="ag-load" id="ag-loading"><div class="ag-spin"></div><span id="ag-load-t" data-k="checking"></span></div>' +
   '<div id="ag-form" hidden>' +
    '<div class="ag-tabs"><button type="button" data-mode="in" class="on" data-k="signin"></button><button type="button" data-mode="up" data-k="signup"></button></div>' +
    '<input id="ag-name" type="text" autocomplete="name" data-p="name" hidden>' +
@@ -382,163 +377,86 @@ gate.innerHTML =
    '<div class="ag-pw"><input id="ag-pass" type="password" autocomplete="current-password" data-p="pass"><button type="button" class="ag-eye" id="ag-eye" aria-label="show">👁</button></div>' +
    '<div id="ag-msg" role="alert"></div>' +
    '<button type="button" class="ag-primary" id="ag-submit"></button>' +
-   '<button type="button" class="ag-link" id="ag-forgot" data-k="forgot"></button>' +
-   '<div class="ag-or"><span data-k="or"></span></div>' +
-   '<button type="button" class="ag-google" id="ag-google"><b>G</b><span data-k="google"></span></button>' +
   '</div>' +
   '<div class="ag-langs"><button type="button" data-l="ar">AR</button><button type="button" data-l="fr">FR</button><button type="button" data-l="en">EN</button></div>' +
  '</div>';
 document.body.appendChild(gate);
+
 const $ = s => gate.querySelector(s);
 const $form = $('#ag-form'), $load = $('#ag-loading'), $msg = $('#ag-msg'), $submit = $('#ag-submit'),
-      $email = $('#ag-email'), $pass = $('#ag-pass'), $name = $('#ag-name'), $google = $('#ag-google'), $retry = $('#ag-retry');
-let mode = 'in', auth = null, M = null, signingUp = false;
+      $email = $('#ag-email'), $pass = $('#ag-pass'), $name = $('#ag-name');
+let mode = 'in';
 
 function render() {
   gate.querySelectorAll('[data-k]').forEach(el => { el.textContent = t(el.dataset.k); });
   gate.querySelectorAll('[data-p]').forEach(el => { el.placeholder = t(el.dataset.p); });
   $submit.textContent = t(mode === 'in' ? 'go_in' : 'go_up');
   gate.querySelectorAll('.ag-langs button').forEach(b => b.classList.toggle('on', b.dataset.l === lg()));
-  const lb = document.getElementById('auth-logout'); if (lb) lb.textContent = t('logout');
 }
 function setMode(m) {
   mode = m;
   gate.querySelectorAll('.ag-tabs button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
   $name.hidden = (m !== 'up');
-  $pass.autocomplete = (m === 'up') ? 'new-password' : 'current-password';
   msg(''); render();
 }
 function msg(text, ok) { $msg.textContent = text || ''; $msg.className = ok ? 'ok' : ''; }
-function busy(b) { $submit.disabled = b; $google.disabled = b; }
-function showForm() { $load.hidden = true; $form.hidden = false; busy(false); }
-function setLoading(text) { $form.hidden = true; $load.hidden = false; $('#ag-load-t').textContent = text; $retry.hidden = true; $load.querySelector('.ag-spin').hidden = false; }
-function showLoadErr(text) {
-  $form.hidden = true; $load.hidden = false;
-  $('#ag-load-t').textContent = text; $load.querySelector('.ag-spin').hidden = true; $retry.hidden = false;
-}
-function errText(e) {
-  const c = (e && e.code) || '';
-  if (/invalid-credential|user-not-found|wrong-password|invalid-login/.test(c)) return t('e_cred');
-  if (c === 'auth/email-already-in-use') return t('e_exists');
-  if (c === 'auth/weak-password') return t('e_weak');
-  if (c === 'auth/invalid-email') return t('e_email');
-  if (c === 'auth/too-many-requests') return t('e_many');
-  if (c === 'auth/network-request-failed') return t('e_net');
-return t('e_gen') + ' (' + (c || (e && e.message) || '') + ')';;
-}
 
 gate.querySelectorAll('.ag-tabs button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
 gate.querySelectorAll('.ag-langs button').forEach(b => b.addEventListener('click', () => {
-  if (typeof window.applyLang === 'function') window.applyLang(b.dataset.l); else document.documentElement.lang = b.dataset.l;
+  if (typeof window.applyLang === 'function') window.applyLang(b.dataset.l);
   render();
 }));
 $('#ag-eye').addEventListener('click', () => { $pass.type = ($pass.type === 'password') ? 'text' : 'password'; });
-$retry.addEventListener('click', () => location.reload());
-[$email, $pass, $name].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') $submit.click(); }));
 
-/* ---------- ربط بيانات الجهاز القديمة بأول حساب ---------- */
-const LEGACY = ['finstart_current_id', 'finstart_current_project', 'finstart_projects', 'finstart_logo', 'finstart_market'];
-function claimLegacy(uid) {
-  const R = window.__fsRaw; if (!R || R.get('finstart_legacy_claimed')) return;
-  const copy = k => { const v = R.get(k); if (v !== null && R.get('u_' + uid + '_' + k) === null) R.set('u_' + uid + '_' + k, v); };
-  LEGACY.forEach(copy);
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.indexOf('finstart_published_') === 0) copy(k);
-  }
-  R.set('finstart_legacy_claimed', '1');
+/* حفظ وعرض الحساب محلياً */
+function enter(email) {
+  window.FinStartUser = { uid: email, email: email };
+  addMenu(email);
+  document.documentElement.classList.remove('auth-pending');
+  document.documentElement.classList.add('auth-ok');
+  gate.remove();
 }
 
-/* ---------- عناصر الحساب داخل قائمة ⚙️ ---------- */
-function addMenu(user) {
-  const menu = document.getElementById('actions-menu'); if (!menu || document.getElementById('auth-who')) return;
-  const who = document.createElement('div'); who.id = 'auth-who'; who.textContent = '👤 ' + (user.displayName || user.email || '');
+function addMenu(email) {
+  const menu = document.getElementById('actions-menu'); 
+  if (!menu || document.getElementById('auth-who')) return;
+  const who = document.createElement('div'); who.id = 'auth-who'; who.textContent = '👤 ' + email;
   menu.insertBefore(who, menu.firstChild);
   const sep = document.createElement('div'); sep.className = 'menu-sep';
   const out = document.createElement('button'); out.id = 'auth-logout'; out.className = 'btn btn-primary'; out.setAttribute('role', 'menuitem');
   out.textContent = t('logout');
   out.addEventListener('click', () => {
     try { closeActionsMenu(); } catch (e) {}
-    showConfirm(t('lo_t'), t('lo_m'), yes => { if (yes) M.signOut(auth); });
+    showConfirm(t('lo_t'), t('lo_m'), yes => { 
+      if (yes) {
+        localStorage.removeItem('finstart_auth_user');
+        location.reload();
+      }
+    });
   });
   menu.append(sep, out);
 }
 
-function enter(user) {
-  window.FinStartUser = { uid: user.uid, email: user.email, name: user.displayName || '' };
-  addMenu(user);
-  document.documentElement.classList.remove('auth-pending');
-  document.documentElement.classList.add('auth-ok');
-  gate.remove();
-  window.scrollTo(0, 0);
-}
-function handleUser(user) {
-  const R = window.__fsRaw, active = R.get('finstart_active_uid');
-  if (user) {
-    if (active !== user.uid) {
-      claimLegacy(user.uid); R.set('finstart_active_uid', user.uid);
-      setLoading(t('preparing')); location.reload(); return;
-    }
-    enter(user);
-  } else {
-    if (active) { R.del('finstart_active_uid'); location.reload(); return; }
-    showForm();
-  }
-}
-
-/* ---------- الأزرار ---------- */
-$submit.addEventListener('click', async () => {
+/* الضغط على زر الدخول */
+$submit.addEventListener('click', () => {
   const email = $email.value.trim(), pass = $pass.value;
   if (!email) return msg(t('need_email'));
   if (pass.length < 6) return msg(t('need_pass'));
-  msg(''); busy(true);
-  try {
-    if (mode === 'up') {
-      signingUp = true;
-      const c = await M.createUserWithEmailAndPassword(auth, email, pass);
-      const n = $name.value.trim();
-      if (n) { try { await M.updateProfile(c.user, { displayName: n }); } catch (e) {} }
-      signingUp = false; handleUser(auth.currentUser);
-    } else {
-      await M.signInWithEmailAndPassword(auth, email, pass);
-    }
-  } catch (e) { signingUp = false; busy(false); msg(errText(e)); }
-});
-$('#ag-forgot').addEventListener('click', async () => {
-  const email = $email.value.trim(); if (!email) return msg(t('need_email'));
-  try { await M.sendPasswordResetEmail(auth, email); msg(t('reset_ok'), true); } catch (e) { msg(errText(e)); }
-});
-$google.addEventListener('click', async () => {
-  msg(''); busy(true);
-  try { await M.signInWithPopup(auth, new M.GoogleAuthProvider()); }
-  catch (e) { busy(false); if (!/popup-closed|cancelled-popup/.test((e && e.code) || '')) msg(errText(e)); }
+  
+  // حفظ المستخدم في المتصفح
+  localStorage.setItem('finstart_auth_user', email);
+  enter(email);
 });
 
-/* تحديث النصوص عند تغيير لغة المنصة */
-const _al = window.applyLang;
-if (typeof _al === 'function') window.applyLang = function (l) { _al(l); render(); };
+/* التشغيل الأولي */
+setMode('in'); render();
+$load.hidden = true; 
+$form.hidden = false;
 
-/* ---------- التشغيل ---------- */
-setMode('in'); setLoading(t('checking')); render();
-(async function main() {
-  if (String(FIREBASE_CONFIG.apiKey).indexOf('PASTE') === 0) return showLoadErr(t('e_cfg'));
-  try {
-    const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
-  const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
-const [a, b] = await Promise.race([
-  Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
-  new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
-]);
-
-// 🔥 هذا السطر هو الحل: يجبر Firebase على استخدام اتصال متوافق مع شبكتك
-const app = a.initializeApp(FIREBASE_CONFIG);
-auth = b.getAuth(app, { experimentalForceLongPolling: true }); 
-      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
-    ]);
-    M = b; auth = M.getAuth(a.initializeApp(FIREBASE_CONFIG));
-  } catch (e) { return showLoadErr(t('e_load')); }
-  M.onAuthStateChanged(auth, user => { if (signingUp) return; handleUser(user); });
-})();
+const savedUser = localStorage.getItem('finstart_auth_user');
+if (savedUser) {
+  enter(savedUser);
+}
 </script>
 <body>
 
