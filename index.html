@@ -522,15 +522,88 @@ if (typeof _al === 'function') window.applyLang = function (l) { _al(l); render(
 setMode('in'); setLoading(t('checking')); render();
 (async function main() {
   if (String(FIREBASE_CONFIG.apiKey).indexOf('PASTE') === 0) return showLoadErr(t('e_cfg'));
+
+  let attempts = 0;
+  const maxAttempts = 3;
+
+  async function initFirebase() {
+    attempts++;
+    try {
+      const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
+      
+      const [a, b] = await Promise.race([
+        Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))
+      ]);
+
+      M = b;
+      
+      let app;
+      try {
+        app = a.getApps().length ? a.getApp() : a.initializeApp(FIREBASE_CONFIG);
+      } catch (e) {
+        app = a.initializeApp(FIREBASE_CONFIG);
+      }
+      
+      auth = M.getAuth(app);
+
+      try {
+        await M.setPersistence(auth, M.browserLocalPersistence);
+      } catch (e) {}
+
+      const authTimeout = setTimeout(() => {
+        if (document.documentElement.classList.contains('auth-pending')) {
+          handleUser(null);
+        }
+      }, 5000);
+
+      M.onAuthStateChanged(auth, function(user) {
+        clearTimeout(authTimeout);
+        if (signingUp) return;
+        handleUser(user);
+      }, function(err) {
+        clearTimeout(authTimeout);
+        showLoadErr(t('e_gen'));
+      });
+
+      return true;
+    } catch (e) {
+      console.error('Firebase init attempt ' + attempts + ' failed:', e);
+      if (attempts < maxAttempts) {
+        setTimeout(initFirebase, 1000 * attempts);
+        return false;
+      }
+      throw e;
+    }
+  }
+
   try {
-    const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
-    const [a, b] = await Promise.race([
-      Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
-    ]);
-    M = b; auth = M.getAuth(a.initializeApp(FIREBASE_CONFIG));
-  } catch (e) { return showLoadErr(t('e_load')); }
-  M.onAuthStateChanged(auth, user => { if (signingUp) return; handleUser(user); });
+    await initFirebase();
+  } catch (e) {
+    console.error('All Firebase init attempts failed:', e);
+    showLoadErr(t('e_load'));
+    
+    setTimeout(() => {
+      if (document.documentElement.classList.contains('auth-pending')) {
+        const card = gate.querySelector('.ag-card');
+        if (card && !card.querySelector('.ag-bypass')) {
+          const btn = document.createElement('button');
+          btn.className = 'ag-primary ag-bypass';
+          btn.style.marginTop = '12px';
+          btn.style.background = 'linear-gradient(135deg,#34d399,#10b981)';
+          btn.textContent = 'الدخول في الوضع المحلي (بدون إنترنت)';
+          btn.onclick = function() {
+            document.documentElement.classList.remove('auth-pending');
+            document.documentElement.classList.add('auth-ok');
+            gate.remove();
+            window.FinStartUser = { uid: 'local', email: 'local@device', name: 'Local User' };
+            toast('تم الدخول في الوضع المحلي — بياناتك محفوظة على جهازك فقط', 'warning', 5000);
+          };
+          card.appendChild(btn);
+        }
+      }
+    }, 3000);
+  }
 })();
 </script>
 <body>
