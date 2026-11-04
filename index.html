@@ -464,13 +464,19 @@ function addMenu(user) {
   menu.append(sep, out);
 }
 
-function enter(user) {
-  window.FinStartUser = { uid: user.uid, email: user.email, name: user.displayName || '' };
-  addMenu(user);
+let entered = false;
+function enterApp() {
+  if (entered) return;
+  entered = true;
   document.documentElement.classList.remove('auth-pending');
   document.documentElement.classList.add('auth-ok');
   gate.remove();
   window.scrollTo(0, 0);
+}
+function enter(user) {
+  window.FinStartUser = { uid: user.uid, email: user.email, name: user.displayName || '' };
+  addMenu(user);
+  enterApp();
 }
 function handleUser(user) {
   const R = window.__fsRaw, active = R.get('finstart_active_uid');
@@ -521,89 +527,40 @@ if (typeof _al === 'function') window.applyLang = function (l) { _al(l); render(
 /* ---------- التشغيل ---------- */
 setMode('in'); setLoading(t('checking')); render();
 (async function main() {
-  if (String(FIREBASE_CONFIG.apiKey).indexOf('PASTE') === 0) return showLoadErr(t('e_cfg'));
+  /* دخول فوري إن كان هذا الجهاز مسجَّلاً من قبل (التحقق يتم في الخلفية) */
+  const cached = window.__fsRaw.get('finstart_active_uid');
+  if (cached) enterApp();
 
-  let attempts = 0;
-  const maxAttempts = 3;
+  if (String(FIREBASE_CONFIG.apiKey).indexOf('PASTE') === 0) { if (!entered) showLoadErr(t('e_cfg')); return; }
 
-  async function initFirebase() {
-    attempts++;
-    try {
-      const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
-      
-      const [a, b] = await Promise.race([
-        Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))
-      ]);
-
-      M = b;
-      
-      let app;
-      try {
-        app = a.getApps().length ? a.getApp() : a.initializeApp(FIREBASE_CONFIG);
-      } catch (e) {
-        app = a.initializeApp(FIREBASE_CONFIG);
-      }
-      
-      auth = M.getAuth(app);
-
-      try {
-        await M.setPersistence(auth, M.browserLocalPersistence);
-      } catch (e) {}
-
-      const authTimeout = setTimeout(() => {
-        if (document.documentElement.classList.contains('auth-pending')) {
-          handleUser(null);
-        }
-      }, 5000);
-
-      M.onAuthStateChanged(auth, function(user) {
-        clearTimeout(authTimeout);
-        if (signingUp) return;
-        handleUser(user);
-      }, function(err) {
-        clearTimeout(authTimeout);
-        showLoadErr(t('e_gen'));
-      });
-
-      return true;
-    } catch (e) {
-      console.error('Firebase init attempt ' + attempts + ' failed:', e);
-      if (attempts < maxAttempts) {
-        setTimeout(initFirebase, 1000 * attempts);
-        return false;
-      }
-      throw e;
-    }
-  }
+  /* شبكة أمان: إن لم يرد Firebase خلال 5 ثوانٍ تظهر شاشة الدخول */
+  const fallback = setTimeout(() => { if (!entered) showForm(); }, 5000);
 
   try {
-    await initFirebase();
+    const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
+    const [a, b] = await Promise.race([
+      Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
+    ]);
+    M = b;
+    const app = a.initializeApp(FIREBASE_CONFIG);
+    try {
+      /* localStorage بدل IndexedDB لتفادي التعليق على الحاسوب */
+      auth = M.initializeAuth(app, {
+        persistence: [M.browserLocalPersistence, M.browserSessionPersistence, M.inMemoryPersistence],
+        popupRedirectResolver: M.browserPopupRedirectResolver
+      });
+    } catch (e) { auth = M.getAuth(app); }
   } catch (e) {
-    console.error('All Firebase init attempts failed:', e);
-    showLoadErr(t('e_load'));
-    
-    setTimeout(() => {
-      if (document.documentElement.classList.contains('auth-pending')) {
-        const card = gate.querySelector('.ag-card');
-        if (card && !card.querySelector('.ag-bypass')) {
-          const btn = document.createElement('button');
-          btn.className = 'ag-primary ag-bypass';
-          btn.style.marginTop = '12px';
-          btn.style.background = 'linear-gradient(135deg,#34d399,#10b981)';
-          btn.textContent = 'الدخول في الوضع المحلي (بدون إنترنت)';
-          btn.onclick = function() {
-            document.documentElement.classList.remove('auth-pending');
-            document.documentElement.classList.add('auth-ok');
-            gate.remove();
-            window.FinStartUser = { uid: 'local', email: 'local@device', name: 'Local User' };
-            toast('تم الدخول في الوضع المحلي — بياناتك محفوظة على جهازك فقط', 'warning', 5000);
-          };
-          card.appendChild(btn);
-        }
-      }
-    }, 3000);
+    clearTimeout(fallback);
+    if (!entered) showLoadErr(t('e_load'));
+    return;
   }
+  M.onAuthStateChanged(auth, user => {
+    clearTimeout(fallback);
+    if (signingUp) return;
+    handleUser(user);
+  });
 })();
 </script>
 <body>
