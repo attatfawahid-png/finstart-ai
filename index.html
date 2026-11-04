@@ -524,8 +524,15 @@ setMode('in'); setLoading(t('checking')); render();
   if (String(FIREBASE_CONFIG.apiKey).indexOf('PASTE') === 0) return showLoadErr(t('e_cfg'));
   try {
     const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
-    const [a, b] = await Promise.race([
-      Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
+  const imp = f => import('https://www.gstatic.com/firebasejs/' + V + '/' + f);
+const [a, b] = await Promise.race([
+  Promise.all([imp('firebase-app.js'), imp('firebase-auth.js')]),
+  new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
+]);
+
+// 🔥 هذا السطر هو الحل: يجبر Firebase على استخدام اتصال متوافق مع شبكتك
+const app = a.initializeApp(FIREBASE_CONFIG);
+auth = b.getAuth(app, { experimentalForceLongPolling: true }); 
       new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
     ]);
     M = b; auth = M.getAuth(a.initializeApp(FIREBASE_CONFIG));
