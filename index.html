@@ -2494,6 +2494,195 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
+<!-- ═══════════ التصميم الاحترافي المطابق 100% للصورة ═══════════ -->
+<style>
+@media (max-width: 768px) {
+  /* 1. خلفية التطبيق الأساسية (تدرج فاتح جداً) */
+  body.m-home, body.m-tab {
+    background: linear-gradient(180deg, #f0f4f8 0%, #e2e8f0 100%) !important;
+    padding-bottom: 0 !important;
+  }
 
+  /* 2. الشريط العلوي (تصميم الصورة الأولى) */
+  header {
+    position: relative !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    border-radius: 0 0 35px 35px !important;
+    padding: calc(15px + env(safe-area-inset-top, 0px)) 20px 30px !important;
+    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.2) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    overflow: hidden;
+  }
+
+  /* الموجة الصفراء أسفل الهيدر (مثل الصورة) */
+  header::after {
+    content: ''; position: absolute; bottom: -20px; left: -10%; width: 120%; height: 40px;
+    background: #fbd38d; border-radius: 50%; z-index: 0;
+  }
+
+  /* الشعار واسم المنصة */
+  .header-brand { z-index: 1; display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; width: 100%; }
+  .header-brand h1 { font-size: 24px !important; color: #fff !important; font-weight: 800 !important; margin: 0 !important; }
+  .m-tag { display: block !important; font-size: 13px; color: #bfdbfe; font-weight: 600; text-align: right; margin-top: 5px; }
+
+  /* زر القائمة (الهامبرغر) */
+  #m-gear {
+    position: static !important; width: 50px !important; height: 50px !important;
+    background: #1e3a8a !important; border: 2px solid #fbd38d !important;
+    border-radius: 16px !important; color: #fff !important; font-size: 26px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important; z-index: 2 !important;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* زر اللغة (أعلى اليسار) */
+  #m-lang {
+    position: absolute !important; top: calc(15px + env(safe-area-inset-top, 0px)); left: 20px;
+    background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.3) !important;
+    border-radius: 20px !important; padding: 6px 12px !important; color: #fff !important; z-index: 2;
+  }
+  #m-lang select { color: #fff !important; font-weight: 700 !important; font-size: 12px !important; }
+  #m-lang::before { content: '🌐'; margin-left: 5px; font-size: 14px; }
+
+  /* 3. شبكة الأيقونات (تصميم الصورة الأولى) */
+  .m-grid { 
+    grid-template-columns: repeat(2, 1fr) !important; /* عمودين مثل الصورة */
+    gap: 15px !important; 
+    padding: 0 15px 80px !important; /* مسافة سفلية للأزرار العائمة */
+    margin-top: 20px !important;
+  }
+  
+  .m-tile {
+    background: #ffffff !important; border: none !important; border-radius: 24px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04) !important;
+    min-height: 120px !important; padding: 15px !important; gap: 12px !important;
+    transition: transform 0.1s !important; position: relative;
+  }
+  .m-tile:active { transform: scale(0.95) !important; }
+  
+  /* أيقونات كبيرة وملونة */
+  .m-tile .ic { font-size: 48px !important; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15)); }
+  
+  /* نصوص الأزرار */
+  .m-tile .lb { font-size: 14px !important; font-weight: 800 !important; color: #1e3a8a !important; }
+
+  /* 4. القائمة الجانبية (Drawer) مطابقة للصورة الثانية */
+  #actions-menu {
+    position: fixed !important; top: 0 !important; right: -100% !important; 
+    width: 85% !important; height: 100vh !important; max-width: 320px !important;
+    background: #f0f4f8 !important; z-index: 9999 !important; 
+    border-radius: 0 !important; padding: 20px 15px !important;
+    display: flex !important; flex-direction: column !important; gap: 12px !important;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2) !important;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  #actions-menu.show { right: 0 !important; }
+
+  /* رأس القائمة (المزيد + علامة الإغلاق) */
+  #actions-menu::before {
+    content: '✖'; position: absolute; top: 25px; right: 20px; font-size: 22px; color: #1e3a8a;
+    font-weight: bold; cursor: pointer; z-index: 2;
+  }
+  #actions-menu::after {
+    content: 'المزيد'; position: absolute; top: 20px; right: 0; width: 100%; text-align: center;
+    font-size: 22px; font-weight: 900; color: #1e3a8a; border-bottom: 3px solid #fbd38d; padding-bottom: 10px;
+  }
+  
+  /* شريط المستخدم (الايميل) */
+  #auth-who {
+    margin-top: 50px; text-align: center; font-size: 13px; font-weight: bold; color: #4a5568;
+    padding: 10px; border-bottom: 1px solid #cbd5e1; margin-bottom: 15px;
+  }
+
+  /* أزرار القائمة الجانبية */
+  #actions-menu .btn {
+    display: flex !important; flex-direction: row-reverse !important; justify-content: space-between !important;
+    align-items: center !important; background: #ffffff !important; color: #1e3a8a !important;
+    border: 1px solid #e2e8f0 !important; border-radius: 16px !important;
+    padding: 16px 20px !important; font-size: 16px !important; font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important; margin: 0 !important;
+  }
+  
+  /* أيقونات الأزرار */
+  #actions-menu .btn[data-i18n="btn_save"]::before { content: '💾'; font-size: 20px; }
+  #actions-menu .btn[data-i18n="btn_excel"]::before { content: '📊'; font-size: 20px; }
+  #actions-menu .btn[data-i18n="btn_pdf"]::before { content: '📄'; font-size: 20px; }
+  #actions-menu .btn[data-i18n="btn_reset"]::before { content: '⚙️'; font-size: 20px; }
+  
+  /* سهم صغير بجانب الأزرار */
+  #actions-menu .btn::after { content: '‹'; font-size: 22px; color: #94a3b8; margin-right: auto; margin-left: 10px; }
+  #actions-menu .btn[data-i18n="btn_save"]::after,
+  #actions-menu .btn[data-i18n="btn_excel"]::after,
+  #actions-menu .btn[data-i18n="btn_pdf"]::after,
+  #actions-menu .btn[data-i18n="btn_reset"]::after { content: '‹'; }
+
+  /* زر تسجيل الخروج (أحمر) */
+  #actions-menu #auth-logout {
+    background: #fee2e2 !important; color: #991b1b !important; border-color: #f87171 !important;
+    margin-top: auto !important; justify-content: center !important;
+  }
+  #actions-menu #auth-logout::after { display: none; }
+  #actions-menu #auth-logout::before { content: '🚪'; margin-left: 8px; }
+
+  /* الموجة السفلية الزرقاء في القائمة */
+  #actions-menu .menu-sep { display: none; }
+
+  /* خلفية سوداء شفافة عند فتح القائمة */
+  #m-sheet-bg { display: block !important; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  #m-sheet-bg.show { opacity: 1; pointer-events: auto; }
+}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  try {
+    // 1. إضافة النصوص إلى الأزرار العلوية
+    var LB = { ar: ['مشاريعي', 'حفظ', 'عرض', 'الوضع'], fr: ['Projets', 'Sauver', 'Écran', 'Thème'], en: ['Projects', 'Save', 'Present', 'Theme'] };
+    function setLabels() {
+      var l = 'ar'; try { l = L; } catch (e) {}
+      var a = LB[l] || LB.ar;
+      document.querySelectorAll('header .header-actions > .theme-btn').forEach(function (b, i) {
+        if (a[i]) b.setAttribute('data-lb', a[i]);
+      });
+    }
+    var _al = window.applyLang;
+    window.applyLang = function (x) { _al(x); setLabels(); };
+    setLabels();
+
+    // 2. تحويل زر الإعدادات ليفتح القائمة الجانبية
+    var gear = document.getElementById('m-gear');
+    if (gear) {
+      gear.textContent = '☰';
+      gear.onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('actions-menu').classList.add('show');
+        document.getElementById('m-sheet-bg').classList.add('show');
+      };
+    }
+
+    // 3. إغلاق القائمة عند النقر على الخلفية أو علامة الإغلاق
+    var menu = document.getElementById('actions-menu');
+    var bg = document.getElementById('m-sheet-bg');
+    if (bg) {
+      bg.onclick = function() {
+        if(menu) menu.classList.remove('show');
+        bg.classList.remove('show');
+      };
+    }
+    
+    // إغلاق عند النقر على علامة X
+    if (menu) {
+      menu.addEventListener('click', function(e) {
+        // إذا تم النقر في المنطقة العلوية اليمنى (مكان علامة X)
+        if (e.clientY < 60 && e.clientX > window.innerWidth - 60) {
+          menu.classList.remove('show');
+          if(bg) bg.classList.remove('show');
+        }
+      });
+    }
+  } catch (err) { console.error('Custom UI error:', err); }
+});
+</script>
 </body>
 </html>
