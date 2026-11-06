@@ -2519,5 +2519,37 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
+  <!-- ═══════════ إصلاح واجهة الدخول للهواتف فقط ═══════════ -->
+<style>
+@media (max-width: 768px) {
+    #auth-gate {
+        /* إلغاء التمرير وتوسيط المحتوى تماماً */
+        align-items: center !important;
+        padding: 15px !important;
+    }
+    #auth-gate .ag-card {
+        /* جعل المربع يملأ الشاشة ويتمدد بشكل متناسق */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 30px 20px !important;
+        min-height: auto !important;
+        box-sizing: border-box !important;
+    }
+    /* تصغير المسافات قليلاً لتناسب الشاشات الصغيرة */
+    #auth-gate .ag-tag {
+        margin: 8px 0 15px !important;
+    }
+    #auth-gate .ag-tabs {
+        margin-bottom: 15px !important;
+    }
+    #auth-gate input {
+        margin-bottom: 10px !important;
+    }
+    #auth-gate .ag-langs {
+        margin-top: 15px !important;
+    }
+}
+</style>
 </body>
 </html>
