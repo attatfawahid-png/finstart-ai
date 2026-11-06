@@ -2494,7 +2494,7 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
-<!-- ═══════════ التصميم الجديد للهاتف (يعيد الوظائف ويصلح الشاشة الفارغة) ═══════════ -->
+<!-- ═══════════ التصميم النهائي للهاتف (يعيد الوظائف ويحل جميع المشاكل) ═══════════ -->
 <style>
 @media (max-width: 768px) {
   /* 1. إخفاء العناصر القديمة في الهاتف فقط */
@@ -2535,7 +2535,7 @@ window.addEventListener('load', function () {
   #new-drawer { position: fixed; top: 0; right: -100%; width: 85%; max-width: 340px; height: 100vh; background: #f0f4f8; z-index: 9000; box-shadow: -10px 0 30px rgba(0,0,0,0.3); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; direction: rtl; overflow-y: auto; }
   #new-drawer.show { right: 0; }
   
-  .drawer-header { display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 15px; border-bottom: 3px solid #fbd38d; }
+  .drawer-header { display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 15px; border-bottom: 3px solid #fbd38d; position: sticky; top: 0; background: #f0f4f8; z-index: 10; }
   .drawer-header h2 { margin: 0; font-size: 22px; font-weight: 900; color: #1e3a8a; }
   .close-drawer { font-size: 28px; color: #1e3a8a; cursor: pointer; font-weight: bold; }
   .drawer-user { text-align: center; padding: 15px; font-size: 13px; font-weight: bold; color: #4a5568; border-bottom: 1px solid #cbd5e1; }
@@ -2606,14 +2606,14 @@ window.addEventListener('load', function () {
   </div>
   <div class="drawer-user" id="new-drawer-user"></div>
   <div class="drawer-list">
-    <!-- الأزرار مربوطة بالوظائف الأصلية عبر محاكاة النقر -->
-    <div class="drawer-item btn-theme" onclick="clickHiddenBtn('toggleTheme'); closeNewDrawer();"><span class="icon">🌙</span><span>الوضع</span><span class="arrow">‹</span></div>
-    <div class="drawer-item btn-present" onclick="clickHiddenBtn('togglePresentation'); closeNewDrawer();"><span class="icon">📺</span><span>عرض</span><span class="arrow">‹</span></div>
-    <div class="drawer-item btn-projects" onclick="clickHiddenBtn('openProjectsModal'); closeNewDrawer();"><span class="icon">📁</span><span>مشاريعي</span><span class="arrow">‹</span></div>
-    <div class="drawer-item btn-save" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_save]').click();}, 150); closeNewDrawer();"><span class="icon">💾</span><span>حفظ</span><span class="arrow">‹</span></div>
-    <div class="drawer-item btn-excel" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_excel]').click();}, 150); closeNewDrawer();"><span class="icon">📊</span><span>Excel</span><span class="arrow">‹</span></div>
-    <div class="drawer-item btn-pdf" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_pdf]').click();}, 150); closeNewDrawer();"><span class="icon">📄</span><span>PDF</span><span class="arrow">‹</span></div>
-    <div class="drawer-item btn-clear" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_reset]').click();}, 150); closeNewDrawer();"><span class="icon">🗑️</span><span>مسح</span><span class="arrow">‹</span></div>
+    <!-- الأزرار مربوطة بالوظائف الأصلية عبر محاكاة النقر الفعلي -->
+    <div class="drawer-item btn-theme" onclick="simulateClick('toggleTheme()'); closeNewDrawer();"><span class="icon">🌙</span><span>الوضع</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-present" onclick="simulateClick('togglePresentation()'); closeNewDrawer();"><span class="icon">📺</span><span>عرض</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-projects" onclick="simulateClick('openProjectsModal()'); closeNewDrawer();"><span class="icon">📁</span><span>مشاريعي</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-save" onclick="simulateClick('document.querySelector(\'#actions-menu [data-i18n=btn_save]\').click()'); closeNewDrawer();"><span class="icon">💾</span><span>حفظ</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-excel" onclick="simulateClick('document.querySelector(\'#actions-menu [data-i18n=btn_excel]\').click()'); closeNewDrawer();"><span class="icon">📊</span><span>Excel</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-pdf" onclick="simulateClick('document.querySelector(\'#actions-menu [data-i18n=btn_pdf]\').click()'); closeNewDrawer();"><span class="icon">📄</span><span>PDF</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-clear" onclick="simulateClick('document.querySelector(\'#actions-menu [data-i18n=btn_reset]\').click()'); closeNewDrawer();"><span class="icon">🗑️</span><span>مسح</span><span class="arrow">‹</span></div>
   </div>
   <div class="drawer-logout" onclick="triggerLogout()">🚪 تسجيل الخروج</div>
 </div>
@@ -2648,13 +2648,12 @@ window.addEventListener('load', function () {
       document.getElementById('new-drawer-bg').classList.remove('show');
     };
 
-    // دالة محاكاة النقر للأزرار المخفية
-    window.clickHiddenBtn = function(actionName) {
-      if (actionName === 'actionsBtn') {
-        var btn = document.getElementById('actionsBtn');
-        if (btn) btn.click();
-      } else if (typeof window[actionName] === 'function') {
-        window[actionName]();
+    // دالة محاكاة النقر الفعلي
+    window.simulateClick = function(code) {
+      try {
+        eval(code);
+      } catch (e) {
+        console.error('Simulation Error:', e);
       }
     };
 
@@ -2664,7 +2663,6 @@ window.addEventListener('load', function () {
       if (logoutBtn) logoutBtn.click();
     };
 
-    // دالة فتح الأقسام (تحل مشكلة الشاشة الفارغة)
     window.openTabFromNewUI = function(id) {
       document.body.classList.add('m-tab');
       if (typeof showTab === 'function') showTab(id);
