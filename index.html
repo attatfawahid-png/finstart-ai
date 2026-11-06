@@ -2494,194 +2494,222 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
-<!-- ═══════════ التصميم الاحترافي المطابق 100% للصورة ═══════════ -->
+<!-- ═══════════ الواجهة الجديدة كلياً (مطابقة 100% للصورة) ═══════════ -->
 <style>
 @media (max-width: 768px) {
-  /* 1. خلفية التطبيق الأساسية (تدرج فاتح جداً) */
-  body.m-home, body.m-tab {
-    background: linear-gradient(180deg, #f0f4f8 0%, #e2e8f0 100%) !important;
-    padding-bottom: 0 !important;
+  /* 1. إخفاء كل عناصر المنصة القديمة في الهاتف */
+  header, .tabs, .container, #m-nav, #m-search, #m-home, #m-back, .m-panel, #chat-toggle { display: none !important; }
+  
+  /* 2. بناء الحاوية الجديدة */
+  #new-mobile-app {
+    display: block !important; position: fixed; inset: 0; background: #f0f4f8; z-index: 5000; overflow-y: auto;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif; direction: rtl;
+    padding-bottom: 20px;
   }
 
-  /* 2. الشريط العلوي (تصميم الصورة الأولى) */
-  header {
-    position: relative !important;
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
-    border-radius: 0 0 35px 35px !important;
-    padding: calc(15px + env(safe-area-inset-top, 0px)) 20px 30px !important;
-    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.2) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 15px !important;
-    overflow: hidden;
+  /* 3. الشريط العلوي (تصميم الصورة) */
+  .app-header {
+    background: #1e3a8a; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    border-radius: 0 0 35px 35px; padding: calc(15px + env(safe-area-inset-top, 0px)) 20px 30px;
+    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.25); position: relative; overflow: hidden;
   }
-
-  /* الموجة الصفراء أسفل الهيدر (مثل الصورة) */
-  header::after {
+  /* الموجة الصفراء */
+  .app-header::after {
     content: ''; position: absolute; bottom: -20px; left: -10%; width: 120%; height: 40px;
     background: #fbd38d; border-radius: 50%; z-index: 0;
   }
-
-  /* الشعار واسم المنصة */
-  .header-brand { z-index: 1; display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; width: 100%; }
-  .header-brand h1 { font-size: 24px !important; color: #fff !important; font-weight: 800 !important; margin: 0 !important; }
-  .m-tag { display: block !important; font-size: 13px; color: #bfdbfe; font-weight: 600; text-align: right; margin-top: 5px; }
-
+  .header-top { display: flex; justify-content: space-between; align-items: center; z-index: 1; position: relative; }
+  .header-logo { display: flex; flex-direction: column; align-items: flex-end; }
+  .header-logo h1 { margin: 0; font-size: 26px; color: #fff; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+  .header-logo p { margin: 4px 0 0; font-size: 13px; color: #bfdbfe; font-weight: 600; }
+  .lang-btn-new { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 6px 12px; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  
   /* زر القائمة (الهامبرغر) */
-  #m-gear {
-    position: static !important; width: 50px !important; height: 50px !important;
-    background: #1e3a8a !important; border: 2px solid #fbd38d !important;
-    border-radius: 16px !important; color: #fff !important; font-size: 26px !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important; z-index: 2 !important;
-    display: flex; align-items: center; justify-content: center;
+  .menu-btn-new {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; z-index: 2;
+    width: 55px; height: 55px; background: #1e3a8a; border: 2px solid #fbd38d; border-radius: 16px;
+    color: #fff; font-size: 28px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   }
 
-  /* زر اللغة (أعلى اليسار) */
-  #m-lang {
-    position: absolute !important; top: calc(15px + env(safe-area-inset-top, 0px)); left: 20px;
-    background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.3) !important;
-    border-radius: 20px !important; padding: 6px 12px !important; color: #fff !important; z-index: 2;
+  /* 4. شريط الأزرار السريعة (مشاريعي، حفظ، عرض، الوضع) */
+  .quick-actions {
+    display: flex; justify-content: center; gap: 12px; margin: -15px 15px 20px; position: relative; z-index: 3;
+    direction: ltr; /* للحفاظ على ترتيب الأزرار كما في الصورة */
   }
-  #m-lang select { color: #fff !important; font-weight: 700 !important; font-size: 12px !important; }
-  #m-lang::before { content: '🌐'; margin-left: 5px; font-size: 14px; }
+  .quick-btn {
+    flex: 1; background: rgba(30, 58, 138, 0.85); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    border-radius: 20px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: #fff; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .quick-btn .ic { font-size: 26px; }
 
-  /* 3. شبكة الأيقونات (تصميم الصورة الأولى) */
-  .m-grid { 
-    grid-template-columns: repeat(2, 1fr) !important; /* عمودين مثل الصورة */
-    gap: 15px !important; 
-    padding: 0 15px 80px !important; /* مسافة سفلية للأزرار العائمة */
-    margin-top: 20px !important;
+  /* 5. شبكة الأيقونات الرئيسية */
+  .main-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px;
   }
+  .grid-item {
+    background: #fff; border-radius: 22px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center;
+    gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: transform 0.1s;
+  }
+  .grid-item:active { transform: scale(0.95); }
+  .grid-item .ic { font-size: 42px; }
+  .grid-item .lb { font-size: 13px; font-weight: 800; color: #1e3a8a; text-align: center; }
+
+  /* 6. القائمة الجانبية (Drawer) */
+  #new-drawer {
+    position: fixed; top: 0; right: -100%; width: 85%; max-width: 340px; height: 100vh; background: #f0f4f8;
+    z-index: 9000; box-shadow: -10px 0 30px rgba(0,0,0,0.3); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column; direction: rtl; overflow-y: auto;
+  }
+  #new-drawer.show { right: 0; }
   
-  .m-tile {
-    background: #ffffff !important; border: none !important; border-radius: 24px !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.04) !important;
-    min-height: 120px !important; padding: 15px !important; gap: 12px !important;
-    transition: transform 0.1s !important; position: relative;
+  .drawer-header {
+    display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 15px;
+    border-bottom: 3px solid #fbd38d;
   }
-  .m-tile:active { transform: scale(0.95) !important; }
+  .drawer-header h2 { margin: 0; font-size: 22px; font-weight: 900; color: #1e3a8a; }
+  .close-drawer { font-size: 28px; color: #1e3a8a; cursor: pointer; font-weight: bold; }
+
+  .drawer-user { text-align: center; padding: 15px; font-size: 13px; font-weight: bold; color: #4a5568; border-bottom: 1px solid #cbd5e1; }
+
+  .drawer-list { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+  .drawer-item {
+    background: #fff; border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 16px; font-weight: 800; color: #1e3a8a; box-shadow: 0 2px 8px rgba(0,0,0,0.03); cursor: pointer; border: 1px solid #e2e8f0;
+  }
+  .drawer-item .arrow { color: #94a3b8; font-size: 20px; }
+  .drawer-item .icon { font-size: 22px; }
   
-  /* أيقونات كبيرة وملونة */
-  .m-tile .ic { font-size: 48px !important; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15)); }
-  
-  /* نصوص الأزرار */
-  .m-tile .lb { font-size: 14px !important; font-weight: 800 !important; color: #1e3a8a !important; }
-
-  /* 4. القائمة الجانبية (Drawer) مطابقة للصورة الثانية */
-  #actions-menu {
-    position: fixed !important; top: 0 !important; right: -100% !important; 
-    width: 85% !important; height: 100vh !important; max-width: 320px !important;
-    background: #f0f4f8 !important; z-index: 9999 !important; 
-    border-radius: 0 !important; padding: 20px 15px !important;
-    display: flex !important; flex-direction: column !important; gap: 12px !important;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.2) !important;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  }
-  #actions-menu.show { right: 0 !important; }
-
-  /* رأس القائمة (المزيد + علامة الإغلاق) */
-  #actions-menu::before {
-    content: '✖'; position: absolute; top: 25px; right: 20px; font-size: 22px; color: #1e3a8a;
-    font-weight: bold; cursor: pointer; z-index: 2;
-  }
-  #actions-menu::after {
-    content: 'المزيد'; position: absolute; top: 20px; right: 0; width: 100%; text-align: center;
-    font-size: 22px; font-weight: 900; color: #1e3a8a; border-bottom: 3px solid #fbd38d; padding-bottom: 10px;
-  }
-  
-  /* شريط المستخدم (الايميل) */
-  #auth-who {
-    margin-top: 50px; text-align: center; font-size: 13px; font-weight: bold; color: #4a5568;
-    padding: 10px; border-bottom: 1px solid #cbd5e1; margin-bottom: 15px;
+  .drawer-logout {
+    margin: 15px; padding: 16px; background: #fee2e2; color: #991b1b; border-radius: 16px; text-align: center;
+    font-weight: 900; font-size: 16px; cursor: pointer; border: 1px solid #f87171; display: flex; justify-content: center; align-items: center; gap: 8px;
   }
 
-  /* أزرار القائمة الجانبية */
-  #actions-menu .btn {
-    display: flex !important; flex-direction: row-reverse !important; justify-content: space-between !important;
-    align-items: center !important; background: #ffffff !important; color: #1e3a8a !important;
-    border: 1px solid #e2e8f0 !important; border-radius: 16px !important;
-    padding: 16px 20px !important; font-size: 16px !important; font-weight: 800 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important; margin: 0 !important;
+  /* خلفية سوداء للقائمة */
+  #new-drawer-bg {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 8999; opacity: 0; pointer-events: none; transition: opacity 0.3s;
   }
-  
-  /* أيقونات الأزرار */
-  #actions-menu .btn[data-i18n="btn_save"]::before { content: '💾'; font-size: 20px; }
-  #actions-menu .btn[data-i18n="btn_excel"]::before { content: '📊'; font-size: 20px; }
-  #actions-menu .btn[data-i18n="btn_pdf"]::before { content: '📄'; font-size: 20px; }
-  #actions-menu .btn[data-i18n="btn_reset"]::before { content: '⚙️'; font-size: 20px; }
-  
-  /* سهم صغير بجانب الأزرار */
-  #actions-menu .btn::after { content: '‹'; font-size: 22px; color: #94a3b8; margin-right: auto; margin-left: 10px; }
-  #actions-menu .btn[data-i18n="btn_save"]::after,
-  #actions-menu .btn[data-i18n="btn_excel"]::after,
-  #actions-menu .btn[data-i18n="btn_pdf"]::after,
-  #actions-menu .btn[data-i18n="btn_reset"]::after { content: '‹'; }
-
-  /* زر تسجيل الخروج (أحمر) */
-  #actions-menu #auth-logout {
-    background: #fee2e2 !important; color: #991b1b !important; border-color: #f87171 !important;
-    margin-top: auto !important; justify-content: center !important;
-  }
-  #actions-menu #auth-logout::after { display: none; }
-  #actions-menu #auth-logout::before { content: '🚪'; margin-left: 8px; }
-
-  /* الموجة السفلية الزرقاء في القائمة */
-  #actions-menu .menu-sep { display: none; }
-
-  /* خلفية سوداء شفافة عند فتح القائمة */
-  #m-sheet-bg { display: block !important; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-  #m-sheet-bg.show { opacity: 1; pointer-events: auto; }
+  #new-drawer-bg.show { opacity: 1; pointer-events: auto; }
 }
 </style>
+
+<!-- ═══════════ بناء الواجهة الجديدة بالـ HTML ═══════════ -->
+<div id="new-mobile-app">
+  <div class="app-header">
+    <div class="header-top">
+      <button class="lang-btn-new" onclick="toggleNewLang()">🌐 <span id="new-lang-text">العربية</span> ⌄</button>
+      <div class="header-logo">
+        <h1><span>📊</span> FinStart DZ</h1>
+        <p>إدارة أذكى .. لمستقبل أفضل</p>
+      </div>
+    </div>
+    <div class="menu-btn-new" onclick="openNewDrawer()">☰</div>
+  </div>
+
+  <!-- الأزرار السريعة (مشاريعي، حفظ، عرض، الوضع) -->
+  <div class="quick-actions">
+    <div class="quick-btn" onclick="openProjectsModal(); closeNewDrawer();"><span class="ic">📁</span>مشاريعي</div>
+    <div class="quick-btn" onclick="saveCurrentProject();"><span class="ic">💾</span>حفظ</div>
+    <div class="quick-btn" onclick="togglePresentation();"><span class="ic">📺</span>عرض</div>
+    <div class="quick-btn" onclick="toggleTheme();"><span class="ic">🌙</span>الوضع</div>
+  </div>
+
+  <!-- شبكة الأيقونات -->
+  <div class="main-grid" id="new-main-grid"></div>
+</div>
+
+<!-- القائمة الجانبية (Drawer) -->
+<div id="new-drawer-bg" onclick="closeNewDrawer()"></div>
+<div id="new-drawer">
+  <div class="drawer-header">
+    <h2>المزيد</h2>
+    <div class="close-drawer" onclick="closeNewDrawer()">✖</div>
+  </div>
+  <div class="drawer-user" id="new-drawer-user"></div>
+  <div class="drawer-list">
+    <div class="drawer-item" onclick="toggleTheme(); closeNewDrawer();"><span class="icon">🌙</span><span>الوضع</span><span class="arrow">‹</span></div>
+    <div class="drawer-item" onclick="togglePresentation(); closeNewDrawer();"><span class="icon">📺</span><span>عرض</span><span class="arrow">‹</span></div>
+    <div class="drawer-item" onclick="saveCurrentProject(); closeNewDrawer();"><span class="icon">💾</span><span>حفظ</span><span class="arrow">‹</span></div>
+    <div class="drawer-item" onclick="openProjectsModal(); closeNewDrawer();"><span class="icon">📁</span><span>مشاريعي</span><span class="arrow">‹</span></div>
+    <div class="drawer-item" onclick="exportPDF(); closeNewDrawer();"><span class="icon">📄</span><span>الإعدادات (PDF)</span><span class="arrow">‹</span></div>
+  </div>
+  <div class="drawer-logout" onclick="document.getElementById('auth-logout').click(); closeNewDrawer();">🚪 تسجيل الخروج</div>
+</div>
 
 <script>
 window.addEventListener('load', function () {
   try {
-    // 1. إضافة النصوص إلى الأزرار العلوية
-    var LB = { ar: ['مشاريعي', 'حفظ', 'عرض', 'الوضع'], fr: ['Projets', 'Sauver', 'Écran', 'Thème'], en: ['Projects', 'Save', 'Present', 'Theme'] };
-    function setLabels() {
-      var l = 'ar'; try { l = L; } catch (e) {}
-      var a = LB[l] || LB.ar;
-      document.querySelectorAll('header .header-actions > .theme-btn').forEach(function (b, i) {
-        if (a[i]) b.setAttribute('data-lb', a[i]);
-      });
-    }
-    var _al = window.applyLang;
-    window.applyLang = function (x) { _al(x); setLabels(); };
-    setLabels();
+    // 1. بناء شبكة الأيقونات ديناميكياً
+    var TABS = [
+      { id: 'tab2', ic: '🏗️', lb: 'التكاليف' },
+      { id: 'tab1', ic: '📋', lb: 'معلومات' },
+      { id: 'tab3', ic: '📈', lb: 'التحليل المالي' },
+      { id: 'tab8', ic: '👥', lb: 'الرواتب' },
+      { id: 'tab4', ic: '⚔️', lb: 'المنافسون' },
+      { id: 'tab10', ic: '🏛️', lb: 'القروض' },
+      { id: 'tab9', ic: '🧠', lb: 'SWOT' },
+      { id: 'tab5', ic: '🧩', lb: 'BMC' },
+      { id: 'tab11', ic: '📄', lb: 'المحاسب' },
+      { id: 'tab6', ic: '🤖', lb: 'المساعد' },
+      { id: 'tab13', ic: '📽️', lb: 'المسار' },
+      { id: 'tab12', ic: '📊', lb: 'الاستثمار' },
+      { id: 'tab15', ic: '🎤', lb: 'العرض' },
+      { id: 'tab14', ic: '🗓️', lb: 'السوق' }
+    ];
 
-    // 2. تحويل زر الإعدادات ليفتح القائمة الجانبية
-    var gear = document.getElementById('m-gear');
-    if (gear) {
-      gear.textContent = '☰';
-      gear.onclick = function(e) {
-        e.preventDefault();
-        document.getElementById('actions-menu').classList.add('show');
-        document.getElementById('m-sheet-bg').classList.add('show');
-      };
+    var grid = document.getElementById('new-main-grid');
+    if (grid) {
+      grid.innerHTML = TABS.map(function(t) {
+        return '<div class="grid-item" onclick="openTabFromNewUI(\'' + t.id + '\')"><span class="ic">' + t.ic + '</span><span class="lb">' + t.lb + '</span></div>';
+      }).join('');
     }
 
-    // 3. إغلاق القائمة عند النقر على الخلفية أو علامة الإغلاق
-    var menu = document.getElementById('actions-menu');
-    var bg = document.getElementById('m-sheet-bg');
-    if (bg) {
-      bg.onclick = function() {
-        if(menu) menu.classList.remove('show');
-        bg.classList.remove('show');
-      };
-    }
-    
-    // إغلاق عند النقر على علامة X
-    if (menu) {
-      menu.addEventListener('click', function(e) {
-        // إذا تم النقر في المنطقة العلوية اليمنى (مكان علامة X)
-        if (e.clientY < 60 && e.clientX > window.innerWidth - 60) {
-          menu.classList.remove('show');
-          if(bg) bg.classList.remove('show');
-        }
-      });
-    }
-  } catch (err) { console.error('Custom UI error:', err); }
+    // 2. دوال فتح وإغلاق القائمة
+    window.openNewDrawer = function() {
+      document.getElementById('new-drawer').classList.add('show');
+      document.getElementById('new-drawer-bg').classList.add('show');
+      var u = document.getElementById('auth-who');
+      var du = document.getElementById('new-drawer-user');
+      if (u && du) du.textContent = u.textContent;
+    };
+    window.closeNewDrawer = function() {
+      document.getElementById('new-drawer').classList.remove('show');
+      document.getElementById('new-drawer-bg').classList.remove('show');
+    };
+
+    // 3. الانتقال بين الأقسام
+    window.openTabFromNewUI = function(id) {
+      // إخفاء الواجهة الجديدة مؤقتاً للدخول للتطبيق
+      document.getElementById('new-mobile-app').style.display = 'none';
+      // استدعاء الدالة الأصلية للمنصة
+      if (typeof showTab === 'function') {
+        showTab(id);
+      }
+      // إظهار زر الرجوع الخاص بالمنصة
+      var back = document.getElementById('m-back');
+      if (back) {
+        back.style.display = 'flex';
+        // برمجة زر الرجوع للعودة للواجهة الجديدة
+        back.onclick = function() {
+          document.getElementById('new-mobile-app').style.display = 'block';
+          back.style.display = 'none';
+          // إخفاء محتوى القسم
+          document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active')});
+        };
+      }
+    };
+
+    // 4. تغيير اللغة
+    window.toggleNewLang = function() {
+      var cur = 'ar';
+      try { cur = L; } catch(e) {}
+      var nxt = cur === 'ar' ? 'fr' : (cur === 'fr' ? 'en' : 'ar');
+      if (typeof applyLang === 'function') applyLang(nxt);
+      var names = { ar: 'العربية', fr: 'Français', en: 'English' };
+      document.getElementById('new-lang-text').textContent = names[nxt];
+    };
+
+  } catch (err) { console.error('New App UI Error:', err); }
 });
 </script>
 </body>
