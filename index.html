@@ -351,9 +351,9 @@ html.auth-pending{overflow:hidden;}
 })();
 </script>
 
-<!-- ═══ تنسيق واجهة الدخول الاحترافي (ثابت 100% ويملأ الشاشة على الهاتف) ═══ -->
+<!-- ═══ تنسيق واجهة الدخول الاحترافي (حل جذري لملء الشاشة) ═══ -->
 <style>
-/* 1. إعدادات الحاوية الأساسية (تمنع أي حركة أو انزلاق) */
+/* 1. إعدادات الحاوية الأساسية (منع الحركة والتمدد) */
 #auth-gate {
     position: fixed !important;
     top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
@@ -362,24 +362,24 @@ html.auth-pending{overflow:hidden;}
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    overflow: hidden !important; /* منع التمرير العشوائي */
+    overflow: hidden !important;
     background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%) !important;
     margin: 0 !important;
-    padding: 15px !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
 }
 
-/* إلغاء أي تأثيرات من الأكواد السابقة */
+/* إخفاء أي تأثيرات خلفية قديمة */
 #auth-gate::before, #auth-gate::after {
     display: none !important; 
 }
 
-/* 2. تصميم المربع (البطاقة) */
+/* 2. تصميم المربع (البطاقة) للحاسوب */
 #auth-gate .ag-card {
     position: relative !important;
     width: 100% !important;
-    max-width: 420px !important; /* العرض الأقصى في الحاسوب */
-    margin: 0 auto !important;
+    max-width: 420px !important;
+    margin: auto !important;
     padding: 40px 30px !important;
     border-radius: 24px !important;
     background: rgba(255, 255, 255, 0.95) !important; 
@@ -387,11 +387,10 @@ html.auth-pending{overflow:hidden;}
     box-shadow: 0 20px 40px rgba(30, 58, 95, 0.15) !important;
     color: #1a202c !important;
     box-sizing: border-box !important;
-    /* منع التمدد والحركة */
     transform: none !important;
 }
 
-/* 3. العناصر الداخلية */
+/* 3. العناصر الداخلية للحاسوب */
 #auth-gate .ag-logo {
     margin: 0 auto 15px !important;
     width: 70px !important; height: 70px !important;
@@ -401,111 +400,54 @@ html.auth-pending{overflow:hidden;}
     box-shadow: 0 10px 20px rgba(49, 130, 206, 0.3) !important;
     color: #fff !important;
 }
+#auth-gate h1 { color: #1e3a5f !important; text-shadow: none !important; font-size: 26px !important; font-weight: 800 !important; }
+#auth-gate .ag-tag { color: #4a5568 !important; margin: 8px 0 25px !important; font-size: 13px !important; }
+#auth-gate .ag-tabs { margin-bottom: 20px !important; background: #f0f4f8 !important; border: 1px solid #e2e8f0 !important; border-radius: 14px !important; }
+#auth-gate .ag-tabs button { height: 44px !important; color: #4a5568 !important; font-weight: 700 !important; }
+#auth-gate .ag-tabs button.on { background: linear-gradient(135deg, #1e3a5f, #2b5a8c) !important; color: #fff !important; box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3) !important; }
+#auth-gate input { height: 52px !important; margin-bottom: 14px !important; border-radius: 12px !important; background: #ffffff !important; color: #1a202c !important; border: 1.5px solid #e2e8f0 !important; box-shadow: 0 2px 6px rgba(0,0,0,0.02) !important; width: 100% !important; box-sizing: border-box !important; }
+#auth-gate input:focus { border-color: #3182ce !important; box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.15) !important; }
+#auth-gate .ag-primary { height: 54px !important; border-radius: 12px !important; background: linear-gradient(135deg, #3182ce, #2b6cb0) !important; color: #ffffff !important; box-shadow: 0 6px 20px rgba(49, 130, 206, 0.3) !important; font-size: 16px !important; width: 100% !important; }
+#auth-gate .ag-langs { margin-top: 20px !important; gap: 10px !important; }
+#auth-gate .ag-langs button { border: 1px solid #e2e8f0 !important; background: #ffffff !important; color: #1a202c !important; border-radius: 10px !important; }
+#auth-gate .ag-langs button.on { border-color: #3182ce !important; color: #3182ce !important; background: #ebf8ff !important; }
+#auth-gate input:-webkit-autofill, #auth-gate input:-webkit-autofill:focus { -webkit-text-fill-color: #1a202c !important; box-shadow: 0 0 0 1000px #ffffff inset !important; }
 
-#auth-gate h1 {
-    color: #1e3a5f !important;
-    text-shadow: none !important;
-    font-size: 26px !important;
-    font-weight: 800 !important;
-}
-
-#auth-gate .ag-tag {
-    color: #4a5568 !important;
-    margin: 8px 0 25px !important;
-    font-size: 13px !important;
-}
-
-#auth-gate .ag-tabs {
-    margin-bottom: 20px !important;
-    background: #f0f4f8 !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 14px !important;
-}
-
-#auth-gate .ag-tabs button {
-    height: 44px !important;
-    color: #4a5568 !important;
-    font-weight: 700 !important;
-}
-
-#auth-gate .ag-tabs button.on {
-    background: linear-gradient(135deg, #1e3a5f, #2b5a8c) !important;
-    color: #fff !important;
-    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3) !important;
-}
-
-#auth-gate input {
-    height: 52px !important;
-    margin-bottom: 14px !important;
-    border-radius: 12px !important;
-    background: #ffffff !important;
-    color: #1a202c !important;
-    border: 1.5px solid #e2e8f0 !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02) !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-#auth-gate input:focus {
-    border-color: #3182ce !important;
-    box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.15) !important;
-}
-
-#auth-gate .ag-primary {
-    height: 54px !important;
-    border-radius: 12px !important;
-    background: linear-gradient(135deg, #3182ce, #2b6cb0) !important;
-    color: #ffffff !important;
-    box-shadow: 0 6px 20px rgba(49, 130, 206, 0.3) !important;
-    font-size: 16px !important;
-    width: 100% !important;
-}
-
-#auth-gate .ag-langs {
-    margin-top: 20px !important;
-    gap: 10px !important;
-}
-
-#auth-gate .ag-langs button {
-    border: 1px solid #e2e8f0 !important;
-    background: #ffffff !important;
-    color: #1a202c !important;
-    border-radius: 10px !important;
-}
-
-#auth-gate .ag-langs button.on {
-    border-color: #3182ce !important;
-    color: #3182ce !important;
-    background: #ebf8ff !important;
-}
-
-#auth-gate input:-webkit-autofill,
-#auth-gate input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #1a202c !important;
-  box-shadow: 0 0 0 1000px #ffffff inset !important;
-}
-
-/* 4. التعديل الحاسم للهاتف فقط (ملء الشاشة) */
+/* ========================================================= */
+/* 4. التعديل الحاسم للهاتف فقط (إلغاء المربع وملء الشاشة) */
+/* ========================================================= */
 @media (max-width: 768px) {
     #auth-gate {
-        padding: 15px !important;
+        padding: 0 !important;
+        background: #ffffff !important; /* خلفية بيضاء بالكامل للهاتف */
     }
+    
     #auth-gate .ag-card {
-        width: 100% !important; /* تملأ العرض بالكامل */
-        max-width: 100% !important; /* إلغاء أي قيود للعرض */
-        padding: 25px 20px !important;
-        border-radius: 20px !important;
+        /* إلغاء شكل المربع وتحويله لشاشة كاملة */
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 100vh !important; /* يملأ طول الشاشة */
         margin: 0 !important;
+        padding: 30px 20px !important; /* مساحات داخلية مريحة */
+        border-radius: 0 !important; /* إزالة الحواف الدائرية */
+        border: none !important; /* إزالة الإطار */
+        box-shadow: none !important; /* إزالة الظل */
+        background: transparent !important; /* خلفية شفافة */
+        
+        /* توسيط المحتوى في منتصف الشاشة */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important; 
     }
-    #auth-gate .ag-logo { width: 60px !important; height: 60px !important; margin-bottom: 10px !important; }
-    #auth-gate h1 { font-size: 22px !important; }
-    #auth-gate .ag-tag { margin: 5px 0 15px !important; font-size: 12px !important; }
-    #auth-gate .ag-tabs { margin-bottom: 15px !important; }
-    #auth-gate .ag-tabs button { height: 40px !important; font-size: 13px !important; }
-    #auth-gate input { height: 48px !important; margin-bottom: 10px !important; font-size: 15px !important; }
-    #auth-gate .ag-primary { height: 48px !important; font-size: 15px !important; }
-    #auth-gate .ag-langs { margin-top: 15px !important; }
-    #auth-gate .ag-langs button { height: 30px !important; width: 40px !important; font-size: 11px !important; }
+
+    /* تصغير العناصر قليلاً لتناسب الشاشة */
+    #auth-gate .ag-logo { width: 65px !important; height: 65px !important; margin-bottom: 15px !important; }
+    #auth-gate h1 { font-size: 24px !important; }
+    #auth-gate .ag-tag { margin: 5px 0 20px !important; font-size: 13px !important; }
+    #auth-gate .ag-tabs { margin-bottom: 20px !important; background: #f8fafc !important; }
+    #auth-gate input { height: 50px !important; margin-bottom: 12px !important; font-size: 15px !important; }
+    #auth-gate .ag-primary { height: 50px !important; font-size: 16px !important; }
+    #auth-gate .ag-langs { margin-top: 20px !important; }
 }
 </style>
 
