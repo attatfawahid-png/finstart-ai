@@ -2494,19 +2494,19 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
- <!-- ═══════════ التصميم الجديد للصفحة الثانية (للهاتف فقط) ═══════════ -->
+<!-- ═══════════ التصميم الشامل والآمن (للهاتف فقط) ═══════════ -->
 <style>
 @media (max-width: 768px) {
-  /* 1. إخفاء الواجهة القديمة في الهاتف فقط */
+  /* 1. إخفاء العناصر القديمة في الهاتف فقط */
   header, .tabs, .container, #m-nav, #m-search, #m-home, #m-back, .m-panel, #chat-toggle, #m-gear, #m-lang { display: none !important; }
   
-  /* 2. بناء الحاوية الجديدة */
+  /* 2. الحاوية الجديدة للهاتف */
   #new-mobile-app {
     display: block !important; position: fixed; inset: 0; background: #f0f4f8; z-index: 5000; overflow-y: auto;
     font-family: 'Segoe UI', Tahoma, Arial, sans-serif; direction: rtl; padding-bottom: 20px;
   }
 
-  /* 3. الشريط العلوي (الشعار في المنتصف) */
+  /* 3. الشريط العلوي */
   .app-header {
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     border-radius: 0 0 35px 35px; padding: calc(15px + env(safe-area-inset-top, 0px)) 20px 30px;
@@ -2518,23 +2518,34 @@ window.addEventListener('load', function () {
   }
   .header-top { display: flex; justify-content: space-between; align-items: center; z-index: 1; position: relative; }
   
-  /* زر اللغة (أعلى اليسار) */
+  /* زر اللغة (يسار) */
   .lang-btn-new { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 6px 12px; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
   
-  /* الشعار في المنتصف */
+  /* الشعار (منتصف) */
   .header-logo { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; }
   .header-logo h1 { margin: 0; font-size: 24px; color: #fff; font-weight: 900; display: flex; align-items: center; gap: 8px; }
   .header-logo p { margin: 4px 0 0; font-size: 12px; color: #bfdbfe; font-weight: 600; }
   
-  /* زر المزيد (أعلى اليمين) */
+  /* زر المزيد (يمين) */
   .menu-btn-new {
     width: 48px; height: 48px; background: #1e3a8a; border: 2px solid #fbd38d; border-radius: 14px;
     color: #fff; font-size: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
 
-  /* 4. شبكة الأيقونات (3 أعمدة كما في الصورة) */
+  /* 4. شريط الأزرار السريعة (مشاريعي، حفظ، عرض، الوضع) */
+  .quick-actions {
+    display: flex; justify-content: center; gap: 12px; margin: -15px 15px 20px; position: relative; z-index: 3; direction: ltr;
+  }
+  .quick-btn {
+    flex: 1; background: rgba(30, 58, 138, 0.85); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    border-radius: 20px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: #fff; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .quick-btn .ic { font-size: 26px; }
+
+  /* 5. شبكة الأيقونات */
   .main-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 15px 0;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px;
   }
   .grid-item {
     background: #fff; border-radius: 22px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center;
@@ -2544,7 +2555,7 @@ window.addEventListener('load', function () {
   .grid-item .ic { font-size: 42px; }
   .grid-item .lb { font-size: 13px; font-weight: 800; color: #1e3a8a; text-align: center; }
 
-  /* 5. القائمة الجانبية (المزيد) */
+  /* 6. القائمة الجانبية (المزيد) */
   #new-drawer {
     position: fixed; top: 0; right: -100%; width: 85%; max-width: 340px; height: 100vh; background: #f0f4f8;
     z-index: 9000; box-shadow: -10px 0 30px rgba(0,0,0,0.3); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2561,7 +2572,7 @@ window.addEventListener('load', function () {
 
   .drawer-user { text-align: center; padding: 15px; font-size: 13px; font-weight: bold; color: #4a5568; border-bottom: 1px solid #cbd5e1; }
 
-  /* أزرار القائمة - مربوطة بالأزرار الأصلية */
+  /* أزرار القائمة الجانبية - مطابقة للصورة */
   .drawer-list { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
   .drawer-item {
     background: #fff; border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
@@ -2570,9 +2581,15 @@ window.addEventListener('load', function () {
   .drawer-item .arrow { color: #94a3b8; font-size: 20px; }
   .drawer-item .icon { font-size: 22px; }
   
+  /* ألوان الأزرار كما في الصورة */
+  .drawer-item.btn-save { background: #38a169; color: #fff; border: none; }
+  .drawer-item.btn-excel { background: #38a169; color: #fff; border: none; }
+  .drawer-item.btn-pdf { background: #3182ce; color: #fff; border: none; }
+  .drawer-item.btn-clear { background: #e53e3e; color: #fff; border: none; }
+  
   .drawer-logout {
-    margin: 15px; padding: 16px; background: #fee2e2; color: #991b1b; border-radius: 16px; text-align: center;
-    font-weight: 900; font-size: 16px; cursor: pointer; border: 1px solid #f87171; display: flex; justify-content: center; align-items: center; gap: 8px;
+    margin: 15px; padding: 16px; background: #3182ce; color: #fff; border-radius: 16px; text-align: center;
+    font-weight: 900; font-size: 16px; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 8px;
   }
 
   #new-drawer-bg {
@@ -2580,7 +2597,7 @@ window.addEventListener('load', function () {
   }
   #new-drawer-bg.show { opacity: 1; pointer-events: auto; }
 
-  /* زر الرجوع عند الدخول لقسم */
+  /* زر الرجوع داخل الأقسام */
   #new-back-btn {
     display: none; position: fixed; top: calc(15px + env(safe-area-inset-top, 0px)); left: 15px; z-index: 9999;
     background: #1e3a8a; color: #fff; border: 2px solid #fbd38d; border-radius: 50%; width: 45px; height: 45px;
@@ -2604,6 +2621,13 @@ window.addEventListener('load', function () {
     </div>
   </div>
 
+  <div class="quick-actions">
+    <div class="quick-btn" onclick="triggerOriginal('openProjectsModal'); closeNewDrawer();"><span class="ic">📁</span>مشاريعي</div>
+    <div class="quick-btn" onclick="triggerOriginal('saveCurrentProject');"><span class="ic">💾</span>حفظ</div>
+    <div class="quick-btn" onclick="triggerOriginal('togglePresentation');"><span class="ic">📺</span>عرض</div>
+    <div class="quick-btn" onclick="triggerOriginal('toggleTheme');"><span class="ic">🌙</span>الوضع</div>
+  </div>
+
   <div class="main-grid" id="new-main-grid"></div>
 </div>
 
@@ -2617,12 +2641,14 @@ window.addEventListener('load', function () {
   </div>
   <div class="drawer-user" id="new-drawer-user"></div>
   <div class="drawer-list">
-    <!-- ربط الأزرار بالوظائف الأصلية -->
+    <!-- ربط الأزرار بالوظائف الأصلية عبر محاكاة النقر -->
     <div class="drawer-item" onclick="triggerOriginal('toggleTheme'); closeNewDrawer();"><span class="icon">🌙</span><span>الوضع</span><span class="arrow">‹</span></div>
     <div class="drawer-item" onclick="triggerOriginal('togglePresentation'); closeNewDrawer();"><span class="icon">📺</span><span>عرض</span><span class="arrow">‹</span></div>
-    <div class="drawer-item" onclick="triggerOriginal('saveCurrentProject'); closeNewDrawer();"><span class="icon">💾</span><span>حفظ</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-save" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_save]').click();}, 150); closeNewDrawer();"><span class="icon">💾</span><span>حفظ</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-excel" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_excel]').click();}, 150); closeNewDrawer();"><span class="icon">📊</span><span>Excel</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-pdf" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_pdf]').click();}, 150); closeNewDrawer();"><span class="icon">📄</span><span>PDF</span><span class="arrow">‹</span></div>
     <div class="drawer-item" onclick="triggerOriginal('openProjectsModal'); closeNewDrawer();"><span class="icon">📁</span><span>مشاريعي</span><span class="arrow">‹</span></div>
-    <div class="drawer-item" onclick="triggerOriginal('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_reset]').click();}, 100); closeNewDrawer();"><span class="icon">🗑️</span><span>مسح البيانات</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-clear" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_reset]').click();}, 150); closeNewDrawer();"><span class="icon">🗑️</span><span>مسح</span><span class="arrow">‹</span></div>
   </div>
   <div class="drawer-logout" onclick="triggerLogout()">🚪 تسجيل الخروج</div>
 </div>
@@ -2630,7 +2656,7 @@ window.addEventListener('load', function () {
 <script>
 window.addEventListener('load', function () {
   try {
-    // 1. بناء شبكة الأيقونات
+    // 1. بناء الشبكة
     var TABS = [
       { id: 'tab2', ic: '🏗️', lb: 'التكاليف' }, { id: 'tab1', ic: '📋', lb: 'معلومات' },
       { id: 'tab3', ic: '📈', lb: 'التحليل المالي' }, { id: 'tab8', ic: '👥', lb: 'الرواتب' },
@@ -2647,7 +2673,7 @@ window.addEventListener('load', function () {
       }).join('');
     }
 
-    // 2. دوال التحكم في القائمة
+    // 2. التحكم في القائمة
     window.openNewDrawer = function() {
       document.getElementById('new-drawer').classList.add('show');
       document.getElementById('new-drawer-bg').classList.add('show');
@@ -2659,14 +2685,16 @@ window.addEventListener('load', function () {
       document.getElementById('new-drawer-bg').classList.remove('show');
     };
 
-    // 3. ربط الأزرار بالوظائف الأصلية (حل مشكلة الأزرار التي لا تعمل)
+    // 3. محاكاة النقر على العناصر الأصلية (الحل السحري لتعمل الأزرار)
     window.triggerOriginal = function(funcName) {
-      if (funcName === 'actionsBtn') {
-        var btn = document.getElementById('actionsBtn');
-        if (btn) btn.click();
-      } else if (typeof window[funcName] === 'function') {
+      if (typeof window[funcName] === 'function') {
         window[funcName]();
       }
+    };
+    
+    window.clickHiddenBtn = function(id) {
+      var el = document.getElementById(id);
+      if (el) el.click();
     };
 
     // 4. تسجيل الخروج
@@ -2700,6 +2728,6 @@ window.addEventListener('load', function () {
 
   } catch (err) { console.error('New App UI Error:', err); }
 });
-</script> 
+</script>
 </body>
 </html>
