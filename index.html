@@ -2494,11 +2494,11 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
-<!-- ═══════════ التصميم الشامل والآمن (للهاتف فقط) ═══════════ -->
+<!-- ═══════════ التصميم الجديد للهاتف (يعيد الوظائف ويصلح الشاشة الفارغة) ═══════════ -->
 <style>
 @media (max-width: 768px) {
   /* 1. إخفاء العناصر القديمة في الهاتف فقط */
-  header, .tabs, .container, #m-nav, #m-search, #m-home, #m-back, .m-panel, #chat-toggle, #m-gear, #m-lang { display: none !important; }
+  header, .tabs, #m-nav, #m-search, #m-home, #m-back, .m-panel, #m-gear, #m-lang { display: none !important; }
   
   /* 2. الحاوية الجديدة للهاتف */
   #new-mobile-app {
@@ -2518,93 +2518,66 @@ window.addEventListener('load', function () {
   }
   .header-top { display: flex; justify-content: space-between; align-items: center; z-index: 1; position: relative; }
   
-  /* زر اللغة (يسار) */
   .lang-btn-new { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 6px 12px; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-  
-  /* الشعار (منتصف) */
   .header-logo { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; }
   .header-logo h1 { margin: 0; font-size: 24px; color: #fff; font-weight: 900; display: flex; align-items: center; gap: 8px; }
   .header-logo p { margin: 4px 0 0; font-size: 12px; color: #bfdbfe; font-weight: 600; }
-  
-  /* زر المزيد (يمين) */
-  .menu-btn-new {
-    width: 48px; height: 48px; background: #1e3a8a; border: 2px solid #fbd38d; border-radius: 14px;
-    color: #fff; font-size: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
+  .menu-btn-new { width: 48px; height: 48px; background: #1e3a8a; border: 2px solid #fbd38d; border-radius: 14px; color: #fff; font-size: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
-  /* 4. شريط الأزرار السريعة (مشاريعي، حفظ، عرض، الوضع) */
-  .quick-actions {
-    display: flex; justify-content: center; gap: 12px; margin: -15px 15px 20px; position: relative; z-index: 3; direction: ltr;
-  }
-  .quick-btn {
-    flex: 1; background: rgba(30, 58, 138, 0.85); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-    border-radius: 20px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; gap: 6px;
-    color: #fff; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  }
-  .quick-btn .ic { font-size: 26px; }
-
-  /* 5. شبكة الأيقونات */
-  .main-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px;
-  }
-  .grid-item {
-    background: #fff; border-radius: 22px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center;
-    gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: transform 0.1s;
-  }
+  /* 4. شبكة الأيقونات */
+  .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 15px 0; }
+  .grid-item { background: #fff; border-radius: 22px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: transform 0.1s; }
   .grid-item:active { transform: scale(0.95); }
   .grid-item .ic { font-size: 42px; }
   .grid-item .lb { font-size: 13px; font-weight: 800; color: #1e3a8a; text-align: center; }
 
-  /* 6. القائمة الجانبية (المزيد) */
-  #new-drawer {
-    position: fixed; top: 0; right: -100%; width: 85%; max-width: 340px; height: 100vh; background: #f0f4f8;
-    z-index: 9000; box-shadow: -10px 0 30px rgba(0,0,0,0.3); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column; direction: rtl; overflow-y: auto;
-  }
+  /* 5. القائمة الجانبية (المزيد) */
+  #new-drawer { position: fixed; top: 0; right: -100%; width: 85%; max-width: 340px; height: 100vh; background: #f0f4f8; z-index: 9000; box-shadow: -10px 0 30px rgba(0,0,0,0.3); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; direction: rtl; overflow-y: auto; }
   #new-drawer.show { right: 0; }
   
-  .drawer-header {
-    display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 15px;
-    border-bottom: 3px solid #fbd38d;
-  }
+  .drawer-header { display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 15px; border-bottom: 3px solid #fbd38d; }
   .drawer-header h2 { margin: 0; font-size: 22px; font-weight: 900; color: #1e3a8a; }
   .close-drawer { font-size: 28px; color: #1e3a8a; cursor: pointer; font-weight: bold; }
-
   .drawer-user { text-align: center; padding: 15px; font-size: 13px; font-weight: bold; color: #4a5568; border-bottom: 1px solid #cbd5e1; }
 
-  /* أزرار القائمة الجانبية - مطابقة للصورة */
   .drawer-list { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-  .drawer-item {
-    background: #fff; border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
-    font-size: 16px; font-weight: 800; color: #1e3a8a; box-shadow: 0 2px 8px rgba(0,0,0,0.03); cursor: pointer; border: 1px solid #e2e8f0;
-  }
+  .drawer-item { background: #fff; border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 800; color: #1e3a8a; box-shadow: 0 2px 8px rgba(0,0,0,0.03); cursor: pointer; border: 1px solid #e2e8f0; }
   .drawer-item .arrow { color: #94a3b8; font-size: 20px; }
   .drawer-item .icon { font-size: 22px; }
   
-  /* ألوان الأزرار كما في الصورة */
+  /* ألوان الأزرار */
   .drawer-item.btn-save { background: #38a169; color: #fff; border: none; }
   .drawer-item.btn-excel { background: #38a169; color: #fff; border: none; }
   .drawer-item.btn-pdf { background: #3182ce; color: #fff; border: none; }
   .drawer-item.btn-clear { background: #e53e3e; color: #fff; border: none; }
+  .drawer-item.btn-theme { background: #fff; color: #1e3a8a; border: none; }
+  .drawer-item.btn-present { background: #fff; color: #1e3a8a; border: none; }
+  .drawer-item.btn-projects { background: #fff; color: #1e3a8a; border: none; }
   
-  .drawer-logout {
-    margin: 15px; padding: 16px; background: #3182ce; color: #fff; border-radius: 16px; text-align: center;
-    font-weight: 900; font-size: 16px; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 8px;
-  }
+  .drawer-logout { margin: 15px; padding: 16px; background: #3182ce; color: #fff; border-radius: 16px; text-align: center; font-weight: 900; font-size: 16px; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; gap: 8px; }
 
-  #new-drawer-bg {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 8999; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-  }
+  #new-drawer-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 8999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
   #new-drawer-bg.show { opacity: 1; pointer-events: auto; }
 
-  /* زر الرجوع داخل الأقسام */
+  /* 6. إعدادات فتح الأقسام (حل مشكلة الشاشة الفارغة) */
+  body.m-tab #new-mobile-app { display: none !important; }
+  
+  /* إظهار الحاوية الأصلية عند فتح قسم */
+  body.m-tab .container { display: block !important; padding-top: 60px !important; }
+  
+  /* إضافة شريط علوي مصغر عند فتح قسم */
+  body.m-tab::after {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; height: 60px;
+    background: #1e3a8a; z-index: 1000;
+  }
+  
+  /* زر الرجوع */
   #new-back-btn {
     display: none; position: fixed; top: calc(15px + env(safe-area-inset-top, 0px)); left: 15px; z-index: 9999;
-    background: #1e3a8a; color: #fff; border: 2px solid #fbd38d; border-radius: 50%; width: 45px; height: 45px;
+    background: #fbd38d; color: #1e3a8a; border: 2px solid #fff; border-radius: 50%; width: 45px; height: 45px;
     font-size: 24px; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
   body.m-tab #new-back-btn { display: flex; }
-  body.m-tab #new-mobile-app { display: none !important; }
 }
 </style>
 
@@ -2620,14 +2593,6 @@ window.addEventListener('load', function () {
       <div class="menu-btn-new" onclick="openNewDrawer()">☰</div>
     </div>
   </div>
-
-  <div class="quick-actions">
-    <div class="quick-btn" onclick="triggerOriginal('openProjectsModal'); closeNewDrawer();"><span class="ic">📁</span>مشاريعي</div>
-    <div class="quick-btn" onclick="triggerOriginal('saveCurrentProject');"><span class="ic">💾</span>حفظ</div>
-    <div class="quick-btn" onclick="triggerOriginal('togglePresentation');"><span class="ic">📺</span>عرض</div>
-    <div class="quick-btn" onclick="triggerOriginal('toggleTheme');"><span class="ic">🌙</span>الوضع</div>
-  </div>
-
   <div class="main-grid" id="new-main-grid"></div>
 </div>
 
@@ -2641,13 +2606,13 @@ window.addEventListener('load', function () {
   </div>
   <div class="drawer-user" id="new-drawer-user"></div>
   <div class="drawer-list">
-    <!-- ربط الأزرار بالوظائف الأصلية عبر محاكاة النقر -->
-    <div class="drawer-item" onclick="triggerOriginal('toggleTheme'); closeNewDrawer();"><span class="icon">🌙</span><span>الوضع</span><span class="arrow">‹</span></div>
-    <div class="drawer-item" onclick="triggerOriginal('togglePresentation'); closeNewDrawer();"><span class="icon">📺</span><span>عرض</span><span class="arrow">‹</span></div>
+    <!-- الأزرار مربوطة بالوظائف الأصلية عبر محاكاة النقر -->
+    <div class="drawer-item btn-theme" onclick="clickHiddenBtn('toggleTheme'); closeNewDrawer();"><span class="icon">🌙</span><span>الوضع</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-present" onclick="clickHiddenBtn('togglePresentation'); closeNewDrawer();"><span class="icon">📺</span><span>عرض</span><span class="arrow">‹</span></div>
+    <div class="drawer-item btn-projects" onclick="clickHiddenBtn('openProjectsModal'); closeNewDrawer();"><span class="icon">📁</span><span>مشاريعي</span><span class="arrow">‹</span></div>
     <div class="drawer-item btn-save" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_save]').click();}, 150); closeNewDrawer();"><span class="icon">💾</span><span>حفظ</span><span class="arrow">‹</span></div>
     <div class="drawer-item btn-excel" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_excel]').click();}, 150); closeNewDrawer();"><span class="icon">📊</span><span>Excel</span><span class="arrow">‹</span></div>
     <div class="drawer-item btn-pdf" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_pdf]').click();}, 150); closeNewDrawer();"><span class="icon">📄</span><span>PDF</span><span class="arrow">‹</span></div>
-    <div class="drawer-item" onclick="triggerOriginal('openProjectsModal'); closeNewDrawer();"><span class="icon">📁</span><span>مشاريعي</span><span class="arrow">‹</span></div>
     <div class="drawer-item btn-clear" onclick="clickHiddenBtn('actionsBtn'); setTimeout(()=>{document.querySelector('[data-i18n=btn_reset]').click();}, 150); closeNewDrawer();"><span class="icon">🗑️</span><span>مسح</span><span class="arrow">‹</span></div>
   </div>
   <div class="drawer-logout" onclick="triggerLogout()">🚪 تسجيل الخروج</div>
@@ -2656,7 +2621,6 @@ window.addEventListener('load', function () {
 <script>
 window.addEventListener('load', function () {
   try {
-    // 1. بناء الشبكة
     var TABS = [
       { id: 'tab2', ic: '🏗️', lb: 'التكاليف' }, { id: 'tab1', ic: '📋', lb: 'معلومات' },
       { id: 'tab3', ic: '📈', lb: 'التحليل المالي' }, { id: 'tab8', ic: '👥', lb: 'الرواتب' },
@@ -2673,7 +2637,6 @@ window.addEventListener('load', function () {
       }).join('');
     }
 
-    // 2. التحكم في القائمة
     window.openNewDrawer = function() {
       document.getElementById('new-drawer').classList.add('show');
       document.getElementById('new-drawer-bg').classList.add('show');
@@ -2685,38 +2648,33 @@ window.addEventListener('load', function () {
       document.getElementById('new-drawer-bg').classList.remove('show');
     };
 
-    // 3. محاكاة النقر على العناصر الأصلية (الحل السحري لتعمل الأزرار)
-    window.triggerOriginal = function(funcName) {
-      if (typeof window[funcName] === 'function') {
-        window[funcName]();
+    // دالة محاكاة النقر للأزرار المخفية
+    window.clickHiddenBtn = function(actionName) {
+      if (actionName === 'actionsBtn') {
+        var btn = document.getElementById('actionsBtn');
+        if (btn) btn.click();
+      } else if (typeof window[actionName] === 'function') {
+        window[actionName]();
       }
     };
-    
-    window.clickHiddenBtn = function(id) {
-      var el = document.getElementById(id);
-      if (el) el.click();
-    };
 
-    // 4. تسجيل الخروج
     window.triggerLogout = function() {
       closeNewDrawer();
       var logoutBtn = document.getElementById('auth-logout');
       if (logoutBtn) logoutBtn.click();
     };
 
-    // 5. فتح الأقسام
+    // دالة فتح الأقسام (تحل مشكلة الشاشة الفارغة)
     window.openTabFromNewUI = function(id) {
       document.body.classList.add('m-tab');
       if (typeof showTab === 'function') showTab(id);
     };
 
-    // 6. العودة للرئيسية
     window.goBackToHome = function() {
       document.body.classList.remove('m-tab');
       document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active')});
     };
 
-    // 7. تغيير اللغة
     window.toggleNewLang = function() {
       var cur = 'ar';
       try { cur = L; } catch(e) {}
