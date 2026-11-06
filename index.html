@@ -350,54 +350,6 @@ html.auth-pending{overflow:hidden;}
   }, 12000);
 })();
 </script>
-<!-- ═══ تنسيق واجهة الدخول فقط (إضافة آمنة) ═══ -->
-<style>
-/* توسيط آمن: لا تُقصّ البطاقة على الشاشات الصغيرة أو مع لوحة المفاتيح */
-#auth-gate{align-items:flex-start;padding:20px 16px;}
-#auth-gate .ag-card{margin:auto;width:min(100%,400px);padding:32px 24px 22px;}
-
-/* مسافات متساوية ومنتظمة */
-#auth-gate .ag-logo{margin:0 auto 12px;}
-#auth-gate h1{line-height:1.2;}
-#auth-gate .ag-tag{margin:8px 0 22px;}
-#auth-gate .ag-tabs{margin-bottom:16px;}
-#auth-gate input{margin:0 0 12px;}
-#auth-gate .ag-pw{margin-bottom:12px;}
-#auth-gate .ag-pw input{margin:0;}
-
-/* إزالة الفجوة: رسالة الخطأ لا تحجز مكاناً إلا عند ظهورها */
-#auth-gate #ag-msg{min-height:0;margin:0;}
-#auth-gate #ag-msg:not(:empty){margin:0 0 12px;}
-#auth-gate .ag-primary{margin-top:4px;}
-#auth-gate .ag-langs{margin-top:20px;}
-
-/* ثبات لون الحقول مع الملء التلقائي للمتصفح */
-#auth-gate input:-webkit-autofill,
-#auth-gate input:-webkit-autofill:focus{
-  -webkit-text-fill-color:#fff;caret-color:#fff;
-  box-shadow:0 0 0 1000px #1b2f86 inset !important;
-  transition:background-color 9999s ease-out 0s;
-}
-</style>
-
-<script>
-/* منع الوضع الليلي الإجباري للمتصفح أثناء ظهور واجهة الدخول فقط،
-   ثم إزالته تلقائياً بعد الدخول فيبقى سلوك المنصة كما هو */
-(function(){
-  try{
-    var m=document.createElement('meta');
-    m.name='color-scheme'; m.content='only light'; m.id='ag-cs';
-    document.head.appendChild(m);
-    var root=document.documentElement;
-    new MutationObserver(function(_,o){
-      if(!root.classList.contains('auth-pending')){
-        var x=document.getElementById('ag-cs'); if(x) x.remove();
-        o.disconnect();
-      }
-    }).observe(root,{attributes:true,attributeFilter:['class']});
-  }catch(e){}
-})();
-</script>  
 
 <script type="module">
 /* ═══════════════════════════════════════════════════════════════
