@@ -2494,5 +2494,183 @@ window.addEventListener('load', function () {
   }
 }
 </style> 
+  <!-- ═══════════ التصميم الاحترافي الجديد للهاتف (بناءً على الصور) ═══════════ -->
+<style>
+@media (max-width: 768px) {
+  /* 1. إخفاء العناصر القديمة التي لا نحتاجها */
+  #m-search, .m-ptitle, header .lang-switch, header #actionsBtn, #m-nav { display: none !important; }
+  
+  /* 2. خلفية التطبيق العامة */
+  body.m-home, body.m-tab {
+    background: #f0f4f8 !important;
+    background-image: radial-gradient(circle at 100% 0%, #e2e8f0 0%, transparent 50%), radial-gradient(circle at 0% 100%, #ebf8ff 0%, transparent 50%) !important;
+  }
+
+  /* 3. الشريط العلوي الفاخر */
+  header {
+    position: relative !important;
+    background: #1e3a8a !important; /* الأزرق الكحلي */
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    border-radius: 0 0 30px 30px !important;
+    padding: calc(15px + env(safe-area-inset-top, 0px)) 20px 25px !important;
+    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.25) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    overflow: hidden;
+  }
+
+  /* الموجة الصفراء أسفل الهيدر */
+  header::after {
+    content: ''; position: absolute; bottom: -15px; left: -10%; width: 120%; height: 30px;
+    background: #fbd38d; border-radius: 50%; z-index: 0; opacity: 0.8;
+  }
+
+  /* الشعار واسم المنصة */
+  .header-brand { z-index: 1; display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; width: 100%; }
+  .header-brand h1 { font-size: 24px !important; color: #fff !important; font-weight: 800 !important; margin: 0 !important; }
+  .m-tag { display: block !important; font-size: 13px; color: #bfdbfe; font-weight: 600; text-align: right; margin-top: 4px; }
+
+  /* زر القائمة الجانبية (الهامبرغر) */
+  #m-gear {
+    position: static !important; width: 48px !important; height: 48px !important;
+    background: #1e3a8a !important; border: 2px solid #fbd38d !important;
+    border-radius: 14px !important; color: #fff !important; font-size: 24px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important; z-index: 2 !important;
+  }
+
+  /* زر اللغة (أعلى اليسار) */
+  #m-lang {
+    position: absolute !important; top: calc(15px + env(safe-area-inset-top, 0px)); left: 20px;
+    background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.3) !important;
+    border-radius: 20px !important; padding: 6px 12px !important; color: #fff !important; z-index: 2;
+  }
+  #m-lang select { color: #fff !important; font-weight: 700 !important; font-size: 12px !important; }
+  #m-lang::before { content: '🌐'; margin-left: 5px; font-size: 14px; }
+
+  /* 4. شبكة الأيقونات (البطاقات) */
+  .m-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 15px !important; padding: 0 15px !important; }
+  
+  .m-tile {
+    background: #ffffff !important; border: none !important; border-radius: 22px !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05) !important;
+    min-height: 110px !important; padding: 15px 10px !important; gap: 10px !important;
+    transition: transform 0.1s !important; position: relative; overflow: hidden;
+  }
+  .m-tile:active { transform: scale(0.95) !important; }
+  
+  /* أيقونات كبيرة وملونة */
+  .m-tile .ic { font-size: 42px !important; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); }
+  
+  /* نصوص الأزرار */
+  .m-tile .lb { font-size: 13px !important; font-weight: 800 !important; color: #1e3a8a !important; }
+
+  /* 5. القائمة الجانبية (Drawer) */
+  #actions-menu {
+    position: fixed !important; top: 0 !important; right: -100% !important; 
+    width: 85% !important; height: 100vh !important; max-width: 350px !important;
+    background: #ffffff !important; z-index: 9999 !important; 
+    border-radius: 30px 0 0 30px !important; padding: 20px !important;
+    display: flex !important; flex-direction: column !important; gap: 12px !important;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2) !important;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    overflow-y: auto !important;
+  }
+  /* فتح القائمة */
+  #actions-menu.show { right: 0 !important; }
+
+  /* رأس القائمة الجانبية */
+  #actions-menu::before {
+    content: '✖'; position: absolute; top: 20px; left: 20px; font-size: 24px; color: #1e3a8a;
+    font-weight: bold; cursor: pointer; width: 30px; height: 30px; text-align: center;
+  }
+  #actions-menu::after {
+    content: 'المزيد'; position: absolute; top: 20px; right: 0; width: 100%; text-align: center;
+    font-size: 22px; font-weight: 900; color: #1e3a8a; pointer-events: none;
+  }
+  
+  /* أزرار القائمة الجانبية */
+  #actions-menu .btn {
+    display: flex !important; flex-direction: row !important; justify-content: space-between !important;
+    align-items: center !important; background: #f8fafc !important; color: #1e3a8a !important;
+    border: 1px solid #e2e8f0 !important; border-radius: 18px !important;
+    padding: 18px 20px !important; font-size: 16px !important; font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important; margin-top: 60px; /* مسافة تحت العنوان */
+  }
+  #actions-menu .btn::before { content: '‹'; font-size: 20px; color: #94a3b8; order: -1; }
+  #actions-menu .btn::after { content: ''; margin-right: auto; margin-left: 10px; font-size: 22px; }
+  
+  #actions-menu .btn[data-i18n="btn_save"]::after { content: '💾'; }
+  #actions-menu .btn[data-i18n="btn_excel"]::after { content: '📊'; }
+  #actions-menu .btn[data-i18n="btn_pdf"]::after { content: '📄'; }
+  #actions-menu .btn[data-i18n="btn_reset"]::after { content: '⚙️'; }
+
+  #actions-menu .btn:not([data-i18n]) { margin-top: 5px; } /* لزر تسجيل الخروج */
+
+  /* نصوص الأزرار المخصصة */
+  #actions-menu .btn[data-i18n="btn_reset"] { order: 5; } /* الإعدادات في الأسفل */
+  #actions-menu .btn[data-i18n="btn_save"] { order: 1; }
+  #actions-menu .btn[data-i18n="btn_excel"] { order: 2; }
+  #actions-menu .btn[data-i18n="btn_pdf"] { order: 3; }
+  #actions-menu #auth-logout { order: 6; background: #fee2e2 !important; color: #991b1b !important; border-color: #f87171 !important; }
+  
+  /* الموجة الزرقاء أسفل القائمة */
+  #actions-menu .menu-sep { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; display: none; }
+  
+  /* إغلاق القائمة عند النقر خارجها */
+  #m-sheet-bg { display: block !important; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  #m-sheet-bg.show { opacity: 1; pointer-events: auto; }
+}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  try {
+    // 1. إضافة النصوص إلى الأزرار بناءً على اللغة
+    var LB = { ar: ['مشاريعي', 'حفظ', 'عرض', 'الوضع'], fr: ['Projets', 'Sauver', 'Écran', 'Thème'], en: ['Projects', 'Save', 'Present', 'Theme'] };
+    function setLabels() {
+      var l = 'ar'; try { l = L; } catch (e) {}
+      var a = LB[l] || LB.ar;
+      document.querySelectorAll('header .header-actions > .theme-btn').forEach(function (b, i) {
+        if (a[i]) b.setAttribute('data-lb', a[i]);
+      });
+    }
+    var _al = window.applyLang;
+    window.applyLang = function (x) { _al(x); setLabels(); };
+    setLabels();
+
+    // 2. تحويل زر الإعدادات (m-gear) ليفتح القائمة الجانبية
+    var gear = document.getElementById('m-gear');
+    if (gear) {
+      gear.textContent = '☰'; // تغيير الأيقونة إلى هامبرغر
+      gear.onclick = function(e) {
+        e.preventDefault();
+        document.getElementById('actions-menu').classList.add('show');
+        document.getElementById('m-sheet-bg').classList.add('show');
+      };
+    }
+
+    // 3. إغلاق القائمة عند النقر على الخلفية أو زر الإغلاق
+    var bg = document.getElementById('m-sheet-bg');
+    if (bg) {
+      bg.onclick = function() {
+        document.getElementById('actions-menu').classList.remove('show');
+        bg.classList.remove('show');
+      };
+    }
+    
+    // إضافة زر إغلاق وهمي في القائمة
+    var menu = document.getElementById('actions-menu');
+    if (menu) {
+      menu.addEventListener('click', function(e) {
+        if (e.target === menu) {
+          menu.classList.remove('show');
+          document.getElementById('m-sheet-bg').classList.remove('show');
+        }
+      });
+    }
+  } catch (err) { console.error('Custom UI error:', err); }
+});
+</script>
 </body>
 </html>
