@@ -2374,114 +2374,42 @@ window.addEventListener('load', function () {
 });
 </script>
 
-<!-- ═══════════ تصميم الهاتف الفاخر: ثبات مطلق وأزرار عائمة نظيفة ═══════════ -->
+ <!-- ═══════════ تعديل الواجهة: إزالة البحث والتكرار + تنظيم أزرار الأعلى (للهاتف فقط) ═══════════ -->
 <style>
-@media (max-width: 768px) {
-  /* 1. إزالة أي عناصر زائدة */
-  #m-search, body.m-home #m-search { display: none !important; }
-  header .lang-switch { display: none !important; }
-  header #actionsBtn { display: none !important; }
+@media (max-width:768px){
+  /* 1) إزالة البحث */
+  #m-search,body.m-home #m-search{display:none !important;}
 
-  /* 2. تثبيت الشريط العلوي تماماً (يمنع الحركة والتقطيع نهائياً) */
-  header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 9999 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    padding: calc(15px + env(safe-area-inset-top, 0px)) 15px 15px !important;
-    margin: 0 !important;
-    border-radius: 0 0 30px 30px !important;
-    background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
-    /* تحسين الأداء */
-    will-change: transform;
-    transform: translateZ(0);
-  }
+  /* 2) إزالة أزرار اللغة الثلاثة وزر ⚙️ المكرر (تبقى قائمة اللغة وزر ⚙️ في الأعلى) */
+  header .lang-switch{display:none !important;}
+  header #actionsBtn{display:none !important;}
+  header .actions-wrap{display:contents !important;}
 
-  body.dark-mode header {
-    background: linear-gradient(135deg, #0f172a, #1e293b) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  /* 3) الأزرار الأربعة: شبكة منظمة وراقية */
+  body.m-home header .header-actions{
+    display:grid !important;grid-template-columns:repeat(4,1fr);gap:10px;direction:rtl;
+    padding:12px;margin-top:4px;border-radius:30px;
+    background:linear-gradient(160deg,rgba(40,80,200,.30),rgba(6,14,62,.55));
+    border:1.5px solid var(--m-edge);
+    box-shadow:0 0 26px rgba(80,130,255,.30),inset 0 0 22px rgba(80,130,255,.10);
   }
-
-  /* إعطاء مسافة للمحتوى حتى لا يختفي تحت الشريط الثابت */
-  .container {
-    padding-top: calc(140px + env(safe-area-inset-top, 0px)) !important;
-    margin-top: 0 !important;
+  body.m-home header .header-actions > .theme-btn{
+    display:flex !important;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    width:auto;max-width:none;min-width:0;min-height:0;height:76px;aspect-ratio:auto;padding:0;
+    border-radius:22px;font-size:27px;line-height:1;color:#fff;transform:none;
+    background:linear-gradient(160deg,rgba(70,115,235,.42),rgba(8,18,72,.88));
+    border:1.5px solid rgba(130,170,255,.48);
+    box-shadow:0 10px 22px rgba(0,0,0,.35),0 0 16px rgba(80,130,255,.28),inset 0 -3px 10px -5px var(--ac,#ffc83d);
+    transition:transform .15s;
   }
-
-  /* إصلاح الشعار ليكون في المنتصف */
-  .header-brand {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    margin-bottom: 15px !important;
+  body.m-home header .header-actions > .theme-btn:active{transform:scale(.94);}
+  body.m-home header .header-actions > .theme-btn::after{
+    content:attr(data-lb);font-size:11px;font-weight:700;letter-spacing:.2px;color:#e8f0ff;font-family:inherit;
   }
-  
-  .header-brand h1 {
-    font-size: 20px !important;
-    color: #ffffff !important;
-    font-weight: 800 !important;
-    letter-spacing: 1px !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
-  }
-
-  /* 3. الأزرار العائمة (بدون أي مربع محيط) */
-  header .header-actions {
-    display: flex !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    width: 100% !important;
-    max-width: 350px !important;
-    padding: 0 !important;
-    margin: 0 auto !important;
-    background: transparent !important; /* إزالة المربع */
-    border: none !important;
-    box-shadow: none !important;
-    gap: 10px !important;
-  }
-
-  /* تصميم الأزرار الدائرية النظيفة */
-  header .header-actions > .theme-btn {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 52px !important;
-    height: 52px !important;
-    border-radius: 50% !important; /* أزرار دائرية */
-    font-size: 22px !important;
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.1) !important; /* خلفية شفافة خفيفة جداً */
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
-    transition: transform 0.1s ease, background 0.2s ease !important;
-    /* تحسين الأداء */
-    will-change: transform;
-    transform: translateZ(0);
-    /* إخفاء النص */
-    font-size: 0 !important; 
-  }
-  
-  /* إعادة حجم الأيقونة لأننا أخفينا النص */
-  header .header-actions > .theme-btn::before {
-    font-size: 22px !important;
-  }
-
-  /* تأثير الضغط */
-  header .header-actions > .theme-btn:active {
-    transform: scale(0.9) translateZ(0) !important;
-    background: rgba(255, 255, 255, 0.25) !important;
-  }
-
-  /* ألوان أيقونات مميزة */
-  header .header-actions > .theme-btn:nth-child(1) { color: #ffd700 !important; } /* مشاريعي */
-  header .header-actions > .theme-btn:nth-child(2) { color: #4ade80 !important; } /* حفظ */
-  header .header-actions > .theme-btn:nth-child(3) { color: #60a5fa !important; } /* عرض */
-  header .header-actions > .theme-btn:nth-child(4) { color: #c084fc !important; } /* الوضع */
+  body.m-home header .header-actions > .theme-btn:nth-child(1){--ac:#ffc83d;}
+  body.m-home header .header-actions > .theme-btn:nth-child(2){--ac:#34d399;}
+  body.m-home header .header-actions > .theme-btn:nth-child(3){--ac:#22d3ee;}
+  body.m-home header .header-actions > .theme-btn:nth-child(4){--ac:#a78bfa;}
 }
 </style>
 
