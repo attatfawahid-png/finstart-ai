@@ -2750,5 +2750,24 @@ window.addEventListener('load', function () {
   body:has(#new-drawer.show)::after{animation:none !important;}
 }
 </style>
+  <!-- النوافذ والإشعارات فوق كل شيء (الصفحة الرئيسية + القائمة) -->
+<style>
+#projectsModal{z-index:2147483200 !important;}
+#confirm-modal{z-index:2147483300 !important;}
+#loading-overlay{z-index:2147483400 !important;}
+#toast-container{z-index:2147483600 !important;}
+#autosave-badge{z-index:2147483500 !important;}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  try {
+    ['projectsModal','confirm-modal','loading-overlay','autosave-badge','toast-container'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.parentNode === document.body) document.body.appendChild(el);
+    });
+  } catch (e) { console.error('Layer fix error:', e); }
+});
+</script>
 </body>
 </html>
