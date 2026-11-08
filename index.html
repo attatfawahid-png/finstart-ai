@@ -2082,7 +2082,6 @@ window.addEventListener('beforeunload', function(e) {
 <script>
 window.addEventListener('load', function () {
   try {
-   if (window.innerWidth > 768) return; 
     var ICONS={tab1:'📋',tab2:'🏗️',tab8:'👥',tab3:'📊',tab10:'🏦',tab4:'⚔️',tab5:'🧩',tab9:'🧠',tab6:'🤖',tab11:'🧾',tab12:'📈',tab13:'🛣️',tab14:'🏪',tab15:'🎤'};
     var MAIN=['tab1','tab2','tab3','tab6'];
     var ALL=['tab1','tab2','tab8','tab3','tab10','tab4','tab5','tab9','tab6','tab11','tab12','tab13','tab14','tab15'];
@@ -2258,7 +2257,6 @@ window.addEventListener('load', function () {
 <script>
 window.addEventListener('load', function () {
   try {
-    if (window.innerWidth > 768) return;
     var MQ = window.matchMedia('(max-width:768px)');
     try { if (MQ.matches && !localStorage.getItem('finstart_theme')) document.body.classList.add('dark-mode'); } catch (e) {}
 
@@ -2501,8 +2499,7 @@ window.addEventListener('load', function () {
 @media (max-width: 768px) {
   /* 1. إخفاء العناصر القديمة في الهاتف فقط */
   header, .tabs, #m-nav, #m-search, #m-home, #m-back, .m-panel, #m-gear, #m-lang { display: none !important; }
-
-   #new-mobile-app, #new-drawer, #new-drawer-bg, #new-back-btn { display: none !important; } 
+  
   /* 2. الحاوية الجديدة للهاتف */
   #new-mobile-app {
     display: block !important; position: fixed; inset: 0; background: #f0f4f8; z-index: 5000; overflow-y: auto;
@@ -2688,5 +2685,14 @@ window.addEventListener('load', function () {
   } catch (err) { console.error('New App UI Error:', err); }
 });
 </script>
+ <!-- إخفاء واجهة الهاتف الجديدة على الحاسوب فقط -->
+<style>
+@media (min-width:769px){
+  #new-mobile-app,
+  #new-drawer,
+  #new-drawer-bg,
+  #new-back-btn{display:none !important;}
+}
+</style> 
 </body>
 </html>
