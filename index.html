@@ -2848,5 +2848,15 @@ window.addEventListener('load', function () {
   } catch (err) { console.error('New UI language sync error:', err); }
 });
 </script>
+  <!-- زر المساعد 💬 يظهر فوق الصفحة الرئيسية على الهاتف (الحاسوب لا يتأثر) -->
+<style>
+@media (max-width:768px){
+  #chat-toggle{z-index:6000 !important;}
+  #chat-window{z-index:6001 !important;}
+
+  /* مساحة أسفل الصفحة الرئيسية حتى لا يحجب الزر آخر الأيقونات عند السحب */
+  #new-mobile-app{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px)) !important;}
+}
+</style>
 </body>
 </html>
