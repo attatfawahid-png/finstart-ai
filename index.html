@@ -2769,5 +2769,84 @@ window.addEventListener('load', function () {
   } catch (e) { console.error('Layer fix error:', e); }
 });
 </script>
+  <!-- ترجمة أسماء الصفحة الرئيسية والقائمة + الوضع الليلي للصفحة الرئيسية (الهاتف فقط) -->
+<style>
+@media (max-width:768px){
+  body.dark-mode #new-mobile-app{background:#050d34;}
+  body.dark-mode .grid-item{
+    background:linear-gradient(160deg,#16327f,#0a1650);
+    border:1px solid rgba(110,150,255,.35);
+    box-shadow:0 4px 15px rgba(0,0,0,.35);
+  }
+  body.dark-mode .grid-item .lb{color:#ffffff;}
+
+  body.dark-mode #new-drawer{background:#0a1650;}
+  body.dark-mode .drawer-header{background:#0a1650;}
+  body.dark-mode .drawer-header h2,
+  body.dark-mode .close-drawer{color:#ffffff;}
+  body.dark-mode .drawer-user{color:#cfe0ff;border-bottom-color:rgba(110,150,255,.3);}
+  body.dark-mode .drawer-item.btn-theme,
+  body.dark-mode .drawer-item.btn-present,
+  body.dark-mode .drawer-item.btn-projects{
+    background:#14247a;color:#ffffff;border:1px solid rgba(110,150,255,.3);
+  }
+}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  try {
+    var ORDER = ['tab2','tab1','tab3','tab8','tab4','tab10','tab9','tab5','tab11','tab6','tab13','tab12','tab15','tab14'];
+    var TAG = {
+      ar: 'إدارة أذكى .. لمستقبل أفضل',
+      fr: 'Gérez mieux .. pour un meilleur avenir',
+      en: 'Smarter management .. for a better future'
+    };
+    var MORE = { ar: 'المزيد', fr: 'Plus', en: 'More' };
+    var ITEMS = {
+      ar: ['الوضع', 'عرض', 'مشاريعي', 'حفظ', 'Excel', 'PDF', 'مسح'],
+      fr: ['Thème', 'Écran', 'Projets', 'Sauver', 'Excel', 'PDF', 'Effacer'],
+      en: ['Theme', 'Present', 'Projects', 'Save', 'Excel', 'PDF', 'Clear']
+    };
+    var OUT = { ar: '🚪 تسجيل الخروج', fr: '🚪 Déconnexion', en: '🚪 Sign out' };
+    var NAMES = { ar: 'العربية', fr: 'Français', en: 'English' };
+
+    function curLang() { try { return (T[L] ? L : 'ar'); } catch (e) { return 'ar'; } }
+
+    function syncNewUI() {
+      var l = curLang();
+
+      var labels = document.querySelectorAll('#new-main-grid .grid-item .lb');
+      labels.forEach(function (el, i) {
+        if (!ORDER[i]) return;
+        var s = '';
+        try { s = String(t('t' + ORDER[i].slice(3))); } catch (e) { return; }
+        el.textContent = s.replace(/^\d+\.\s*/, '');
+      });
+
+      var tag = document.querySelector('#new-mobile-app .header-logo p');
+      if (tag) tag.textContent = TAG[l];
+
+      var lt = document.getElementById('new-lang-text');
+      if (lt) lt.textContent = NAMES[l];
+
+      var h2 = document.querySelector('#new-drawer .drawer-header h2');
+      if (h2) h2.textContent = MORE[l];
+
+      document.querySelectorAll('#new-drawer .drawer-item').forEach(function (el, i) {
+        var txt = el.children[1];
+        if (txt && ITEMS[l][i]) txt.textContent = ITEMS[l][i];
+      });
+
+      var lo = document.querySelector('#new-drawer .drawer-logout');
+      if (lo) lo.textContent = OUT[l];
+    }
+
+    var _al = window.applyLang;
+    window.applyLang = function (x) { _al(x); syncNewUI(); };
+    syncNewUI();
+  } catch (err) { console.error('New UI language sync error:', err); }
+});
+</script>
 </body>
 </html>
