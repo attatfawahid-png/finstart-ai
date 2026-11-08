@@ -2694,5 +2694,61 @@ window.addEventListener('load', function () {
   #new-back-btn{display:none !important;}
 }
 </style> 
+  <!-- إصلاح قائمة «المزيد» على الهاتف + ظهور النوافذ والإشعارات فوق الواجهة -->
+<style>
+/* النوافذ والإشعارات تظهر فوق واجهة الهاتف (آمن على الحاسوب أيضاً) */
+#projectsModal{z-index:10000 !important;}
+#confirm-modal{z-index:10100 !important;}
+#loading-overlay{z-index:10200 !important;}
+#toast-container{z-index:10300 !important;}
+
+@media (max-width:768px){
+  /* حركة سلسة بدل right + ارتفاع صحيح + تمرير يعمل */
+  #new-drawer{
+    right:0 !important;
+    transform:translateX(105%);
+    transition:transform .25s ease !important;
+    will-change:transform;
+    box-shadow:none !important;
+    height:100vh;
+    height:100dvh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    touch-action:pan-y;
+  }
+  #new-drawer.show{
+    transform:translateX(0);
+    box-shadow:-10px 0 30px rgba(0,0,0,.3) !important;
+  }
+  #new-drawer > *{flex-shrink:0;}
+
+  /* تصغير العناصر */
+  .drawer-header{padding:calc(12px + env(safe-area-inset-top,0px)) 16px 10px !important;}
+  .drawer-header h2{font-size:18px !important;}
+  .close-drawer{font-size:22px !important;}
+  .drawer-user{padding:8px !important;font-size:12px !important;}
+  .drawer-list{padding:10px 12px !important;gap:8px !important;}
+  .drawer-item{
+    padding:10px 14px !important;font-size:14px !important;
+    border-radius:12px !important;min-height:44px;
+    touch-action:manipulation;
+  }
+  .drawer-item .icon{font-size:18px !important;}
+  .drawer-item .arrow{font-size:16px !important;}
+  .drawer-item:active{transform:scale(.98);}
+
+  /* زر تسجيل الخروج: أصغر، ومسافة سفلية كافية ليظهر كاملاً عند السحب */
+  .drawer-logout{
+    padding:12px !important;font-size:14px !important;
+    margin:6px 12px calc(110px + env(safe-area-inset-bottom,0px)) !important;
+    touch-action:manipulation;
+  }
+
+  /* إيقاف حركة الإضاءة الخلفية أثناء فتح القائمة لتخفيف الثقل */
+  body:has(#new-drawer.show)::before,
+  body:has(#new-drawer.show)::after{animation:none !important;}
+}
+</style>
 </body>
 </html>
